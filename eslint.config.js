@@ -34,8 +34,11 @@ export default defineConfig(
 		}
 	},
 	{
-		// Override or add rule settings here, such as:
-		// 'svelte/button-has-type': 'error'
-		rules: {}
+		rules: {
+			'svelte/button-has-type': 'error',
+			// All internal navigation goes through `localizedHref()` (src/lib/i18n), which builds
+			// locale-prefixed paths. The app does not use a base path, so resolve() adds nothing here.
+			'svelte/no-navigation-without-resolve': 'off'
+		}
 	}
 );

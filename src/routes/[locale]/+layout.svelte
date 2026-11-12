@@ -1,37 +1,20 @@
+<script lang="ts">
+	import { setContext } from 'svelte';
 
-	<script lang="ts">
-    import { setContext } from 'svelte';
+	import { I18N_CONTEXT, LOCALE_CONTEXT, translate, type Translator } from '#lib/i18n/index.ts';
 
-    import './layout.css';
+	let { data, children } = $props();
 
-    import {
-        I18N_CONTEXT,
-        translate,
-        type Translator
-    } from '#lib/i18n/index.ts';
+	const translator: Translator = (key, variables) =>
+		translate(data.translations, data.locale, key, variables);
 
-    let { data, children } = $props();
-
-    const translator: Translator = (key, variables) => {
-        return translate(
-            data.translations,
-            data.locale,
-            key,
-            variables
-        );
-    };
-
-    setContext(I18N_CONTEXT, translator);
+	setContext(I18N_CONTEXT, translator);
+	setContext(LOCALE_CONTEXT, () => data.locale);
 </script>
 
 <svelte:head>
-    <title>Klar</title>
+	<title>{translator('app.name')}</title>
+	<meta name="description" content={translator('app.description')} />
 </svelte:head>
 
-<header>
-    <!-- Dein eigener Header -->
-</header>
-
-<main>
-	{@render children()}
-</main>
+{@render children()}

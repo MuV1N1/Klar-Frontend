@@ -1,28 +1,380 @@
-
 {
-  "app": {
-    "name": "Klar",
-    "description": "Dein persönlicher Aufgabenmanager"
-  },
-  "navigation": {
-    "dashboard": "Übersicht",
-    "settings": "Einstellungen",
-    "logout": "Abmelden"
-  },
-  "dashboard": {
-    "title": "Meine Aufgaben",
-    "description": "Behalte deine Aufgaben im Überblick.",
-    "addTask": "Aufgabe hinzufügen",
-    "empty": "Du hast aktuell keine Aufgaben.",
-    "openTasks": {
-      "one": "Du hast {count} offene Aufgabe.",
-      "other": "Du hast {count} offene Aufgaben."
-    }
-  },
-  "common": {
-    "save": "Speichern",
-    "cancel": "Abbrechen",
-    "delete": "Löschen",
-    "loading": "Wird geladen ..."
-  }
+	"app": {
+		"name": "Klar",
+		"tagline": "Kopf frei. Alles erledigt.",
+		"description": "Dein persönlicher Aufgabenmanager"
+	},
+	"navigation": {
+		"dashboard": "Übersicht",
+		"today": "Heute",
+		"upcoming": "Demnächst",
+		"inbox": "Posteingang",
+		"completed": "Erledigt",
+		"lists": "Meine Listen",
+		"settings": "Einstellungen",
+		"focus": "Fokus",
+		"search": "Suchen",
+		"newList": "Neue Liste",
+		"newTask": "Neue Aufgabe",
+		"logout": "Abmelden",
+		"menu": "Menü",
+		"openSidebar": "Navigation öffnen",
+		"closeSidebar": "Navigation schließen",
+		"more": "Mehr"
+	},
+	"common": {
+		"save": "Speichern",
+		"cancel": "Abbrechen",
+		"delete": "Löschen",
+		"edit": "Bearbeiten",
+		"close": "Schließen",
+		"create": "Erstellen",
+		"add": "Hinzufügen",
+		"back": "Zurück",
+		"retry": "Erneut versuchen",
+		"loading": "Wird geladen …",
+		"optional": "Optional",
+		"confirm": "Bestätigen",
+		"open": "Offen",
+		"done": "Erledigt",
+		"all": "Alle",
+		"none": "Keine",
+		"today": "Heute",
+		"tomorrow": "Morgen",
+		"yesterday": "Gestern",
+		"later": "Später",
+		"overdue": "Überfällig",
+		"noDate": "Ohne Datum",
+		"errorTitle": "Etwas ist schiefgelaufen",
+		"errorGeneric": "Die Daten konnten nicht geladen werden.",
+		"openCount": {
+			"zero": "Keine offenen Aufgaben",
+			"one": "{count} offene Aufgabe",
+			"other": "{count} offene Aufgaben"
+		},
+		"taskCount": {
+			"zero": "Keine Aufgaben",
+			"one": "{count} Aufgabe",
+			"other": "{count} Aufgaben"
+		}
+	},
+	"greeting": {
+		"morning": "Guten Morgen, {name}",
+		"afternoon": "Guten Tag, {name}",
+		"evening": "Guten Abend, {name}",
+		"night": "Gute Nacht, {name}"
+	},
+	"dashboard": {
+		"title": "Übersicht",
+		"subtitle": {
+			"zero": "Alles erledigt. Genieß den Tag.",
+			"one": "Du hast heute {count} Aufgabe vor dir.",
+			"other": "Du hast heute {count} Aufgaben vor dir."
+		},
+		"progress": "Fortschritt",
+		"progressValue": "{done} von {total} erledigt",
+		"stats": {
+			"open": "Offen",
+			"today": "Heute fällig",
+			"overdue": "Überfällig",
+			"completedWeek": "Diese Woche erledigt"
+		},
+		"todaySection": "Heute",
+		"overdueSection": "Überfällig",
+		"recentlyCompleted": "Kürzlich erledigt",
+		"lists": "Meine Listen",
+		"allLists": "Alle Listen",
+		"showAll": "Alle anzeigen",
+		"emptyToday": "Für heute ist nichts geplant.",
+		"emptyTodayHint": "Füge eine Aufgabe hinzu oder schau in den Posteingang.",
+		"emptyCompleted": "Noch nichts erledigt. Du schaffst das.",
+		"noLists": "Du hast noch keine Listen.",
+		"quickAdd": "Neue Aufgabe hinzufügen …"
+	},
+	"upcoming": {
+		"eyebrow": "Alle anstehenden Aufgaben",
+		"title": "Demnächst",
+		"filterList": "Liste",
+		"sort": "Sortieren",
+		"sortDue": "Fälligkeitsdatum",
+		"sortPriority": "Priorität",
+		"sortCreated": "Erstellt",
+		"later": "Später",
+		"noDate": "Ohne Datum",
+		"empty": "Keine anstehenden Aufgaben.",
+		"emptyHint": "Aufgaben mit Fälligkeitsdatum erscheinen hier."
+	},
+	"inbox": {
+		"eyebrow": "Alles an einem Ort festhalten",
+		"title": "Posteingang",
+		"description": "Gedanken schnell erfassen. Später sortieren.",
+		"placeholder": "Was möchtest du erledigen?",
+		"unassigned": "Noch nicht zugeordnet",
+		"empty": "Dein Posteingang ist leer.",
+		"emptyHint": "Hier landen Aufgaben, die noch keiner Liste zugeordnet sind.",
+		"moveTo": "Verschieben nach"
+	},
+	"completed": {
+		"eyebrow": "Alles, was du geschafft hast",
+		"title": "Erledigt",
+		"empty": "Noch keine erledigten Aufgaben.",
+		"emptyHint": "Hake eine Aufgabe ab und sie erscheint hier.",
+		"reopen": "Wieder öffnen",
+		"clearAll": "Erledigte Aufgaben löschen",
+		"clearConfirm": "Alle erledigten Aufgaben endgültig löschen?"
+	},
+	"tasks": {
+		"open": "Offen",
+		"done": "Erledigt",
+		"new": "Neue Aufgabe",
+		"edit": "Aufgabe bearbeiten",
+		"titleLabel": "Aufgabenname",
+		"titlePlaceholder": "Was steht an?",
+		"description": "Notiz",
+		"descriptionPlaceholder": "Notiz hinzufügen …",
+		"list": "Liste",
+		"noList": "Keine Liste (Posteingang)",
+		"priority": "Priorität",
+		"dueDate": "Fälligkeit",
+		"dueTime": "Uhrzeit",
+		"pickDate": "Datum auswählen",
+		"createAction": "Aufgabe erstellen",
+		"saveAction": "Änderungen speichern",
+		"createdAt": "Erstellt am {date}",
+		"completedAt": "Erledigt am {date}",
+		"markDone": "Als erledigt markieren",
+		"markOpen": "Wieder öffnen",
+		"deleteConfirm": "Aufgabe „{title}“ wirklich löschen?",
+		"deleted": "Aufgabe gelöscht",
+		"created": "Aufgabe erstellt",
+		"updated": "Aufgabe gespeichert",
+		"completed": "Erledigt: {title}",
+		"reopened": "Wieder geöffnet: {title}",
+		"titleRequired": "Bitte gib einen Namen ein.",
+		"focusOn": "Fokus starten",
+		"addToList": "Aufgabe zu {list} hinzufügen",
+		"quickAddHint": "Enter zum Hinzufügen",
+		"priorities": {
+			"low": "Niedrig",
+			"normal": "Normal",
+			"high": "Hoch"
+		}
+	},
+	"lists": {
+		"title": "Meine Listen",
+		"eyebrow": "Alles sortiert",
+		"description": "Organisiere deine Aufgaben in Listen, die zu deinem Leben passen.",
+		"new": "Neue Liste",
+		"edit": "Liste bearbeiten",
+		"name": "Name",
+		"namePlaceholder": "z. B. Einkaufen",
+		"listDescription": "Beschreibung",
+		"descriptionPlaceholder": "Wofür ist diese Liste?",
+		"color": "Farbe",
+		"icon": "Symbol",
+		"nameRequired": "Bitte gib einen Namen ein.",
+		"created": "Liste erstellt",
+		"updated": "Liste gespeichert",
+		"deleted": "Liste gelöscht",
+		"deleteConfirm": "Liste „{name}“ löschen? Die Aufgaben werden in den Posteingang verschoben.",
+		"empty": "Du hast noch keine Listen.",
+		"emptyHint": "Erstelle eine Liste wie „Einkaufen“ oder „Haushalt“.",
+		"emptyTasks": "In dieser Liste ist noch nichts.",
+		"emptyTasksHint": "Füge die erste Aufgabe hinzu.",
+		"notFound": "Diese Liste gibt es nicht.",
+		"breadcrumb": "Meine Listen / {name}",
+		"openTasks": {
+			"zero": "Keine offenen Aufgaben",
+			"one": "{count} offene Aufgabe",
+			"other": "{count} offene Aufgaben"
+		},
+		"colors": {
+			"orange": "Orange",
+			"blue": "Blau",
+			"purple": "Lila",
+			"lime": "Lime",
+			"pink": "Pink",
+			"teal": "Türkis",
+			"yellow": "Gelb",
+			"gray": "Grau"
+		}
+	},
+	"focus": {
+		"title": "Fokus-Modus",
+		"subtitle": "Eine Aufgabe. Deine volle Aufmerksamkeit.",
+		"noTask": "Freier Fokus",
+		"start": "Sprint starten",
+		"pause": "Pause",
+		"resume": "Weiter",
+		"stop": "Beenden",
+		"reset": "Zurücksetzen",
+		"finished": "Sprint geschafft!",
+		"finishedHint": "Mach eine kurze Pause oder starte den nächsten Sprint.",
+		"markDone": "Aufgabe erledigen",
+		"chooseTask": "Aufgabe wählen",
+		"duration": "Dauer",
+		"minutes": {
+			"one": "{count} Minute",
+			"other": "{count} Minuten"
+		}
+	},
+	"search": {
+		"title": "Suchen",
+		"placeholder": "Aufgaben und Listen durchsuchen …",
+		"hint": "Tippe, um zu suchen",
+		"noResults": "Keine Treffer für „{query}“.",
+		"tasks": "Aufgaben",
+		"lists": "Listen",
+		"shortcut": "Strg K"
+	},
+	"settings": {
+		"title": "Einstellungen",
+		"eyebrow": "Klar anpassen",
+		"appearance": {
+			"title": "Darstellung",
+			"description": "Wähle, wie Klar aussehen soll.",
+			"theme": "Design",
+			"light": "Hell",
+			"dark": "Dunkel",
+			"system": "System"
+		},
+		"language": {
+			"title": "Sprache",
+			"description": "Die Sprache der Oberfläche. Deine Aufgaben werden nicht übersetzt."
+		},
+		"profile": {
+			"title": "Profil",
+			"description": "Deine persönlichen Daten.",
+			"name": "Name",
+			"email": "E-Mail",
+			"save": "Profil speichern",
+			"saved": "Profil gespeichert",
+			"demoHint": "Demo-Modus: Änderungen werden nur lokal gespeichert."
+		},
+		"tasks": {
+			"title": "Aufgaben",
+			"description": "Verhalten beim Anlegen und Anzeigen von Aufgaben.",
+			"defaultList": "Standardliste",
+			"defaultPriority": "Standardpriorität",
+			"showCompleted": "Erledigte Aufgaben auf der Übersicht zeigen",
+			"confirmDelete": "Vor dem Löschen nachfragen",
+			"weekStart": "Wochenbeginn",
+			"monday": "Montag",
+			"sunday": "Sonntag"
+		},
+		"focus": {
+			"title": "Fokus",
+			"description": "Länge eines Fokus-Sprints.",
+			"duration": "Sprintdauer"
+		},
+		"data": {
+			"title": "Daten",
+			"description": "Demo-Daten zurücksetzen oder abmelden.",
+			"reset": "Demo-Daten zurücksetzen",
+			"resetConfirm": "Alle lokalen Aufgaben und Listen auf den Ausgangszustand zurücksetzen?",
+			"resetDone": "Demo-Daten wurden zurückgesetzt",
+			"logout": "Abmelden"
+		},
+		"saved": "Einstellungen gespeichert"
+	},
+	"auth": {
+		"demoBanner": "Demo-Modus: Es wird noch kein echtes Konto angelegt. Jede E-Mail-Adresse funktioniert.",
+		"email": "E-Mail",
+		"emailPlaceholder": "du@beispiel.de",
+		"password": "Passwort",
+		"passwordPlaceholder": "Mindestens 8 Zeichen",
+		"name": "Name",
+		"namePlaceholder": "Wie sollen wir dich nennen?",
+		"login": {
+			"title": "Willkommen zurück",
+			"subtitle": "Melde dich an, um deine Aufgaben zu sehen.",
+			"action": "Anmelden",
+			"forgot": "Passwort vergessen?",
+			"noAccount": "Noch kein Konto?",
+			"register": "Registrieren",
+			"demoLogin": "Mit Demo-Konto anmelden"
+		},
+		"register": {
+			"title": "Konto erstellen",
+			"subtitle": "Kostenlos starten. Keine Kreditkarte nötig.",
+			"action": "Konto erstellen",
+			"hasAccount": "Schon ein Konto?",
+			"login": "Anmelden",
+			"terms": "Mit der Registrierung akzeptierst du die Nutzungsbedingungen."
+		},
+		"forgot": {
+			"title": "Passwort zurücksetzen",
+			"subtitle": "Wir schicken dir einen Link zum Zurücksetzen.",
+			"action": "Link senden",
+			"sent": "Wenn ein Konto zu {email} existiert, haben wir dir eine E-Mail geschickt.",
+			"backToLogin": "Zurück zur Anmeldung"
+		},
+		"errors": {
+			"emailRequired": "Bitte gib deine E-Mail-Adresse ein.",
+			"emailInvalid": "Das sieht nicht wie eine E-Mail-Adresse aus.",
+			"passwordRequired": "Bitte gib ein Passwort ein.",
+			"passwordShort": "Das Passwort muss mindestens 8 Zeichen haben.",
+			"nameRequired": "Bitte gib einen Namen ein.",
+			"failed": "Anmeldung fehlgeschlagen. Bitte versuche es erneut."
+		}
+	},
+	"landing": {
+		"nav": {
+			"features": "Funktionen",
+			"how": "So geht's",
+			"pricing": "Preise",
+			"login": "Anmelden",
+			"start": "Kostenlos starten"
+		},
+		"badge": "Neu: Fokus-Modus mit Timer",
+		"headline1": "Kopf frei.",
+		"headline2": "Alles",
+		"headline3": "erledigt.",
+		"lead": "Klar ist die To-do-App, die nicht im Weg steht. Aufgaben in Sekunden erfassen, den Tag planen, abhaken – und den Rest vergessen.",
+		"cta": "Jetzt loslegen",
+		"secondary": "So funktioniert's",
+		"preview": {
+			"task1": "Wochenplan aufschreiben",
+			"task2": "Präsentation fertig machen",
+			"task3": "Milch, Eier, Kaffee"
+		},
+		"features": {
+			"eyebrow": "Funktionen",
+			"title": "Weniger Verwalten. Mehr Machen.",
+			"capture": {
+				"title": "In Sekunden erfassen",
+				"text": "Gedanken landen im Posteingang. Sortieren kannst du später."
+			},
+			"plan": {
+				"title": "Den Tag planen",
+				"text": "Heute, Demnächst, Überfällig – auf einen Blick, ohne Lärm."
+			},
+			"lists": {
+				"title": "Eigene Listen",
+				"text": "Einkaufen, Haushalt, Hobbys. Mit Farben, die du wiedererkennst."
+			},
+			"focus": {
+				"title": "Fokus-Modus",
+				"text": "Eine Aufgabe, ein Timer, volle Aufmerksamkeit."
+			}
+		},
+		"how": {
+			"eyebrow": "So geht's",
+			"title": "Drei Schritte. Fertig.",
+			"step1": "Aufgabe eintippen",
+			"step2": "Liste und Datum wählen",
+			"step3": "Abhaken und weitermachen"
+		},
+		"pricing": {
+			"eyebrow": "Preise",
+			"title": "Kostenlos. Für dich.",
+			"text": "Klar ist ein privates Projekt. Keine Abos, keine Werbung."
+		},
+		"footer": "Klar · Ein persönlicher Aufgabenmanager"
+	},
+	"errors": {
+		"notFound": "Diese Seite gibt es nicht.",
+		"notFoundHint": "Vielleicht wurde sie verschoben oder der Link ist falsch.",
+		"goHome": "Zur Übersicht"
+	}
 }

@@ -1,28 +1,380 @@
-
 {
-  "app": {
-    "name": "Klar",
-    "description": "Your personal task manager"
-  },
-  "navigation": {
-    "dashboard": "Dashboard",
-    "settings": "Settings",
-    "logout": "Log out"
-  },
-  "dashboard": {
-    "title": "My tasks",
-    "description": "Keep track of your tasks.",
-    "addTask": "Add task",
-    "empty": "You currently have no tasks.",
-    "openTasks": {
-      "one": "You have {count} open task.",
-      "other": "You have {count} open tasks."
-    }
-  },
-  "common": {
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "loading": "Loading ..."
-  }
+	"app": {
+		"name": "Klar",
+		"tagline": "Clear head. All done.",
+		"description": "Your personal task manager"
+	},
+	"navigation": {
+		"dashboard": "Overview",
+		"today": "Today",
+		"upcoming": "Upcoming",
+		"inbox": "Inbox",
+		"completed": "Completed",
+		"lists": "My lists",
+		"settings": "Settings",
+		"focus": "Focus",
+		"search": "Search",
+		"newList": "New list",
+		"newTask": "New task",
+		"logout": "Log out",
+		"menu": "Menu",
+		"openSidebar": "Open navigation",
+		"closeSidebar": "Close navigation",
+		"more": "More"
+	},
+	"common": {
+		"save": "Save",
+		"cancel": "Cancel",
+		"delete": "Delete",
+		"edit": "Edit",
+		"close": "Close",
+		"create": "Create",
+		"add": "Add",
+		"back": "Back",
+		"retry": "Try again",
+		"loading": "Loading …",
+		"optional": "Optional",
+		"confirm": "Confirm",
+		"open": "Open",
+		"done": "Done",
+		"all": "All",
+		"none": "None",
+		"today": "Today",
+		"tomorrow": "Tomorrow",
+		"yesterday": "Yesterday",
+		"later": "Later",
+		"overdue": "Overdue",
+		"noDate": "No date",
+		"errorTitle": "Something went wrong",
+		"errorGeneric": "The data could not be loaded.",
+		"openCount": {
+			"zero": "No open tasks",
+			"one": "{count} open task",
+			"other": "{count} open tasks"
+		},
+		"taskCount": {
+			"zero": "No tasks",
+			"one": "{count} task",
+			"other": "{count} tasks"
+		}
+	},
+	"greeting": {
+		"morning": "Good morning, {name}",
+		"afternoon": "Good afternoon, {name}",
+		"evening": "Good evening, {name}",
+		"night": "Good night, {name}"
+	},
+	"dashboard": {
+		"title": "Overview",
+		"subtitle": {
+			"zero": "All done. Enjoy your day.",
+			"one": "You have {count} task ahead today.",
+			"other": "You have {count} tasks ahead today."
+		},
+		"progress": "Progress",
+		"progressValue": "{done} of {total} done",
+		"stats": {
+			"open": "Open",
+			"today": "Due today",
+			"overdue": "Overdue",
+			"completedWeek": "Done this week"
+		},
+		"todaySection": "Today",
+		"overdueSection": "Overdue",
+		"recentlyCompleted": "Recently completed",
+		"lists": "My lists",
+		"allLists": "All lists",
+		"showAll": "Show all",
+		"emptyToday": "Nothing planned for today.",
+		"emptyTodayHint": "Add a task or check your inbox.",
+		"emptyCompleted": "Nothing done yet. You've got this.",
+		"noLists": "You don't have any lists yet.",
+		"quickAdd": "Add a new task …"
+	},
+	"upcoming": {
+		"eyebrow": "All upcoming tasks",
+		"title": "Upcoming",
+		"filterList": "List",
+		"sort": "Sort",
+		"sortDue": "Due date",
+		"sortPriority": "Priority",
+		"sortCreated": "Created",
+		"later": "Later",
+		"noDate": "No date",
+		"empty": "No upcoming tasks.",
+		"emptyHint": "Tasks with a due date will show up here."
+	},
+	"inbox": {
+		"eyebrow": "Capture everything in one place",
+		"title": "Inbox",
+		"description": "Capture thoughts quickly. Sort them later.",
+		"placeholder": "What do you want to get done?",
+		"unassigned": "Not assigned yet",
+		"empty": "Your inbox is empty.",
+		"emptyHint": "Tasks without a list end up here.",
+		"moveTo": "Move to"
+	},
+	"completed": {
+		"eyebrow": "Everything you've finished",
+		"title": "Completed",
+		"empty": "No completed tasks yet.",
+		"emptyHint": "Check off a task and it will show up here.",
+		"reopen": "Reopen",
+		"clearAll": "Delete completed tasks",
+		"clearConfirm": "Permanently delete all completed tasks?"
+	},
+	"tasks": {
+		"open": "Open",
+		"done": "Done",
+		"new": "New task",
+		"edit": "Edit task",
+		"titleLabel": "Task name",
+		"titlePlaceholder": "What needs to be done?",
+		"description": "Note",
+		"descriptionPlaceholder": "Add a note …",
+		"list": "List",
+		"noList": "No list (inbox)",
+		"priority": "Priority",
+		"dueDate": "Due date",
+		"dueTime": "Time",
+		"pickDate": "Pick a date",
+		"createAction": "Create task",
+		"saveAction": "Save changes",
+		"createdAt": "Created {date}",
+		"completedAt": "Completed {date}",
+		"markDone": "Mark as done",
+		"markOpen": "Reopen",
+		"deleteConfirm": "Delete task “{title}”?",
+		"deleted": "Task deleted",
+		"created": "Task created",
+		"updated": "Task saved",
+		"completed": "Done: {title}",
+		"reopened": "Reopened: {title}",
+		"titleRequired": "Please enter a name.",
+		"focusOn": "Start focus",
+		"addToList": "Add task to {list}",
+		"quickAddHint": "Press Enter to add",
+		"priorities": {
+			"low": "Low",
+			"normal": "Normal",
+			"high": "High"
+		}
+	},
+	"lists": {
+		"title": "My lists",
+		"eyebrow": "Everything sorted",
+		"description": "Organise your tasks into lists that fit your life.",
+		"new": "New list",
+		"edit": "Edit list",
+		"name": "Name",
+		"namePlaceholder": "e.g. Groceries",
+		"listDescription": "Description",
+		"descriptionPlaceholder": "What is this list for?",
+		"color": "Colour",
+		"icon": "Icon",
+		"nameRequired": "Please enter a name.",
+		"created": "List created",
+		"updated": "List saved",
+		"deleted": "List deleted",
+		"deleteConfirm": "Delete list “{name}”? Its tasks will be moved to the inbox.",
+		"empty": "You don't have any lists yet.",
+		"emptyHint": "Create a list like “Groceries” or “Household”.",
+		"emptyTasks": "Nothing in this list yet.",
+		"emptyTasksHint": "Add the first task.",
+		"notFound": "This list does not exist.",
+		"breadcrumb": "My lists / {name}",
+		"openTasks": {
+			"zero": "No open tasks",
+			"one": "{count} open task",
+			"other": "{count} open tasks"
+		},
+		"colors": {
+			"orange": "Orange",
+			"blue": "Blue",
+			"purple": "Purple",
+			"lime": "Lime",
+			"pink": "Pink",
+			"teal": "Teal",
+			"yellow": "Yellow",
+			"gray": "Grey"
+		}
+	},
+	"focus": {
+		"title": "Focus mode",
+		"subtitle": "One task. Your full attention.",
+		"noTask": "Free focus",
+		"start": "Start sprint",
+		"pause": "Pause",
+		"resume": "Resume",
+		"stop": "Stop",
+		"reset": "Reset",
+		"finished": "Sprint complete!",
+		"finishedHint": "Take a short break or start the next sprint.",
+		"markDone": "Complete task",
+		"chooseTask": "Choose a task",
+		"duration": "Duration",
+		"minutes": {
+			"one": "{count} minute",
+			"other": "{count} minutes"
+		}
+	},
+	"search": {
+		"title": "Search",
+		"placeholder": "Search tasks and lists …",
+		"hint": "Type to search",
+		"noResults": "No results for “{query}”.",
+		"tasks": "Tasks",
+		"lists": "Lists",
+		"shortcut": "Ctrl K"
+	},
+	"settings": {
+		"title": "Settings",
+		"eyebrow": "Make Klar yours",
+		"appearance": {
+			"title": "Appearance",
+			"description": "Choose how Klar should look.",
+			"theme": "Theme",
+			"light": "Light",
+			"dark": "Dark",
+			"system": "System"
+		},
+		"language": {
+			"title": "Language",
+			"description": "The interface language. Your tasks are never translated."
+		},
+		"profile": {
+			"title": "Profile",
+			"description": "Your personal details.",
+			"name": "Name",
+			"email": "Email",
+			"save": "Save profile",
+			"saved": "Profile saved",
+			"demoHint": "Demo mode: changes are only stored locally."
+		},
+		"tasks": {
+			"title": "Tasks",
+			"description": "How tasks are created and displayed.",
+			"defaultList": "Default list",
+			"defaultPriority": "Default priority",
+			"showCompleted": "Show completed tasks on the overview",
+			"confirmDelete": "Ask before deleting",
+			"weekStart": "Week starts on",
+			"monday": "Monday",
+			"sunday": "Sunday"
+		},
+		"focus": {
+			"title": "Focus",
+			"description": "Length of a focus sprint.",
+			"duration": "Sprint duration"
+		},
+		"data": {
+			"title": "Data",
+			"description": "Reset demo data or log out.",
+			"reset": "Reset demo data",
+			"resetConfirm": "Reset all local tasks and lists to their initial state?",
+			"resetDone": "Demo data has been reset",
+			"logout": "Log out"
+		},
+		"saved": "Settings saved"
+	},
+	"auth": {
+		"demoBanner": "Demo mode: no real account is created yet. Any email address works.",
+		"email": "Email",
+		"emailPlaceholder": "you@example.com",
+		"password": "Password",
+		"passwordPlaceholder": "At least 8 characters",
+		"name": "Name",
+		"namePlaceholder": "What should we call you?",
+		"login": {
+			"title": "Welcome back",
+			"subtitle": "Sign in to see your tasks.",
+			"action": "Sign in",
+			"forgot": "Forgot password?",
+			"noAccount": "No account yet?",
+			"register": "Sign up",
+			"demoLogin": "Sign in with demo account"
+		},
+		"register": {
+			"title": "Create your account",
+			"subtitle": "Start for free. No credit card needed.",
+			"action": "Create account",
+			"hasAccount": "Already have an account?",
+			"login": "Sign in",
+			"terms": "By signing up you accept the terms of use."
+		},
+		"forgot": {
+			"title": "Reset your password",
+			"subtitle": "We'll send you a link to reset it.",
+			"action": "Send link",
+			"sent": "If an account exists for {email}, we've sent you an email.",
+			"backToLogin": "Back to sign in"
+		},
+		"errors": {
+			"emailRequired": "Please enter your email address.",
+			"emailInvalid": "That doesn't look like an email address.",
+			"passwordRequired": "Please enter a password.",
+			"passwordShort": "The password needs at least 8 characters.",
+			"nameRequired": "Please enter a name.",
+			"failed": "Sign in failed. Please try again."
+		}
+	},
+	"landing": {
+		"nav": {
+			"features": "Features",
+			"how": "How it works",
+			"pricing": "Pricing",
+			"login": "Sign in",
+			"start": "Start for free"
+		},
+		"badge": "New: focus mode with timer",
+		"headline1": "Clear head.",
+		"headline2": "All",
+		"headline3": "done.",
+		"lead": "Klar is the to-do app that stays out of your way. Capture tasks in seconds, plan your day, check them off – and forget the rest.",
+		"cta": "Get started",
+		"secondary": "How it works",
+		"preview": {
+			"task1": "Write the weekly plan",
+			"task2": "Finish the presentation",
+			"task3": "Milk, eggs, coffee"
+		},
+		"features": {
+			"eyebrow": "Features",
+			"title": "Less managing. More doing.",
+			"capture": {
+				"title": "Capture in seconds",
+				"text": "Thoughts land in your inbox. Sort them whenever you like."
+			},
+			"plan": {
+				"title": "Plan your day",
+				"text": "Today, upcoming, overdue – at a glance, without the noise."
+			},
+			"lists": {
+				"title": "Your own lists",
+				"text": "Groceries, household, hobbies. With colours you recognise."
+			},
+			"focus": {
+				"title": "Focus mode",
+				"text": "One task, one timer, full attention."
+			}
+		},
+		"how": {
+			"eyebrow": "How it works",
+			"title": "Three steps. Done.",
+			"step1": "Type a task",
+			"step2": "Pick a list and a date",
+			"step3": "Check it off and move on"
+		},
+		"pricing": {
+			"eyebrow": "Pricing",
+			"title": "Free. For you.",
+			"text": "Klar is a personal project. No subscriptions, no ads."
+		},
+		"footer": "Klar · A personal task manager"
+	},
+	"errors": {
+		"notFound": "This page does not exist.",
+		"notFoundHint": "Maybe it moved or the link is wrong.",
+		"goHome": "Go to overview"
+	}
 }
