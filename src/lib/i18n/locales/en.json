@@ -1,0 +1,28 @@
+
+{
+  "app": {
+    "name": "Klar",
+    "description": "Your personal task manager"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "logout": "Log out"
+  },
+  "dashboard": {
+    "title": "My tasks",
+    "description": "Keep track of your tasks.",
+    "addTask": "Add task",
+    "empty": "You currently have no tasks.",
+    "openTasks": {
+      "one": "You have {count} open task.",
+      "other": "You have {count} open tasks."
+    }
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "loading": "Loading ..."
+  }
+}

@@ -1,0 +1,28 @@
+
+{
+  "app": {
+    "name": "Klar",
+    "description": "Dein persönlicher Aufgabenmanager"
+  },
+  "navigation": {
+    "dashboard": "Übersicht",
+    "settings": "Einstellungen",
+    "logout": "Abmelden"
+  },
+  "dashboard": {
+    "title": "Meine Aufgaben",
+    "description": "Behalte deine Aufgaben im Überblick.",
+    "addTask": "Aufgabe hinzufügen",
+    "empty": "Du hast aktuell keine Aufgaben.",
+    "openTasks": {
+      "one": "Du hast {count} offene Aufgabe.",
+      "other": "Du hast {count} offene Aufgaben."
+    }
+  },
+  "common": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "loading": "Wird geladen ..."
+  }
+}

@@ -1,5 +1,7 @@
 <script lang="ts">
-	import Counter from './Counter.svelte';
+	import { useTranslations } from '#lib/i18n/index.ts';
+
+	const t = useTranslations();
 </script>
 
 <svelte:head>
@@ -8,19 +10,7 @@
 </svelte:head>
 
 <section>
-	<h1>
-		<span class="welcome">
-			<enhanced:img class="welcome-image" src="#lib/images/svelte-welcome.png" alt="Welcome" />
-		</span>
-
-		to your new<br />SvelteKit app
-	</h1>
-
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
-
-	<Counter />
+	<h1>{t('app.name')}</h1>
 </section>
 
 <style>
