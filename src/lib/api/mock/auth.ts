@@ -44,6 +44,7 @@ export const mockAuthApi: AuthApi = {
 				id: createId('user'),
 				name: normalized.split('@')[0],
 				email: normalized,
+				emailVerified: true,
 				createdAt: new Date().toISOString()
 			};
 			writeStorage(MOCK_KEYS.users, [...loadUsers(), user]);
@@ -63,10 +64,37 @@ export const mockAuthApi: AuthApi = {
 			id: createId('user'),
 			name: name.trim(),
 			email: normalized,
+			emailVerified: true,
 			createdAt: new Date().toISOString()
 		};
 		writeStorage(MOCK_KEYS.users, [...users, user]);
+		// Demo mode skips the email step: any code is accepted in verifyEmail.
+		return { user, verificationRequired: true };
+	},
+
+	async verifyEmail({ email, code }) {
+		await delay(300);
+		validateEmail(email);
+		if (!/^\s*\d{3}\s?\d{3}\s*$/.test(code)) {
+			throw new ApiError('Code is invalid', 'validation', 400, { code: 'invalid_code' });
+		}
+		const normalized = email.trim().toLowerCase();
+		const user = loadUsers().find((u) => u.email.toLowerCase() === normalized);
+		if (!user) throw new ApiError('Code is invalid', 'validation', 400, { code: 'invalid_code' });
 		return startSession(user);
+	},
+
+	async resendVerification(email) {
+		await delay(300);
+		validateEmail(email);
+	},
+
+	async resetPassword({ email, code }) {
+		await delay(300);
+		validateEmail(email);
+		if (!/^\s*\d{3}\s?\d{3}\s*$/.test(code)) {
+			throw new ApiError('Code is invalid', 'validation', 400, { code: 'invalid_code' });
+		}
 	},
 
 	async logout() {

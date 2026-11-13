@@ -49,6 +49,14 @@
 			<Icon name="mail" size={20} />
 		</span>
 		<p class="text-sm text-fg-2">{t('auth.forgot.sent', { email })}</p>
+		<Button
+			variant="primary"
+			size="lg"
+			block
+			href={`${localizedHref(locale(), '/reset-password')}?email=${encodeURIComponent(email.trim().toLowerCase())}`}
+		>
+			{t('auth.forgot.enterCode')}
+		</Button>
 	</div>
 {:else}
 	<form

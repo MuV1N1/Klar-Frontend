@@ -4,6 +4,7 @@
 	import Button from '#lib/components/ui/Button.svelte';
 	import Field from '#lib/components/ui/Field.svelte';
 	import Input from '#lib/components/ui/Input.svelte';
+	import { ApiError } from '#lib/api/errors.ts';
 	import { localizedHref, useLocale, useTranslations } from '#lib/i18n/index.ts';
 	import { auth } from '#lib/stores/auth.svelte.ts';
 
@@ -31,10 +32,18 @@
 		if (!validate()) return;
 		submitting = true;
 		try {
-			await auth.register({ name, email, password });
-			await goto(localizedHref(locale(), '/app'));
-		} catch {
-			errors = { form: t('auth.errors.failed') };
+			const result = await auth.register({ name, email, password });
+			const target = result.verificationRequired ? '/verify-email' : '/login';
+			await goto(
+				`${localizedHref(locale(), target)}?email=${encodeURIComponent(result.user.email)}`
+			);
+		} catch (error) {
+			errors = {
+				form:
+					error instanceof ApiError && error.status === 409
+						? t('auth.errors.emailTaken')
+						: t('auth.errors.registerFailed')
+			};
 		} finally {
 			submitting = false;
 		}

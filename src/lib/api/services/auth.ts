@@ -1,4 +1,4 @@
-import type { AuthSession, User } from '#lib/types/index.ts';
+import type { AuthSession, RegisterResult, User } from '#lib/types/index.ts';
 
 import { endpoints } from '../config.ts';
 import { ApiError } from '../errors.ts';
@@ -12,11 +12,13 @@ export const authApi: AuthApi = {
 		tokenStorage.set(session.accessToken);
 		return session;
 	},
-	async register(input) {
-		const session = await http.post<AuthSession>(endpoints.auth.register, input);
+	register: (input) => http.post<RegisterResult>(endpoints.auth.register, input),
+	async verifyEmail(input) {
+		const session = await http.post<AuthSession>(endpoints.auth.verifyEmail, input);
 		tokenStorage.set(session.accessToken);
 		return session;
 	},
+	resendVerification: (email) => http.post<void>(endpoints.auth.resendVerification, { email }),
 	async logout() {
 		try {
 			await http.post<void>(endpoints.auth.logout);
@@ -25,6 +27,7 @@ export const authApi: AuthApi = {
 		}
 	},
 	forgotPassword: (email) => http.post<void>(endpoints.auth.forgotPassword, { email }),
+	resetPassword: (input) => http.post<void>(endpoints.auth.resetPassword, input),
 	async me() {
 		if (!tokenStorage.get()) return null;
 		try {

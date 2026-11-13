@@ -4,12 +4,15 @@ import type {
 	CreateTaskInput,
 	LoginInput,
 	RegisterInput,
+	RegisterResult,
+	ResetPasswordInput,
 	Task,
 	TaskList,
 	UpdateListInput,
 	UpdateProfileInput,
 	UpdateTaskInput,
-	User
+	User,
+	VerifyEmailInput
 } from '#lib/types/index.ts';
 
 /**
@@ -35,9 +38,15 @@ export interface ListsApi {
 
 export interface AuthApi {
 	login(input: LoginInput): Promise<AuthSession>;
-	register(input: RegisterInput): Promise<AuthSession>;
+	/** Creates the account; the user must confirm the emailed code via verifyEmail before signing in. */
+	register(input: RegisterInput): Promise<RegisterResult>;
+	/** Confirms the emailed code and signs the user in. */
+	verifyEmail(input: VerifyEmailInput): Promise<AuthSession>;
+	resendVerification(email: string): Promise<void>;
 	logout(): Promise<void>;
+	/** Sends a 6-digit reset code; always resolves, even for unknown emails. */
 	forgotPassword(email: string): Promise<void>;
+	resetPassword(input: ResetPasswordInput): Promise<void>;
 	/** Returns the current user, or null when no valid session exists. */
 	me(): Promise<User | null>;
 	updateProfile(input: UpdateProfileInput): Promise<User>;

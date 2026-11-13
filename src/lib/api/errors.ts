@@ -50,3 +50,14 @@ export function toApiError(error: unknown): ApiError {
 		error
 	);
 }
+
+/** Machine-readable error code sent by the backend (e.g. `email_not_verified`, `invalid_code`). */
+export function apiErrorCode(error: unknown): string | null {
+	if (!(error instanceof ApiError)) return null;
+	const details = error.details;
+	if (details && typeof details === 'object' && 'code' in details) {
+		const code = (details as { code: unknown }).code;
+		return typeof code === 'string' ? code : null;
+	}
+	return null;
+}

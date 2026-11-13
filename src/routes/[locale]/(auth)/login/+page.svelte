@@ -7,6 +7,7 @@
 	import Input from '#lib/components/ui/Input.svelte';
 	import { DEMO_CREDENTIALS } from '#lib/api/mock/seed.ts';
 	import { apiConfig } from '#lib/api/config.ts';
+	import { apiErrorCode } from '#lib/api/errors.ts';
 	import { localizedHref, useLocale, useTranslations } from '#lib/i18n/index.ts';
 	import { auth } from '#lib/stores/auth.svelte.ts';
 
@@ -35,7 +36,13 @@
 			await auth.login(credentials);
 			const redirect = page.url.searchParams.get('redirect');
 			await goto(redirect?.startsWith('/') ? redirect : localizedHref(locale(), '/app'));
-		} catch {
+		} catch (error) {
+			if (apiErrorCode(error) === 'email_not_verified') {
+				await goto(
+					`${localizedHref(locale(), '/verify-email')}?email=${encodeURIComponent(credentials.email)}`
+				);
+				return;
+			}
 			errors = { form: t('auth.errors.failed') };
 		} finally {
 			submitting = false;

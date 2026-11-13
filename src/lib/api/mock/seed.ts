@@ -9,6 +9,7 @@ export const DEMO_USER: User = {
 	id: 'user_demo',
 	name: 'Marvin',
 	email: 'demo@klar.app',
+	emailVerified: true,
 	createdAt: '2026-01-10T09:00:00.000Z'
 };
 

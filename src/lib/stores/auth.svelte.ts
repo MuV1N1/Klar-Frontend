@@ -1,6 +1,14 @@
 import { api } from '#lib/api/index.ts';
 import { toApiError } from '#lib/api/errors.ts';
-import type { LoginInput, RegisterInput, UpdateProfileInput, User } from '#lib/types/index.ts';
+import type {
+	LoginInput,
+	RegisterInput,
+	RegisterResult,
+	ResetPasswordInput,
+	UpdateProfileInput,
+	User,
+	VerifyEmailInput
+} from '#lib/types/index.ts';
 
 export type AuthStatus = 'unknown' | 'anonymous' | 'authenticated';
 
@@ -43,10 +51,35 @@ class AuthStore {
 		}
 	}
 
-	async register(input: RegisterInput) {
+	/** Creates the account. The user is NOT signed in yet – see verifyEmail. */
+	async register(input: RegisterInput): Promise<RegisterResult> {
 		try {
-			const session = await api.auth.register(input);
+			return await api.auth.register(input);
+		} catch (error) {
+			throw toApiError(error);
+		}
+	}
+
+	async verifyEmail(input: VerifyEmailInput) {
+		try {
+			const session = await api.auth.verifyEmail(input);
 			this.setUser(session.user);
+		} catch (error) {
+			throw toApiError(error);
+		}
+	}
+
+	async resendVerification(email: string) {
+		try {
+			await api.auth.resendVerification(email);
+		} catch (error) {
+			throw toApiError(error);
+		}
+	}
+
+	async resetPassword(input: ResetPasswordInput) {
+		try {
+			await api.auth.resetPassword(input);
 		} catch (error) {
 			throw toApiError(error);
 		}
