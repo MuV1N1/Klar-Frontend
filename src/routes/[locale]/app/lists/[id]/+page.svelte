@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 
+	import { deleteList } from '#lib/components/lists/listActions.ts';
 	import { listColorValue } from '#lib/components/lists/listHelpers.ts';
 	import QuickAdd from '#lib/components/tasks/QuickAdd.svelte';
 	import TaskSection from '#lib/components/tasks/TaskSection.svelte';
@@ -15,7 +15,6 @@
 	import { localizedHref, useLocale, useTranslations } from '#lib/i18n/index.ts';
 	import { lists } from '#lib/stores/lists.svelte.ts';
 	import { tasks } from '#lib/stores/tasks.svelte.ts';
-	import { toasts } from '#lib/stores/toasts.svelte.ts';
 	import { ui } from '#lib/stores/ui.svelte.ts';
 
 	const t = useTranslations();
@@ -25,20 +24,6 @@
 	const listTasks = $derived(
 		page.params.id ? tasks.forList(page.params.id) : { open: [], completed: [] }
 	);
-
-	async function remove() {
-		if (!list) return;
-		if (!confirm(t('lists.deleteConfirm', { name: list.name }))) return;
-		const id = list.id;
-		try {
-			await lists.remove(id);
-			tasks.detachFromList(id);
-			toasts.success(t('lists.deleted'));
-			await goto(localizedHref(locale(), '/app/lists'));
-		} catch {
-			toasts.error(t('common.errorGeneric'));
-		}
-	}
 
 	const menuItems = $derived<MenuItem[]>([
 		{
@@ -52,7 +37,7 @@
 			label: t('common.delete'),
 			icon: 'trash',
 			danger: true,
-			onSelect: () => void remove()
+			onSelect: () => list && void deleteList(list, t, locale())
 		}
 	]);
 </script>

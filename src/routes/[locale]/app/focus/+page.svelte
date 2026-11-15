@@ -140,7 +140,7 @@
 				cy="50"
 				r={RADIUS}
 				fill="none"
-				stroke="var(--accent)"
+				stroke="var(--accent-line)"
 				stroke-width="4"
 				stroke-linecap="round"
 				stroke-dasharray={progressDash}

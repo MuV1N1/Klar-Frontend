@@ -29,6 +29,8 @@ export interface VerifyEmailInput {
 	email: string;
 	/** 6-digit code from the email; spaces are ignored by the backend. */
 	code: string;
+	/** Password chosen at registration; the backend only confirms the account if it matches. */
+	password: string;
 }
 
 export interface ResetPasswordInput {

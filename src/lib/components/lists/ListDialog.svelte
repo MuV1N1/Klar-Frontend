@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { useTranslations } from '#lib/i18n/index.ts';
+	import { useLocale, useTranslations } from '#lib/i18n/index.ts';
 	import { lists } from '#lib/stores/lists.svelte.ts';
 	import { toasts } from '#lib/stores/toasts.svelte.ts';
 	import { ui } from '#lib/stores/ui.svelte.ts';
@@ -17,9 +17,11 @@
 	import Icon from '../ui/Icon.svelte';
 	import Input from '../ui/Input.svelte';
 	import Textarea from '../ui/Textarea.svelte';
+	import { deleteList } from './listActions.ts';
 	import { listIconName } from './listHelpers.ts';
 
 	const t = useTranslations();
+	const locale = useLocale();
 
 	const dialog = $derived(ui.listDialog);
 	const editing = $derived(dialog.list);
@@ -64,6 +66,11 @@
 		} finally {
 			saving = false;
 		}
+	}
+
+	async function remove() {
+		if (!editing) return;
+		if (await deleteList(editing, t, locale())) ui.closeListDialog();
 	}
 </script>
 
@@ -150,7 +157,13 @@
 	</form>
 
 	{#snippet footer()}
-		<div class="flex items-center justify-end gap-2 border-t border-border pt-5">
+		<div class="flex items-center gap-2 border-t border-border pt-5">
+			{#if editing}
+				<Button variant="danger" size="sm" icon="trash" onclick={remove}>
+					{t('common.delete')}
+				</Button>
+			{/if}
+			<span class="flex-1"></span>
 			<Button variant="ghost" onclick={() => ui.closeListDialog()}>{t('common.cancel')}</Button>
 			<Button type="submit" form="list-form" variant="primary" loading={saving}>
 				{editing ? t('common.save') : t('common.create')}

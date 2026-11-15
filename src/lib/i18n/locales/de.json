@@ -319,6 +319,7 @@
 			"failed": "Anmeldung fehlgeschlagen. Bitte versuche es erneut.",
 			"codeRequired": "Bitte gib den 6-stelligen Code ein.",
 			"codeInvalid": "Der Code ist ungültig oder abgelaufen. Fordere einen neuen an.",
+			"codeOrPasswordInvalid": "Code oder Passwort ist falsch, oder der Code ist abgelaufen.",
 			"emailTaken": "Zu dieser E-Mail-Adresse gibt es schon ein Konto.",
 			"emailNotVerified": "Bitte bestätige zuerst deine E-Mail-Adresse.",
 			"registerFailed": "Registrierung fehlgeschlagen. Bitte versuche es erneut."

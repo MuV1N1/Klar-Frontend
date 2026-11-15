@@ -319,6 +319,7 @@
 			"failed": "Sign in failed. Please try again.",
 			"codeRequired": "Please enter the 6-digit code.",
 			"codeInvalid": "The code is invalid or has expired. Request a new one.",
+			"codeOrPasswordInvalid": "The code or password is wrong, or the code has expired.",
 			"emailTaken": "There is already an account for this email address.",
 			"emailNotVerified": "Please confirm your email address first.",
 			"registerFailed": "Registration failed. Please try again."

@@ -14,6 +14,7 @@
 
 	let email = $state(page.url.searchParams.get('email') ?? '');
 	let code = $state('');
+	let password = $state('');
 	let error = $state<string | null>(null);
 	let notice = $state<string | null>(null);
 	let submitting = $state(false);
@@ -30,16 +31,20 @@
 			error = t('auth.errors.codeRequired');
 			return;
 		}
+		if (!password) {
+			error = t('auth.errors.passwordRequired');
+			return;
+		}
 		submitting = true;
 		error = null;
 		notice = null;
 		try {
-			await auth.verifyEmail({ email: email.trim(), code: code.replace(/\s/g, '') });
+			await auth.verifyEmail({ email: email.trim(), code: code.replace(/\s/g, ''), password });
 			await goto(localizedHref(locale(), '/app'));
 		} catch (err) {
 			error =
 				apiErrorCode(err) === 'invalid_code'
-					? t('auth.errors.codeInvalid')
+					? t('auth.errors.codeOrPasswordInvalid')
 					: t('auth.errors.failed');
 		} finally {
 			submitting = false;
@@ -97,6 +102,15 @@
 			bind:value={code}
 			placeholder={t('auth.verify.codePlaceholder')}
 			invalid={!!error}
+			oninput={() => (error = null)}
+		/>
+	</Field>
+	<Field label={t('auth.password')} for="password">
+		<Input
+			id="password"
+			type="password"
+			autocomplete="current-password"
+			bind:value={password}
 			oninput={() => (error = null)}
 		/>
 	</Field>
