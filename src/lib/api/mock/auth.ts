@@ -45,6 +45,7 @@ export const mockAuthApi: AuthApi = {
 				name: normalized.split('@')[0],
 				email: normalized,
 				emailVerified: true,
+				role: 'user',
 				createdAt: new Date().toISOString()
 			};
 			writeStorage(MOCK_KEYS.users, [...loadUsers(), user]);
@@ -65,6 +66,7 @@ export const mockAuthApi: AuthApi = {
 			name: name.trim(),
 			email: normalized,
 			emailVerified: true,
+			role: 'user',
 			createdAt: new Date().toISOString()
 		};
 		writeStorage(MOCK_KEYS.users, [...users, user]);

@@ -10,6 +10,7 @@ export const DEMO_USER: User = {
 	name: 'Marvin',
 	email: 'demo@klar.app',
 	emailVerified: true,
+	role: 'user',
 	createdAt: '2026-01-10T09:00:00.000Z'
 };
 

@@ -1,4 +1,5 @@
 import type { Api } from '../services/types.ts';
+import { mockAdminApi } from './admin.ts';
 import { mockAuthApi, resetMockData } from './auth.ts';
 import { mockEventsApi } from './events.ts';
 import { mockListsApi } from './lists.ts';
@@ -11,5 +12,6 @@ export const mockApi: Api = {
 	events: mockEventsApi,
 	notifications: mockNotificationsApi,
 	auth: mockAuthApi,
+	admin: mockAdminApi,
 	resetMockData
 };

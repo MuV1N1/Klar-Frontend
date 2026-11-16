@@ -1,3 +1,4 @@
+import type { Locale } from '#lib/i18n/index.ts';
 import type {
 	AuthSession,
 	CalendarEvent,
@@ -13,6 +14,7 @@ import type {
 	ResetPasswordInput,
 	Task,
 	TaskList,
+	TranslationEntry,
 	UpdateEventInput,
 	UpdateListInput,
 	UpdateProfileInput,
@@ -86,12 +88,20 @@ export interface AuthApi {
 	updateProfile(input: UpdateProfileInput): Promise<User>;
 }
 
+/** Only for accounts with `role: 'admin'`; the backend answers 403 otherwise. */
+export interface AdminApi {
+	translations(): Promise<TranslationEntry[]>;
+	/** `value: null` (or the default text) resets the text to its default. */
+	updateTranslation(locale: Locale, key: string, value: string | null): Promise<TranslationEntry>;
+}
+
 export interface Api {
 	tasks: TasksApi;
 	lists: ListsApi;
 	events: EventsApi;
 	notifications: NotificationsApi;
 	auth: AuthApi;
+	admin: AdminApi;
 	/** Only available in mock mode: restores the seed data. */
 	resetMockData?: () => Promise<void>;
 }

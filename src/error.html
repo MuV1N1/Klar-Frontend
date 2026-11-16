@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="de">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Klar</title>
+		<style>
+			body {
+				margin: 0;
+				min-height: 100dvh;
+				display: grid;
+				place-items: center;
+				font-family: system-ui, sans-serif;
+				background: #faf9f7;
+				color: #1c1b1a;
+				text-align: center;
+			}
+			@media (prefers-color-scheme: dark) {
+				body {
+					background: #161514;
+					color: #f2f0ed;
+				}
+			}
+			p {
+				color: #8a8682;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Shown when even the texts cannot be loaded, so it is static and bilingual -->
+		<main>
+			<h1>%sveltekit.status%</h1>
+			<p>Klar ist gerade nicht erreichbar. Bitte versuche es gleich noch einmal.</p>
+			<p>Klar is unavailable right now. Please try again in a moment.</p>
+		</main>
+	</body>
+</html>
