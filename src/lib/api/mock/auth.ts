@@ -135,4 +135,5 @@ export async function resetMockData(): Promise<void> {
 	await delay(150);
 	removeStorage(MOCK_KEYS.tasks);
 	removeStorage(MOCK_KEYS.lists);
+	removeStorage(MOCK_KEYS.events);
 }

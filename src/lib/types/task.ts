@@ -1,3 +1,5 @@
+import type { Reminder } from './calendar.ts';
+
 export type TaskPriority = 'low' | 'normal' | 'high';
 
 export const TASK_PRIORITIES: readonly TaskPriority[] = ['low', 'normal', 'high'];
@@ -20,6 +22,8 @@ export interface Task {
 	createdAt: string;
 	/** ISO timestamp. */
 	updatedAt: string;
+	/** Only take effect with a due date. */
+	reminders: Reminder[];
 }
 
 export interface CreateTaskInput {
@@ -29,6 +33,7 @@ export interface CreateTaskInput {
 	dueTime?: string | null;
 	priority?: TaskPriority;
 	listId?: string | null;
+	reminders?: Reminder[];
 }
 
 export type UpdateTaskInput = Partial<CreateTaskInput> & {

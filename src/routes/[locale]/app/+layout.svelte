@@ -8,6 +8,7 @@
 	import { localizedHref, useLocale } from '#lib/i18n/index.ts';
 	import { auth } from '#lib/stores/auth.svelte.ts';
 	import { lists } from '#lib/stores/lists.svelte.ts';
+	import { notifications } from '#lib/stores/notifications.svelte.ts';
 	import { tasks } from '#lib/stores/tasks.svelte.ts';
 
 	let { children } = $props();
@@ -29,6 +30,7 @@
 		if (auth.isAuthenticated) {
 			void lists.load();
 			void tasks.load();
+			void notifications.initialise();
 		}
 	});
 </script>

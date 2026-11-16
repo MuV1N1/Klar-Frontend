@@ -83,6 +83,7 @@ export function seedTasks(): Task[] {
 			completedAt: null,
 			createdAt: iso(createdDaysAgo),
 			updatedAt: iso(createdDaysAgo),
+			reminders: [],
 			...rest
 		};
 	};

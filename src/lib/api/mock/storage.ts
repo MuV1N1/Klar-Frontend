@@ -37,6 +37,8 @@ export function delay(ms = 180 + Math.random() * 220): Promise<void> {
 export const MOCK_KEYS = {
 	tasks: 'klar.mock.tasks',
 	lists: 'klar.mock.lists',
+	events: 'klar.mock.events',
+	notifications: 'klar.mock.notifications',
 	session: 'klar.mock.session',
 	users: 'klar.mock.users'
 } as const;

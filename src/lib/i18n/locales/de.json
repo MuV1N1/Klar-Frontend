@@ -20,7 +20,8 @@
 		"menu": "Menü",
 		"openSidebar": "Navigation öffnen",
 		"closeSidebar": "Navigation schließen",
-		"more": "Mehr"
+		"more": "Mehr",
+		"calendar": "Kalender"
 	},
 	"common": {
 		"save": "Speichern",
@@ -158,7 +159,9 @@
 			"low": "Niedrig",
 			"normal": "Normal",
 			"high": "Hoch"
-		}
+		},
+		"reminders": "Erinnerungen",
+		"remindersAllDayHint": "Ohne Uhrzeit zählen Erinnerungen ab Mitternacht."
 	},
 	"lists": {
 		"title": "Meine Listen",
@@ -275,7 +278,33 @@
 			"resetDone": "Demo-Daten wurden zurückgesetzt",
 			"logout": "Abmelden"
 		},
-		"saved": "Einstellungen gespeichert"
+		"saved": "Einstellungen gespeichert",
+		"notifications": {
+			"title": "Benachrichtigungen",
+			"description": "Wie und wann Klar dich an Termine und Aufgaben erinnert.",
+			"push": "Push auf diesem Gerät",
+			"pushState": {
+				"unsupported": "Dieser Browser unterstützt keine Push-Nachrichten. Auf dem iPhone: Klar über „Teilen → Zum Home-Bildschirm“ hinzufügen und von dort öffnen.",
+				"unavailable": "Push ist auf dem Server noch nicht eingerichtet.",
+				"denied": "Benachrichtigungen sind im Browser blockiert. Erlaube sie in den Website-Einstellungen.",
+				"off": "Aus – Erinnerungen per Push kommen auf diesem Gerät nicht an.",
+				"on": "An – dieses Gerät bekommt Push-Erinnerungen."
+			},
+			"enable": "Aktivieren",
+			"disable": "Deaktivieren",
+			"test": "Test senden",
+			"testSent": {
+				"one": "Test an {count} Gerät gesendet",
+				"other": "Test an {count} Geräte gesendet"
+			},
+			"testFailed": "Kein Gerät hat den Test bekommen.",
+			"pushEnabled": "Push-Benachrichtigungen aktiviert",
+			"pushDenied": "Benachrichtigungen wurden nicht erlaubt.",
+			"fallback": "Ist auf keinem Gerät Push aktiv, kommen Push-Erinnerungen per E-Mail.",
+			"timedDefaults": "Standard für Termine mit Uhrzeit",
+			"allDayDefaults": "Standard für ganztägige Termine",
+			"timeZone": "Zeitzone für Erinnerungen: {zone} (vom Browser übernommen)"
+		}
 	},
 	"auth": {
 		"demoBanner": "Demo-Modus: Es wird noch kein echtes Konto angelegt. Jede E-Mail-Adresse funktioniert.",
@@ -402,5 +431,154 @@
 		"notFound": "Diese Seite gibt es nicht.",
 		"notFoundHint": "Vielleicht wurde sie verschoben oder der Link ist falsch.",
 		"goHome": "Zur Übersicht"
+	},
+	"calendar": {
+		"title": "Kalender",
+		"eyebrow": "Termine und Aufgaben",
+		"views": {
+			"month": "Monat",
+			"week": "Woche"
+		},
+		"previous": "Zurück",
+		"next": "Weiter",
+		"allDay": "Ganztägig",
+		"from": "ab {time}",
+		"until": "bis {time}",
+		"more": {
+			"one": "+{count} weiterer",
+			"other": "+{count} weitere"
+		},
+		"emptyDay": "Keine Termine oder Aufgaben an diesem Tag.",
+		"tasksDue": "Fällige Aufgaben",
+		"recurring": "Wiederholt sich",
+		"event": {
+			"new": "Neuer Termin",
+			"edit": "Termin bearbeiten",
+			"titleLabel": "Titel",
+			"titleRequired": "Bitte gib einen Titel ein.",
+			"timeRequired": "Bitte gib Beginn und Ende an.",
+			"endBeforeStart": "Das Ende liegt vor dem Beginn.",
+			"allDay": "Ganztägig",
+			"start": "Beginn",
+			"startTime": "Uhrzeit Beginn",
+			"end": "Ende",
+			"endTime": "Uhrzeit Ende",
+			"otherZone": "Zeiten in der Zeitzone {zone}",
+			"recurrence": "Wiederholung",
+			"reminders": "Erinnerungen",
+			"remindersSeries": "Erinnerungen gelten für alle Termine der Serie.",
+			"location": "Ort",
+			"color": "Farbe",
+			"description": "Notizen",
+			"saveAction": "Speichern",
+			"createAction": "Termin anlegen",
+			"created": "Termin angelegt",
+			"updated": "Termin gespeichert",
+			"deleted": "Termin gelöscht",
+			"deleteConfirm": "„{title}“ löschen?"
+		},
+		"scope": {
+			"saveTitle": "Wiederkehrenden Termin ändern",
+			"deleteTitle": "Wiederkehrenden Termin löschen",
+			"this": "Nur diesen Termin",
+			"following": "Diesen und alle folgenden",
+			"all": "Alle Termine der Serie"
+		},
+		"recurrence": {
+			"none": "Keine Wiederholung",
+			"daily": "Täglich",
+			"weekly": "Wöchentlich",
+			"monthly": "Monatlich",
+			"yearly": "Jährlich",
+			"custom": "Benutzerdefinierte Wiederholung",
+			"every": {
+				"DAILY": {
+					"one": "Täglich",
+					"other": "Alle {count} Tage"
+				},
+				"WEEKLY": {
+					"one": "Jede Woche",
+					"other": "Alle {count} Wochen"
+				},
+				"MONTHLY": {
+					"one": "Jeden Monat",
+					"other": "Alle {count} Monate"
+				},
+				"YEARLY": {
+					"one": "Jedes Jahr",
+					"other": "Alle {count} Jahre"
+				}
+			},
+			"onDays": "am {days}",
+			"onNth": {
+				"1": "am ersten {day}",
+				"2": "am zweiten {day}",
+				"3": "am dritten {day}",
+				"4": "am vierten {day}",
+				"-1": "am letzten {day}"
+			},
+			"onMonthDay": "am {day}.",
+			"onDate": "am {date}",
+			"until": "bis {date}",
+			"times": {
+				"one": "einmal",
+				"other": "{count} Mal"
+			},
+			"everyPrefix": "Alle",
+			"unit": {
+				"DAILY": {
+					"one": "Tag",
+					"other": "Tage"
+				},
+				"WEEKLY": {
+					"one": "Woche",
+					"other": "Wochen"
+				},
+				"MONTHLY": {
+					"one": "Monat",
+					"other": "Monate"
+				},
+				"YEARLY": {
+					"one": "Jahr",
+					"other": "Jahre"
+				}
+			},
+			"days": "Wochentage",
+			"endNever": "Endet nie",
+			"endUntil": "Endet am",
+			"endCount": "Endet nach Anzahl"
+		}
+	},
+	"reminders": {
+		"atStart": "Zum Beginn",
+		"minutesBefore": {
+			"one": "{count} Minute vorher",
+			"other": "{count} Minuten vorher"
+		},
+		"hoursBefore": {
+			"one": "{count} Stunde vorher",
+			"other": "{count} Stunden vorher"
+		},
+		"daysBefore": {
+			"one": "{count} Tag vorher",
+			"other": "{count} Tage vorher"
+		},
+		"weeksBefore": {
+			"one": "{count} Woche vorher",
+			"other": "{count} Wochen vorher"
+		},
+		"onDayAt": "Am Tag um {time}",
+		"daysBeforeAt": {
+			"one": "Am Vortag um {time}",
+			"other": "{count} Tage vorher um {time}"
+		},
+		"channels": {
+			"push": "Push",
+			"email": "E-Mail"
+		},
+		"when": "Zeitpunkt",
+		"how": "Kanal",
+		"remove": "Erinnerung entfernen",
+		"add": "Erinnerung hinzufügen"
 	}
 }

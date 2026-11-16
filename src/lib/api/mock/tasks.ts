@@ -45,7 +45,8 @@ export const mockTasksApi: TasksApi = {
 			completed: false,
 			completedAt: null,
 			createdAt: now,
-			updatedAt: now
+			updatedAt: now,
+			reminders: input.reminders ?? []
 		};
 		save([task, ...load()]);
 		return task;
@@ -72,7 +73,8 @@ export const mockTasksApi: TasksApi = {
 			listId: input.listId !== undefined ? input.listId : current.listId,
 			completed,
 			completedAt: completed ? (current.completed ? current.completedAt : now) : null,
-			updatedAt: now
+			updatedAt: now,
+			reminders: input.reminders ?? current.reminders ?? []
 		};
 		tasks[index] = updated;
 		save(tasks);

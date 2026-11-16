@@ -5,9 +5,10 @@
 	import { tasks } from '#lib/stores/tasks.svelte.ts';
 	import { toasts } from '#lib/stores/toasts.svelte.ts';
 	import { ui } from '#lib/stores/ui.svelte.ts';
-	import { TASK_PRIORITIES, type TaskPriority } from '#lib/types/index.ts';
+	import { TASK_PRIORITIES, type Reminder, type TaskPriority } from '#lib/types/index.ts';
 	import { formatDateTime } from '#lib/utils/date.ts';
 
+	import ReminderEditor from '../calendar/ReminderEditor.svelte';
 	import Button from '../ui/Button.svelte';
 	import Dialog from '../ui/Dialog.svelte';
 	import Field from '../ui/Field.svelte';
@@ -27,6 +28,7 @@
 	let priority = $state<TaskPriority>('normal');
 	let dueDate = $state('');
 	let dueTime = $state('');
+	let reminders = $state<Reminder[]>([]);
 	let error = $state<string | null>(null);
 	let saving = $state(false);
 	let titleInput = $state<HTMLInputElement | null>(null);
@@ -42,6 +44,7 @@
 		priority = task?.priority ?? defaults.priority ?? settings.value.defaultPriority;
 		dueDate = task?.dueDate ?? defaults.dueDate ?? '';
 		dueTime = task?.dueTime ?? defaults.dueTime ?? '';
+		reminders = task?.reminders ?? [];
 		error = null;
 		setTimeout(() => titleInput?.focus(), 30);
 	});
@@ -68,7 +71,8 @@
 			listId: listId || null,
 			priority,
 			dueDate: dueDate || null,
-			dueTime: dueDate && dueTime ? dueTime : null
+			dueTime: dueDate && dueTime ? dueTime : null,
+			reminders: dueDate ? reminders : []
 		};
 		try {
 			if (editing) {
@@ -150,6 +154,15 @@
 				/>
 			</Field>
 		</div>
+
+		{#if dueDate}
+			<Field
+				label={t('tasks.reminders')}
+				hint={dueTime ? undefined : t('tasks.remindersAllDayHint')}
+			>
+				<ReminderEditor bind:reminders allDay={!dueTime} id="task-reminders" />
+			</Field>
+		{/if}
 
 		<Field label={t('tasks.description')} for="task-description">
 			<Textarea

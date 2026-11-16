@@ -87,3 +87,42 @@ export function relativeDueKey(iso: string): 'today' | 'tomorrow' | 'yesterday' 
 	if (diff === -1) return 'yesterday';
 	return null;
 }
+
+/** First day of the week containing `iso` (weeks start on Monday or Sunday). */
+export function startOfWeekISO(iso: string, weekStart: 'monday' | 'sunday'): string {
+	const date = parseISODate(iso);
+	const offset = weekStart === 'monday' ? (date.getDay() + 6) % 7 : date.getDay();
+	return addDaysISO(-offset, date);
+}
+
+/** The 7 days of the week containing `iso`. */
+export function weekDaysISO(iso: string, weekStart: 'monday' | 'sunday'): string[] {
+	const first = parseISODate(startOfWeekISO(iso, weekStart));
+	return Array.from({ length: 7 }, (_, i) => addDaysISO(i, first));
+}
+
+/** 6 full weeks covering the month of `iso`, as shown in a month view. */
+export function monthGridISO(iso: string, weekStart: 'monday' | 'sunday'): string[] {
+	const date = parseISODate(iso);
+	const first = startOfWeekISO(
+		toISODate(new Date(date.getFullYear(), date.getMonth(), 1)),
+		weekStart
+	);
+	return Array.from({ length: 42 }, (_, i) => addDaysISO(i, parseISODate(first)));
+}
+
+/** Same day in another month, clamped to the month's length (31 Jan + 1 → 28/29 Feb). */
+export function addMonthsISO(iso: string, months: number): string {
+	const date = parseISODate(iso);
+	const target = new Date(date.getFullYear(), date.getMonth() + months, 1);
+	const lastDay = new Date(target.getFullYear(), target.getMonth() + 1, 0).getDate();
+	target.setDate(Math.min(date.getDate(), lastDay));
+	return toISODate(target);
+}
+
+/** Local time of an instant, e.g. "09:30" / "9:30 AM". */
+export function formatInstantTime(instant: string, locale: Locale): string {
+	return new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit' }).format(
+		new Date(instant)
+	);
+}

@@ -10,6 +10,7 @@
 	import PageHeader from '#lib/components/ui/PageHeader.svelte';
 	import Select from '#lib/components/ui/Select.svelte';
 	import Toggle from '#lib/components/ui/Toggle.svelte';
+	import ReminderEditor from '#lib/components/calendar/ReminderEditor.svelte';
 	import { api } from '#lib/api/index.ts';
 	import { apiConfig } from '#lib/api/config.ts';
 	import {
@@ -21,11 +22,13 @@
 		useTranslations
 	} from '#lib/i18n/index.ts';
 	import { auth } from '#lib/stores/auth.svelte.ts';
+	import { calendar } from '#lib/stores/calendar.svelte.ts';
 	import { lists } from '#lib/stores/lists.svelte.ts';
+	import { notifications } from '#lib/stores/notifications.svelte.ts';
 	import { settings, type Theme } from '#lib/stores/settings.svelte.ts';
 	import { tasks } from '#lib/stores/tasks.svelte.ts';
 	import { toasts } from '#lib/stores/toasts.svelte.ts';
-	import { TASK_PRIORITIES, type TaskPriority } from '#lib/types/index.ts';
+	import { TASK_PRIORITIES, type Reminder, type TaskPriority } from '#lib/types/index.ts';
 
 	const t = useTranslations();
 	const locale = useLocale();
@@ -75,6 +78,58 @@
 		[15, 25, 30, 45, 60].map((m) => ({ value: String(m), label: t('focus.minutes', { count: m }) }))
 	);
 
+	// Notifications
+	let pushBusy = $state(false);
+
+	async function togglePush(enable: boolean) {
+		pushBusy = true;
+		try {
+			const state = enable
+				? await notifications.enablePush()
+				: (await notifications.disablePush(), 'off');
+			if (enable && state === 'on') toasts.success(t('settings.notifications.pushEnabled'));
+			if (enable && state === 'denied') toasts.error(t('settings.notifications.pushDenied'));
+		} catch {
+			toasts.error(t('common.errorGeneric'));
+		} finally {
+			pushBusy = false;
+		}
+	}
+
+	async function testPush() {
+		try {
+			const delivered = await notifications.testPush();
+			if (delivered > 0) toasts.success(t('settings.notifications.testSent', { count: delivered }));
+			else toasts.error(t('settings.notifications.testFailed'));
+		} catch {
+			toasts.error(t('common.errorGeneric'));
+		}
+	}
+
+	let saveTimer: ReturnType<typeof setTimeout> | undefined;
+	/** Saved shortly after the last change, so quick edits become one request. */
+	function saveDefaults(allDay: boolean, reminders: Reminder[]) {
+		clearTimeout(saveTimer);
+		saveTimer = setTimeout(async () => {
+			try {
+				await notifications.updateDefaults(allDay, reminders);
+				toasts.success(t('settings.saved'));
+			} catch {
+				toasts.error(t('common.errorGeneric'));
+			}
+		}, 600);
+	}
+
+	let timedDefaults = $state<Reminder[]>([]);
+	let allDayDefaults = $state<Reminder[]>([]);
+	$effect(() => {
+		const current = notifications.settings;
+		if (current) {
+			timedDefaults = current.eventReminders;
+			allDayDefaults = current.allDayEventReminders;
+		}
+	});
+
 	async function resetData() {
 		if (!confirm(t('settings.data.resetConfirm'))) return;
 		await api.resetMockData?.();
@@ -83,9 +138,12 @@
 	}
 
 	async function logout() {
+		// Before logging out: unsubscribing this device needs the session.
+		await notifications.reset();
 		await auth.logout();
 		tasks.reset();
 		lists.reset();
+		calendar.reset();
 		await goto(localizedHref(locale(), '/login'));
 	}
 </script>
@@ -226,6 +284,66 @@
 				onchange={(checked) => settings.update({ confirmDelete: checked })}
 			/>
 		</div>
+	</section>
+
+	<!-- Notifications -->
+	<section class="rounded-[18px] border border-border bg-surface p-5 sm:p-7">
+		<h2 class="text-[15px] font-semibold text-fg">{t('settings.notifications.title')}</h2>
+		<p class="mt-1 text-[13px] text-muted">{t('settings.notifications.description')}</p>
+
+		<div class="mt-5 flex flex-col gap-3 rounded-[14px] bg-surface-2 p-4">
+			<div class="flex flex-wrap items-center justify-between gap-3">
+				<span class="flex min-w-0 flex-col gap-0.5">
+					<span class="text-sm font-medium text-fg">{t('settings.notifications.push')}</span>
+					<span class="text-[12px] text-muted"
+						>{t(`settings.notifications.pushState.${notifications.push}`)}</span
+					>
+				</span>
+				<div class="flex items-center gap-2">
+					{#if notifications.push === 'on'}
+						<Button size="sm" variant="ghost" onclick={testPush}
+							>{t('settings.notifications.test')}</Button
+						>
+						<Button size="sm" variant="outline" loading={pushBusy} onclick={() => togglePush(false)}
+							>{t('settings.notifications.disable')}</Button
+						>
+					{:else if notifications.push === 'off'}
+						<Button
+							size="sm"
+							variant="primary"
+							icon="bell"
+							loading={pushBusy}
+							onclick={() => togglePush(true)}>{t('settings.notifications.enable')}</Button
+						>
+					{/if}
+				</div>
+			</div>
+			<p class="text-[12px] text-muted">{t('settings.notifications.fallback')}</p>
+		</div>
+
+		{#if notifications.settings}
+			<div class="mt-6 grid gap-6 sm:grid-cols-2 sm:gap-x-8">
+				<Field label={t('settings.notifications.timedDefaults')}>
+					<ReminderEditor
+						bind:reminders={timedDefaults}
+						allDay={false}
+						id="default-timed"
+						onchange={() => saveDefaults(false, timedDefaults)}
+					/>
+				</Field>
+				<Field label={t('settings.notifications.allDayDefaults')}>
+					<ReminderEditor
+						bind:reminders={allDayDefaults}
+						allDay={true}
+						id="default-all-day"
+						onchange={() => saveDefaults(true, allDayDefaults)}
+					/>
+				</Field>
+			</div>
+			<p class="mt-4 text-[12px] text-muted">
+				{t('settings.notifications.timeZone', { zone: notifications.settings.timeZone })}
+			</p>
+		{/if}
 	</section>
 
 	<!-- Focus -->

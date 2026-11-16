@@ -5,6 +5,7 @@
 	import { ui } from '#lib/stores/ui.svelte.ts';
 
 	import ListDialog from '../lists/ListDialog.svelte';
+	import EventDialog from '../calendar/EventDialog.svelte';
 	import TaskDialog from '../tasks/TaskDialog.svelte';
 	import IconButton from '../ui/IconButton.svelte';
 	import Logo from '../ui/Logo.svelte';
@@ -69,6 +70,7 @@
 
 	<BottomNav />
 	<TaskDialog />
+	<EventDialog />
 	<ListDialog />
 	<SearchDialog />
 </div>

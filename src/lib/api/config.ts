@@ -40,5 +40,15 @@ export const endpoints = {
 		collection: '/lists',
 		item: (id: string) => `/lists/${encodeURIComponent(id)}`
 	},
+	events: {
+		collection: '/events',
+		item: (id: string) => `/events/${encodeURIComponent(id)}`
+	},
+	settings: '/users/me/settings',
+	push: {
+		config: '/push/config',
+		subscriptions: '/push/subscriptions',
+		test: '/push/test'
+	},
 	profile: '/users/me'
 } as const;

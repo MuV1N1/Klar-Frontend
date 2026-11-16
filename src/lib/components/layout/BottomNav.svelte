@@ -14,7 +14,7 @@
 
 	const items = $derived<{ path: string; label: string; icon: IconName; exact?: boolean }[]>([
 		{ path: '/app', label: t('navigation.dashboard'), icon: 'sun', exact: true },
-		{ path: '/app/upcoming', label: t('navigation.upcoming'), icon: 'calendar' },
+		{ path: '/app/calendar', label: t('navigation.calendar'), icon: 'calendar' },
 		{ path: '/app/lists', label: t('navigation.lists'), icon: 'layers' },
 		{ path: '/app/settings', label: t('navigation.settings'), icon: 'settings' }
 	]);

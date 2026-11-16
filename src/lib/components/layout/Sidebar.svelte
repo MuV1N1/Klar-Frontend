@@ -64,6 +64,13 @@
 		onclick={close}
 	/>
 	<NavLink
+		href={href('/app/calendar')}
+		label={t('navigation.calendar')}
+		icon="grid"
+		active={isActive('/app/calendar')}
+		onclick={close}
+	/>
+	<NavLink
 		href={href('/app/upcoming')}
 		label={t('navigation.upcoming')}
 		icon="calendar"

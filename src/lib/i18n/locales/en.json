@@ -20,7 +20,8 @@
 		"menu": "Menu",
 		"openSidebar": "Open navigation",
 		"closeSidebar": "Close navigation",
-		"more": "More"
+		"more": "More",
+		"calendar": "Calendar"
 	},
 	"common": {
 		"save": "Save",
@@ -158,7 +159,9 @@
 			"low": "Low",
 			"normal": "Normal",
 			"high": "High"
-		}
+		},
+		"reminders": "Reminders",
+		"remindersAllDayHint": "Without a time, reminders count from midnight."
 	},
 	"lists": {
 		"title": "My lists",
@@ -275,7 +278,33 @@
 			"resetDone": "Demo data has been reset",
 			"logout": "Log out"
 		},
-		"saved": "Settings saved"
+		"saved": "Settings saved",
+		"notifications": {
+			"title": "Notifications",
+			"description": "How and when Klar reminds you of events and tasks.",
+			"push": "Push on this device",
+			"pushState": {
+				"unsupported": "This browser does not support push notifications. On iPhone: add Klar via “Share → Add to Home Screen” and open it from there.",
+				"unavailable": "Push is not set up on the server yet.",
+				"denied": "Notifications are blocked in the browser. Allow them in the site settings.",
+				"off": "Off – push reminders do not reach this device.",
+				"on": "On – this device receives push reminders."
+			},
+			"enable": "Turn on",
+			"disable": "Turn off",
+			"test": "Send test",
+			"testSent": {
+				"one": "Test sent to {count} device",
+				"other": "Test sent to {count} devices"
+			},
+			"testFailed": "No device received the test.",
+			"pushEnabled": "Push notifications turned on",
+			"pushDenied": "Notifications were not allowed.",
+			"fallback": "If push is not on for any device, push reminders arrive by email.",
+			"timedDefaults": "Default for events with a time",
+			"allDayDefaults": "Default for all-day events",
+			"timeZone": "Time zone for reminders: {zone} (taken from the browser)"
+		}
 	},
 	"auth": {
 		"demoBanner": "Demo mode: no real account is created yet. Any email address works.",
@@ -402,5 +431,154 @@
 		"notFound": "This page does not exist.",
 		"notFoundHint": "Maybe it moved or the link is wrong.",
 		"goHome": "Go to overview"
+	},
+	"calendar": {
+		"title": "Calendar",
+		"eyebrow": "Events and tasks",
+		"views": {
+			"month": "Month",
+			"week": "Week"
+		},
+		"previous": "Previous",
+		"next": "Next",
+		"allDay": "All day",
+		"from": "from {time}",
+		"until": "until {time}",
+		"more": {
+			"one": "+{count} more",
+			"other": "+{count} more"
+		},
+		"emptyDay": "No events or tasks on this day.",
+		"tasksDue": "Tasks due",
+		"recurring": "Repeats",
+		"event": {
+			"new": "New event",
+			"edit": "Edit event",
+			"titleLabel": "Title",
+			"titleRequired": "Please enter a title.",
+			"timeRequired": "Please enter a start and an end.",
+			"endBeforeStart": "The end is before the start.",
+			"allDay": "All day",
+			"start": "Start",
+			"startTime": "Start time",
+			"end": "End",
+			"endTime": "End time",
+			"otherZone": "Times in the {zone} time zone",
+			"recurrence": "Repeat",
+			"reminders": "Reminders",
+			"remindersSeries": "Reminders apply to every event in the series.",
+			"location": "Location",
+			"color": "Colour",
+			"description": "Notes",
+			"saveAction": "Save",
+			"createAction": "Create event",
+			"created": "Event created",
+			"updated": "Event saved",
+			"deleted": "Event deleted",
+			"deleteConfirm": "Delete “{title}”?"
+		},
+		"scope": {
+			"saveTitle": "Change recurring event",
+			"deleteTitle": "Delete recurring event",
+			"this": "This event only",
+			"following": "This and following events",
+			"all": "All events in the series"
+		},
+		"recurrence": {
+			"none": "Does not repeat",
+			"daily": "Daily",
+			"weekly": "Weekly",
+			"monthly": "Monthly",
+			"yearly": "Yearly",
+			"custom": "Custom repetition",
+			"every": {
+				"DAILY": {
+					"one": "Daily",
+					"other": "Every {count} days"
+				},
+				"WEEKLY": {
+					"one": "Weekly",
+					"other": "Every {count} weeks"
+				},
+				"MONTHLY": {
+					"one": "Monthly",
+					"other": "Every {count} months"
+				},
+				"YEARLY": {
+					"one": "Yearly",
+					"other": "Every {count} years"
+				}
+			},
+			"onDays": "on {days}",
+			"onNth": {
+				"1": "on the first {day}",
+				"2": "on the second {day}",
+				"3": "on the third {day}",
+				"4": "on the fourth {day}",
+				"-1": "on the last {day}"
+			},
+			"onMonthDay": "on day {day}",
+			"onDate": "on {date}",
+			"until": "until {date}",
+			"times": {
+				"one": "once",
+				"other": "{count} times"
+			},
+			"everyPrefix": "Every",
+			"unit": {
+				"DAILY": {
+					"one": "day",
+					"other": "days"
+				},
+				"WEEKLY": {
+					"one": "week",
+					"other": "weeks"
+				},
+				"MONTHLY": {
+					"one": "month",
+					"other": "months"
+				},
+				"YEARLY": {
+					"one": "year",
+					"other": "years"
+				}
+			},
+			"days": "Days of the week",
+			"endNever": "Never ends",
+			"endUntil": "Ends on",
+			"endCount": "Ends after"
+		}
+	},
+	"reminders": {
+		"atStart": "At start time",
+		"minutesBefore": {
+			"one": "{count} minute before",
+			"other": "{count} minutes before"
+		},
+		"hoursBefore": {
+			"one": "{count} hour before",
+			"other": "{count} hours before"
+		},
+		"daysBefore": {
+			"one": "{count} day before",
+			"other": "{count} days before"
+		},
+		"weeksBefore": {
+			"one": "{count} week before",
+			"other": "{count} weeks before"
+		},
+		"onDayAt": "On the day at {time}",
+		"daysBeforeAt": {
+			"one": "The day before at {time}",
+			"other": "{count} days before at {time}"
+		},
+		"channels": {
+			"push": "Push",
+			"email": "Email"
+		},
+		"when": "When",
+		"how": "Channel",
+		"remove": "Remove reminder",
+		"add": "Add reminder"
 	}
 }

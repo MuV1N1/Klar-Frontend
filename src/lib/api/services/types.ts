@@ -1,5 +1,10 @@
 import type {
 	AuthSession,
+	CalendarEvent,
+	CreateEventInput,
+	EditScope,
+	NotificationSettings,
+	PushConfig,
 	CreateListInput,
 	CreateTaskInput,
 	LoginInput,
@@ -8,6 +13,7 @@ import type {
 	ResetPasswordInput,
 	Task,
 	TaskList,
+	UpdateEventInput,
 	UpdateListInput,
 	UpdateProfileInput,
 	UpdateTaskInput,
@@ -36,6 +42,34 @@ export interface ListsApi {
 	remove(id: string): Promise<void>;
 }
 
+/** Which occurrence of a series a change refers to; omit for single events. */
+export interface OccurrenceRef {
+	scope: EditScope;
+	/** `occurrenceStart` of the occurrence. */
+	occurrence: string | null;
+}
+
+export interface EventsApi {
+	/** Occurrences overlapping the days `from`..`to` (inclusive, YYYY-MM-DD). */
+	list(from: string, to: string): Promise<CalendarEvent[]>;
+	get(id: string): Promise<CalendarEvent>;
+	create(input: CreateEventInput): Promise<CalendarEvent>;
+	update(id: string, input: UpdateEventInput, ref?: OccurrenceRef): Promise<CalendarEvent>;
+	remove(id: string, ref?: OccurrenceRef): Promise<void>;
+}
+
+/** Reminder defaults, time zone and Web Push devices. */
+export interface NotificationsApi {
+	settings(): Promise<NotificationSettings>;
+	updateSettings(input: Partial<NotificationSettings>): Promise<NotificationSettings>;
+	pushConfig(): Promise<PushConfig>;
+	/** `subscription` is `PushSubscription.toJSON()`. */
+	subscribe(subscription: PushSubscriptionJSON): Promise<void>;
+	unsubscribe(endpoint: string): Promise<void>;
+	/** Sends a test notification; resolves with the number of devices reached. */
+	testPush(): Promise<number>;
+}
+
 export interface AuthApi {
 	login(input: LoginInput): Promise<AuthSession>;
 	/** Creates the account; the user must confirm the emailed code via verifyEmail before signing in. */
@@ -55,6 +89,8 @@ export interface AuthApi {
 export interface Api {
 	tasks: TasksApi;
 	lists: ListsApi;
+	events: EventsApi;
+	notifications: NotificationsApi;
 	auth: AuthApi;
 	/** Only available in mock mode: restores the seed data. */
 	resetMockData?: () => Promise<void>;
