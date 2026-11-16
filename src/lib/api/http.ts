@@ -1,5 +1,7 @@
 import { browser } from '$app/env';
 
+import { isLocale } from '#lib/i18n/index.ts';
+
 import { apiConfig } from './config.ts';
 import { ApiError, toApiError } from './errors.ts';
 
@@ -33,6 +35,16 @@ export const tokenStorage = {
 };
 
 /**
+ * Active app locale from the URL (`/en/...`), so the backend sends e-mails in the language the
+ * user is looking at. Without one, the browser's own Accept-Language is used.
+ */
+function currentLocale(): string | null {
+	if (!browser) return null;
+	const segment = window.location.pathname.split('/')[1];
+	return isLocale(segment) ? segment : null;
+}
+
+/**
  * Thin fetch wrapper used by the real API services.
  * Adds JSON handling, the bearer token and converts failures into ApiError.
  */
@@ -44,6 +56,9 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
 
 	const token = tokenStorage.get();
 	if (token) headers.Authorization = `Bearer ${token}`;
+
+	const locale = currentLocale();
+	if (locale) headers['Accept-Language'] = locale;
 
 	let response: Response;
 	try {
