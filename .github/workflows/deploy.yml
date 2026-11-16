@@ -1,0 +1,105 @@
+# Check -> build Docker image -> push to GHCR -> restart the web container on the server.
+# Server setup and required secrets/variables: see docs/DEPLOYMENT.md in Klar-Backend.
+name: CI / Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  IMAGE: ghcr.io/muv1n1/klar-frontend
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run check
+      - run: npm run build
+
+  image:
+    needs: check
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          platforms: ${{ vars.DEPLOY_PLATFORM || 'linux/amd64' }}
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          # Otherwise every build adds an extra, untagged package version
+          provenance: false
+
+  deploy:
+    needs: image
+    # Skipped until the server is configured (repository variable DEPLOY_HOST)
+    if: vars.DEPLOY_HOST != ''
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_ed25519
+          echo "${{ secrets.DEPLOY_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/id_ed25519
+
+      - name: Pull and restart web container
+        env:
+          TARGET: ${{ vars.DEPLOY_USER }}@${{ vars.DEPLOY_HOST }}
+        run: |
+          # Short-lived job token for the pull; logged out again afterwards
+          echo "${{ secrets.GITHUB_TOKEN }}" | ssh "$TARGET" "docker login ghcr.io -u ${{ github.actor }} --password-stdin"
+          ssh "$TARGET" "cd /opt/klar \
+            && KLAR_WEB_TAG=${{ github.sha }} docker compose pull web \
+            && KLAR_WEB_TAG=${{ github.sha }} docker compose up -d --no-deps web \
+            && docker image prune -af; \
+            status=\$?; docker logout ghcr.io; exit \$status"
+
+      - name: Smoke test
+        if: vars.DEPLOY_URL != ''
+        run: curl -fsS --retry 20 --retry-all-errors --retry-delay 3 -o /dev/null "${{ vars.DEPLOY_URL }}/de/login"
+
+  cleanup:
+    needs: image
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      # Keep the last 10 builds for rollbacks
+      - uses: actions/delete-package-versions@v5
+        with:
+          package-name: klar-frontend
+          package-type: container
+          min-versions-to-keep: 10
