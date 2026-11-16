@@ -10,12 +10,19 @@
 	import Skeleton from '#lib/components/ui/Skeleton.svelte';
 	import Textarea from '#lib/components/ui/Textarea.svelte';
 	import { api, ApiError } from '#lib/api/index.ts';
-	import { LOCALES, LOCALE_NAMES, useTranslations, type Locale } from '#lib/i18n/index.ts';
-	import { auth } from '#lib/stores/auth.svelte.ts';
+	import {
+		LOCALES,
+		LOCALE_NAMES,
+		localizedHref,
+		useLocale,
+		useTranslations,
+		type Locale
+	} from '#lib/i18n/index.ts';
 	import { toasts } from '#lib/stores/toasts.svelte.ts';
 	import type { TranslationEntry } from '#lib/types/index.ts';
 
 	const t = useTranslations();
+	const locale = useLocale();
 
 	/** Rendering ~1000 textareas at once is slow; more appear on demand. */
 	const PAGE_SIZE = 50;
@@ -30,8 +37,6 @@
 	let drafts = $state<Record<string, string>>({});
 	let saving = $state<Record<string, boolean>>({});
 
-	const isAdmin = $derived(auth.user?.role === 'admin');
-
 	async function load() {
 		status = 'loading';
 		try {
@@ -43,7 +48,7 @@
 	}
 
 	$effect(() => {
-		if (isAdmin) void load();
+		void load();
 	});
 
 	const namespaces = $derived([...new Set(entries.map((entry) => entry.key.split('.')[0]))]);
@@ -113,15 +118,15 @@
 	eyebrow={t('admin.translations.eyebrow')}
 	title={t('admin.translations.title')}
 	description={t('admin.translations.description')}
-/>
+>
+	{#snippet actions()}
+		<Button variant="outline" icon="arrowLeft" href={localizedHref(locale(), '/app/admin')}>
+			{t('admin.back')}
+		</Button>
+	{/snippet}
+</PageHeader>
 
-{#if !isAdmin}
-	<EmptyState
-		icon="eyeOff"
-		title={t('admin.translations.noAccess')}
-		description={t('admin.translations.noAccessHint')}
-	/>
-{:else if status === 'error'}
+{#if status === 'error'}
 	<ErrorState
 		title={t('common.errorTitle')}
 		message={t('common.errorGeneric')}
