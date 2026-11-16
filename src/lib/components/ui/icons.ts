@@ -44,6 +44,7 @@ export const ICONS = {
 	chevronLeft: 'm15 18-6-6 6-6',
 	arrowRight: 'M5 12h14M12 5l7 7-7 7',
 	arrowLeft: 'M19 12H5M12 19l-7-7 7-7',
+	shield: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z',
 	clock: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM12 6v6l4 2',
 	flag: 'M4 22V4a1 1 0 0 1 1-1h11l-1.5 4L16 11H5',
 	moreHorizontal: 'M12 12h.01M19 12h.01M5 12h.01',

@@ -362,6 +362,19 @@
 		</div>
 	</section>
 
+	{#if auth.user?.role === 'admin'}
+		<!-- Admin (also the way in on phones, where the sidebar is not visible) -->
+		<section class="rounded-[18px] border border-border bg-surface p-5 sm:p-7">
+			<h2 class="text-[15px] font-semibold text-fg">{t('settings.admin.title')}</h2>
+			<p class="mt-1 text-[13px] text-muted">{t('settings.admin.description')}</p>
+			<div class="mt-5">
+				<Button variant="outline" icon="shield" href={localizedHref(locale(), '/app/admin')}>
+					{t('settings.admin.open')}
+				</Button>
+			</div>
+		</section>
+	{/if}
+
 	<!-- Data -->
 	<section class="rounded-[18px] border border-border bg-surface p-5 sm:p-7">
 		<h2 class="text-[15px] font-semibold text-fg">{t('settings.data.title')}</h2>

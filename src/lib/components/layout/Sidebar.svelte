@@ -154,9 +154,9 @@
 		/>
 		{#if auth.user?.role === 'admin'}
 			<NavLink
-				href={href('/app/admin/translations')}
-				label={t('navigation.translations')}
-				icon="globe"
+				href={href('/app/admin')}
+				label={t('navigation.admin')}
+				icon="shield"
 				active={isActive('/app/admin')}
 				onclick={close}
 			/>
