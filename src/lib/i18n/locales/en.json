@@ -439,6 +439,9 @@
 			"month": "Month",
 			"week": "Week"
 		},
+		"weekShort": "CW",
+		"weekNumber": "CW {week}",
+		"weekLong": "Calendar week {week}",
 		"previous": "Previous",
 		"next": "Next",
 		"allDay": "All day",

@@ -17,8 +17,10 @@
 	import {
 		addDaysISO,
 		addMonthsISO,
+		isoWeek,
 		monthGridISO,
 		parseISODate,
+		startOfWeekISO,
 		todayISO,
 		weekDaysISO
 	} from '#lib/utils/date.ts';
@@ -64,12 +66,22 @@
 				parseISODate(selected)
 			);
 		}
-		return new Intl.DateTimeFormat(locale(), {
+		const dates = new Intl.DateTimeFormat(locale(), {
 			day: 'numeric',
 			month: 'short',
 			year: 'numeric'
 		}).formatRange(parseISODate(range.from), parseISODate(range.to));
+		return `${t('calendar.weekNumber', { week: currentWeek })} · ${dates}`;
 	});
+
+	/** ISO week of the selection; with Sunday-first weeks the Monday after decides. */
+	const currentWeek = $derived(
+		isoWeek(
+			settings.value.weekStart === 'sunday'
+				? addDaysISO(1, parseISODate(startOfWeekISO(selected, 'sunday')))
+				: selected
+		)
+	);
 
 	function step(direction: 1 | -1) {
 		navigate({
@@ -83,7 +95,12 @@
 
 <svelte:head><title>{t('calendar.title')} – {t('app.name')}</title></svelte:head>
 
-<PageHeader eyebrow={t('calendar.eyebrow')} title={heading}>
+<PageHeader
+	eyebrow={view === 'month'
+		? `${t('calendar.eyebrow')} · ${t('calendar.weekNumber', { week: currentWeek })}`
+		: t('calendar.eyebrow')}
+	title={heading}
+>
 	{#snippet actions()}
 		<div class="flex items-center gap-1 rounded-[14px] bg-surface-2 p-1" role="group">
 			{#each ['month', 'week'] as const as option (option)}
@@ -132,6 +149,7 @@
 			{selected}
 			onselect={(day) => navigate({ date: day })}
 			onopen={(day) => ui.openNewEvent({ date: day })}
+			onweek={(day) => navigate({ date: day, view: 'week' })}
 		/>
 		<DayAgenda day={selected} />
 	</div>
