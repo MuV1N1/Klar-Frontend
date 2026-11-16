@@ -165,7 +165,9 @@
 	</div>
 
 	<p class="mb-3 text-[12px] text-muted">
-		{t('admin.translations.count', { count: filtered.length })}
+		{t('admin.translations.count', { count: filtered.length })} ·
+		{t('admin.translations.showKeysHint')}
+		<code class="font-mono">?showKeys=1</code>
 	</p>
 
 	{#if filtered.length === 0}
