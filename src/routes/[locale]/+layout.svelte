@@ -6,7 +6,7 @@
 	let { data, children } = $props();
 
 	const translator: Translator = (key, variables) =>
-		translate(data.translations, data.locale, key, variables);
+		translate(data.messages, data.locale, key, variables);
 
 	setContext(I18N_CONTEXT, translator);
 	setContext(LOCALE_CONTEXT, () => data.locale);

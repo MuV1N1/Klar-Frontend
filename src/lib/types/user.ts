@@ -4,6 +4,8 @@ export interface User {
 	email: string;
 	/** False until the user confirmed the 6-digit code from the verification email. */
 	emailVerified: boolean;
+	/** Admins can edit the app's texts (/app/admin/translations). */
+	role: 'user' | 'admin';
 	/** ISO timestamp. */
 	createdAt: string;
 }

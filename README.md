@@ -43,7 +43,8 @@ src/
 │   │   ├── tasks/            # TaskItem, TaskSection, QuickAdd, TaskDialog
 │   │   ├── lists/            # ListCard, ListDialog
 │   │   └── dashboard/        # StatCard, Skeleton
-│   ├── i18n/                 # Übersetzungssystem + locales/de.json, en.json
+│   ├── i18n/                 # t(), Locale-Helfer (Texte kommen vom Backend)
+│   ├── server/i18n.ts        # Lädt die Texte serverseitig vom Backend (ETag-Cache)
 │   ├── stores/               # Svelte-5-Stores: auth, tasks, lists, settings, ui, toasts
 │   ├── types/                # Task, TaskList, User
 │   └── utils/                # Datum, Sortierung, IDs
@@ -57,7 +58,13 @@ src/
 
 ## Internationalisierung
 
-Die Sprache steckt in der URL (`/de/...`, `/en/...`). Übersetzungen liegen in
-`src/lib/i18n/locales/*.json` und werden mit `t('dashboard.title', { name })` aufgerufen.
-Pluralformen: Objekte mit `zero` / `one` / `other`, ausgewählt über die Variable `count`.
+Die Sprache steckt in der URL (`/de/...`, `/en/...`). Die Texte liegen **im Backend**
+(`Klar-Backend/src/main/resources/i18n/*.json`, Admin-Änderungen in Postgres) und werden beim Rendern über
+`GET /api/i18n/<locale>` geladen (`src/routes/+layout.server.ts`). Aufruf mit `t('dashboard.title', { name })`.
+Pluralformen: Schlüssel `….zero` / `….one` / `….other`, ausgewählt über die Variable `count`.
+Neue Texte also im Backend-Repo eintragen. Admins bearbeiten Texte unter `/<locale>/app/admin/translations`.
+Details: `Klar-Backend/docs/I18N.md`.
+
+Ohne erreichbares Backend gibt es keine Texte – auch im Mock-Modus muss `PUBLIC_API_BASE_URL` auf ein
+Backend zeigen (zur Not das produktive, der Endpunkt ist öffentlich).
 Nutzerinhalte (Aufgaben, Listen) werden nie übersetzt.

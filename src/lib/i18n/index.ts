@@ -1,8 +1,5 @@
 import { getContext } from 'svelte';
 
-import de from './locales/de.json';
-import en from './locales/en.json';
-
 export type Locale = 'de' | 'en';
 
 export const LOCALES: readonly Locale[] = ['de', 'en'];
@@ -13,9 +10,12 @@ export const LOCALE_NAMES: Record<Locale, string> = {
 	en: 'English'
 };
 
-export type TranslationDictionary = {
-	[key: string]: string | TranslationDictionary;
-};
+/**
+ * All texts of one language, flat: `{ "calendar.event.new": "Neuer Termin", … }`.
+ * They come from the backend (`GET /api/i18n/<locale>`, see `$lib/server/i18n.ts`); admins can
+ * edit them under /app/admin/translations.
+ */
+export type Messages = Record<string, string>;
 
 export type TranslationVariables = Record<string, string | number>;
 
@@ -24,51 +24,34 @@ export type Translator = (key: string, variables?: TranslationVariables) => stri
 export const I18N_CONTEXT = Symbol('i18n');
 export const LOCALE_CONTEXT = Symbol('locale');
 
-const dictionaries: Record<Locale, TranslationDictionary> = {
-	de,
-	en
-};
-
 export function isLocale(value: unknown): value is Locale {
 	return typeof value === 'string' && (LOCALES as readonly string[]).includes(value);
 }
 
-export function getTranslations(locale: Locale): TranslationDictionary {
-	return dictionaries[locale] ?? dictionaries[DEFAULT_LOCALE];
-}
-
 /**
- * Resolves a dotted key like `dashboard.title` and interpolates `{variables}`.
- * Plural forms are objects with `zero` / `one` / `other` (Intl.PluralRules categories)
- * and are selected by the `count` variable.
+ * Looks up a key like `dashboard.title` and interpolates `{variables}`.
+ * Plural forms are separate keys ending in `.zero` / `.one` / `.other` (Intl.PluralRules
+ * categories) and are selected by the `count` variable.
  */
 export function translate(
-	translations: TranslationDictionary,
+	messages: Messages,
 	locale: Locale,
 	key: string,
 	variables: TranslationVariables = {}
 ): string {
-	const value = key
-		.split('.')
-		.reduce<string | TranslationDictionary | undefined>(
-			(current, part) =>
-				typeof current === 'object' && current !== undefined ? current[part] : undefined,
-			translations
-		);
+	let message = messages[key];
 
-	if (typeof value === 'string') {
-		return interpolate(value, variables);
+	if (message === undefined && typeof variables.count === 'number') {
+		const count = variables.count;
+		const category = new Intl.PluralRules(locale).select(count);
+		message =
+			(count === 0 ? messages[`${key}.zero`] : undefined) ??
+			messages[`${key}.${category}`] ??
+			messages[`${key}.other`];
 	}
 
-	if (value && typeof variables.count === 'number') {
-		const count = variables.count;
-		const pluralCategory = new Intl.PluralRules(locale).select(count);
-		const pluralValue =
-			(count === 0 ? value.zero : undefined) ?? value[pluralCategory] ?? value.other;
-
-		if (typeof pluralValue === 'string') {
-			return interpolate(pluralValue, variables);
-		}
+	if (message !== undefined) {
+		return interpolate(message, variables);
 	}
 
 	console.warn(`[i18n] Missing translation: ${key}`);

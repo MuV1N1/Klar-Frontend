@@ -14,5 +14,11 @@ export const variables = defineEnvVars({
 		public: true,
 		description: 'Base URL of the Spring Boot REST API.',
 		schema: (value) => (value || 'http://localhost:8080/api').replace(/\/$/, '')
+	},
+	API_INTERNAL_URL: {
+		description:
+			'Backend URL for server-side requests (texts), e.g. http://app:8080/api in Docker. ' +
+			'Defaults to PUBLIC_API_BASE_URL (relative values are resolved against the request URL).',
+		schema: (value) => value?.replace(/\/$/, '') || undefined
 	}
 });

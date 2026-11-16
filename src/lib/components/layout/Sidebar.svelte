@@ -152,6 +152,15 @@
 			active={isActive('/app/settings')}
 			onclick={close}
 		/>
+		{#if auth.user?.role === 'admin'}
+			<NavLink
+				href={href('/app/admin/translations')}
+				label={t('navigation.translations')}
+				icon="globe"
+				active={isActive('/app/admin')}
+				onclick={close}
+			/>
+		{/if}
 		{#if auth.user}
 			<div class="flex items-center gap-3 px-3 pt-1 pb-1">
 				<span

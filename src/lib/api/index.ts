@@ -1,5 +1,6 @@
 import { apiConfig } from './config.ts';
 import { mockApi } from './mock/index.ts';
+import { adminApi } from './services/admin.ts';
 import { authApi } from './services/auth.ts';
 import { eventsApi } from './services/events.ts';
 import { listsApi } from './services/lists.ts';
@@ -12,7 +13,8 @@ const restApi: Api = {
 	lists: listsApi,
 	events: eventsApi,
 	notifications: notificationsApi,
-	auth: authApi
+	auth: authApi,
+	admin: adminApi
 };
 
 /**
@@ -23,6 +25,7 @@ export const api: Api = apiConfig.useMock ? mockApi : restApi;
 
 export { ApiError } from './errors.ts';
 export type {
+	AdminApi,
 	Api,
 	AuthApi,
 	EventsApi,

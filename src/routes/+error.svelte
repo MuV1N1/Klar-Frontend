@@ -3,11 +3,12 @@
 
 	import Button from '#lib/components/ui/Button.svelte';
 	import Logo from '#lib/components/ui/Logo.svelte';
-	import { DEFAULT_LOCALE, getTranslations, isLocale, translate } from '#lib/i18n/index.ts';
+	import { DEFAULT_LOCALE, isLocale, translate, type Messages } from '#lib/i18n/index.ts';
 
-	// The error page may render outside the [locale] layout, so resolve translations directly.
+	// The error page may render outside the [locale] layout; the texts come from the root layout.
 	const locale = $derived(isLocale(page.params.locale) ? page.params.locale : DEFAULT_LOCALE);
-	const t = (key: string) => translate(getTranslations(locale), locale, key);
+	const messages = $derived((page.data.messages ?? {}) as Messages);
+	const t = (key: string) => translate(messages, locale, key);
 </script>
 
 <div class="flex min-h-dvh flex-col items-center justify-center gap-6 bg-bg px-6 text-center">

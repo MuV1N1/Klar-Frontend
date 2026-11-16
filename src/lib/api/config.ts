@@ -50,5 +50,8 @@ export const endpoints = {
 		subscriptions: '/push/subscriptions',
 		test: '/push/test'
 	},
-	profile: '/users/me'
+	profile: '/users/me',
+	admin: {
+		translations: '/admin/translations'
+	}
 } as const;
