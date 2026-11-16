@@ -439,6 +439,9 @@
 			"month": "Monat",
 			"week": "Woche"
 		},
+		"weekShort": "KW",
+		"weekNumber": "KW {week}",
+		"weekLong": "Kalenderwoche {week}",
 		"previous": "Zurück",
 		"next": "Weiter",
 		"allDay": "Ganztägig",

@@ -111,6 +111,19 @@ export function monthGridISO(iso: string, weekStart: 'monday' | 'sunday'): strin
 	return Array.from({ length: 42 }, (_, i) => addDaysISO(i, parseISODate(first)));
 }
 
+/** ISO 8601 week number (weeks start on Monday, week 1 contains the first Thursday). */
+export function isoWeek(iso: string): number {
+	const date = parseISODate(iso);
+	// The Thursday of this week decides which year the week belongs to.
+	const thursday = new Date(
+		date.getFullYear(),
+		date.getMonth(),
+		date.getDate() + 3 - ((date.getDay() + 6) % 7)
+	);
+	const firstOfYear = new Date(thursday.getFullYear(), 0, 1);
+	return Math.floor(Math.round((thursday.getTime() - firstOfYear.getTime()) / DAY_MS) / 7) + 1;
+}
+
 /** Same day in another month, clamped to the month's length (31 Jan + 1 → 28/29 Feb). */
 export function addMonthsISO(iso: string, months: number): string {
 	const date = parseISODate(iso);

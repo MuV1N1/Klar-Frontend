@@ -10,6 +10,7 @@
 	import {
 		formatInstantTime,
 		formatTime,
+		isoWeek,
 		monthGridISO,
 		parseISODate,
 		todayISO
@@ -22,14 +23,18 @@
 		selected: string;
 		onselect: (day: string) => void;
 		onopen: (day: string) => void;
+		/** Opens the week starting at the given day. */
+		onweek: (firstDay: string) => void;
 	}
 
-	let { selected, onselect, onopen }: Props = $props();
+	let { selected, onselect, onopen, onweek }: Props = $props();
 
 	const t = useTranslations();
 	const locale = useLocale();
 
 	const days = $derived(monthGridISO(selected, settings.value.weekStart));
+	/** First day of each of the 6 rows. */
+	const weekStarts = $derived(days.filter((_, i) => i % 7 === 0));
 	const month = $derived(parseISODate(selected).getMonth());
 	const today = todayISO();
 
@@ -89,75 +94,103 @@
 </script>
 
 <div class="overflow-hidden rounded-[18px] border border-border bg-surface">
-	<div class="grid grid-cols-7 border-b border-border">
-		{#each weekdayNames as name, i (i)}
-			<div
-				class="px-2 py-2.5 text-center text-[11px] font-medium tracking-wide text-muted uppercase"
-			>
-				{name}
-			</div>
-		{/each}
-	</div>
-	<div class="grid grid-cols-7 grid-rows-6">
-		{#each days as day (day)}
-			{@const items = itemsFor(day)}
-			{@const inMonth = parseISODate(day).getMonth() === month}
-			<div
-				role="button"
-				tabindex="0"
-				aria-pressed={day === selected}
-				aria-label={new Intl.DateTimeFormat(locale(), { dateStyle: 'full' }).format(
-					parseISODate(day)
-				)}
-				onclick={() => onselect(day)}
-				ondblclick={() => onopen(day)}
-				onkeydown={(e) => {
-					if (e.key === 'Enter' || e.key === ' ') {
-						e.preventDefault();
-						onselect(day);
-					}
-				}}
-				use:dropTarget={{ accepts: () => true, ondrop: (item) => dropOnDay(item, day, t) }}
-				class={`flex min-h-20 min-w-0 cursor-pointer flex-col gap-1 border-r border-b border-border p-1 text-left transition-colors data-[drop=over]:bg-accent-soft data-[drop=over]:ring-2 data-[drop=over]:ring-accent-line data-[drop=over]:ring-inset sm:min-h-28 sm:p-1.5 lg:min-h-32 xl:min-h-36 [&:nth-child(7n)]:border-r-0 [&:nth-last-child(-n+7)]:border-b-0 ${
-					day === selected ? 'bg-accent-soft' : 'hover:bg-surface-2'
-				} ${inMonth ? '' : 'opacity-45'}`}
-			>
-				<span
-					class={`flex h-6 w-6 shrink-0 items-center justify-center self-center rounded-full text-[12px] font-medium sm:self-start ${
-						day === today ? 'bg-accent text-accent-fg' : 'text-fg-2'
-					}`}
+	<div class="flex border-b border-border">
+		<div
+			class="w-7 shrink-0 border-r border-border py-2.5 text-center text-[10px] font-medium tracking-wide text-muted uppercase sm:w-9 sm:text-[11px]"
+		>
+			{t('calendar.weekShort')}
+		</div>
+		<div class="grid flex-1 grid-cols-7">
+			{#each weekdayNames as name, i (i)}
+				<div
+					class="px-2 py-2.5 text-center text-[11px] font-medium tracking-wide text-muted uppercase"
 				>
-					{parseISODate(day).getDate()}
-				</span>
-				<span class="flex min-w-0 flex-col gap-0.5">
-					{#each items as item, index (item.key)}
-						<button
-							type="button"
-							use:draggable={item.drag}
-							title={item.time ? `${item.time} · ${item.label}` : item.label}
-							onclick={(e) => {
-								e.stopPropagation();
-								item.open();
-							}}
-							class={`min-w-0 items-center gap-1 rounded-[6px] px-1 py-0.5 text-left text-[10px] leading-tight text-fg transition-[filter] hover:brightness-95 sm:px-1.5 sm:text-[11.5px] ${itemClass(index)}`}
-							style={`background:color-mix(in srgb, ${item.color} ${item.allDay ? 32 : 16}%, transparent)`}
-						>
-							{#if !item.allDay}<span
-									class="hidden h-1.5 w-1.5 shrink-0 rounded-full sm:block"
-									style={`background:${item.color}`}
-								></span>{/if}
-							<span class="truncate">{item.label}</span>
-						</button>
-					{/each}
-					{#each VISIBLE as visible (visible.count)}
-						{#if items.length > visible.count}
-							<span class={`px-1 text-[10px] text-muted sm:px-1.5 sm:text-[11px] ${visible.more}`}>
-								{t('calendar.more', { count: items.length - visible.count })}
-							</span>
-						{/if}
-					{/each}
-				</span>
-			</div>
-		{/each}
+					{name}
+				</div>
+			{/each}
+		</div>
+	</div>
+	<div class="flex">
+		<!-- ISO week of each row; with Sunday-first weeks the Monday (2nd cell) decides -->
+		<div class="grid w-7 shrink-0 grid-rows-6 border-r border-border sm:w-9">
+			{#each weekStarts as first (first)}
+				{@const week = isoWeek(
+					days[days.indexOf(first) + (settings.value.weekStart === 'sunday' ? 1 : 0)]
+				)}
+				<button
+					type="button"
+					onclick={() => onweek(first)}
+					aria-label={t('calendar.weekLong', { week })}
+					title={t('calendar.weekLong', { week })}
+					class="flex justify-center border-b border-border pt-2 text-[10.5px] font-medium text-muted tabular-nums transition-colors last:border-b-0 hover:bg-surface-2 hover:text-fg sm:pt-2.5 sm:text-[11.5px]"
+				>
+					{week}
+				</button>
+			{/each}
+		</div>
+		<div class="grid flex-1 grid-cols-7 grid-rows-6">
+			{#each days as day (day)}
+				{@const items = itemsFor(day)}
+				{@const inMonth = parseISODate(day).getMonth() === month}
+				<div
+					role="button"
+					tabindex="0"
+					aria-pressed={day === selected}
+					aria-label={new Intl.DateTimeFormat(locale(), { dateStyle: 'full' }).format(
+						parseISODate(day)
+					)}
+					onclick={() => onselect(day)}
+					ondblclick={() => onopen(day)}
+					onkeydown={(e) => {
+						if (e.key === 'Enter' || e.key === ' ') {
+							e.preventDefault();
+							onselect(day);
+						}
+					}}
+					use:dropTarget={{ accepts: () => true, ondrop: (item) => dropOnDay(item, day, t) }}
+					class={`flex min-h-20 min-w-0 cursor-pointer flex-col gap-1 border-r border-b border-border p-1 text-left transition-colors data-[drop=over]:bg-accent-soft data-[drop=over]:ring-2 data-[drop=over]:ring-accent-line data-[drop=over]:ring-inset sm:min-h-28 sm:p-1.5 lg:min-h-32 xl:min-h-36 [&:nth-child(7n)]:border-r-0 [&:nth-last-child(-n+7)]:border-b-0 ${
+						day === selected ? 'bg-accent-soft' : 'hover:bg-surface-2'
+					} ${inMonth ? '' : 'opacity-45'}`}
+				>
+					<span
+						class={`flex h-6 w-6 shrink-0 items-center justify-center self-center rounded-full text-[12px] font-medium sm:self-start ${
+							day === today ? 'bg-accent text-accent-fg' : 'text-fg-2'
+						}`}
+					>
+						{parseISODate(day).getDate()}
+					</span>
+					<span class="flex min-w-0 flex-col gap-0.5">
+						{#each items as item, index (item.key)}
+							<button
+								type="button"
+								use:draggable={item.drag}
+								title={item.time ? `${item.time} · ${item.label}` : item.label}
+								onclick={(e) => {
+									e.stopPropagation();
+									item.open();
+								}}
+								class={`min-w-0 items-center gap-1 rounded-[6px] px-1 py-0.5 text-left text-[10px] leading-tight text-fg transition-[filter] hover:brightness-95 sm:px-1.5 sm:text-[11.5px] ${itemClass(index)}`}
+								style={`background:color-mix(in srgb, ${item.color} ${item.allDay ? 32 : 16}%, transparent)`}
+							>
+								{#if !item.allDay}<span
+										class="hidden h-1.5 w-1.5 shrink-0 rounded-full sm:block"
+										style={`background:${item.color}`}
+									></span>{/if}
+								<span class="truncate">{item.label}</span>
+							</button>
+						{/each}
+						{#each VISIBLE as visible (visible.count)}
+							{#if items.length > visible.count}
+								<span
+									class={`px-1 text-[10px] text-muted sm:px-1.5 sm:text-[11px] ${visible.more}`}
+								>
+									{t('calendar.more', { count: items.length - visible.count })}
+								</span>
+							{/if}
+						{/each}
+					</span>
+				</div>
+			{/each}
+		</div>
 	</div>
 </div>
