@@ -1,4 +1,10 @@
-import type { CalendarEvent, CreateTaskInput, Task, TaskList } from '#lib/types/index.ts';
+import type {
+	CalendarEvent,
+	CreateTaskInput,
+	EditScope,
+	Task,
+	TaskList
+} from '#lib/types/index.ts';
 
 /** Prefill for a new event, e.g. from clicking a day or a time slot. */
 export interface EventDefaults {
@@ -29,6 +35,22 @@ class UiStore {
 	});
 
 	searchOpen = $state(false);
+
+	/** "Only this / following / all" question for recurring events (used by drag & drop). */
+	scopePrompt = $state<{
+		action: 'save' | 'delete';
+		resolve: (scope: EditScope | null) => void;
+	} | null>(null);
+
+	askScope(action: 'save' | 'delete'): Promise<EditScope | null> {
+		this.scopePrompt?.resolve(null);
+		return new Promise((resolve) => (this.scopePrompt = { action, resolve }));
+	}
+
+	answerScope(scope: EditScope | null) {
+		this.scopePrompt?.resolve(scope);
+		this.scopePrompt = null;
+	}
 
 	openNewEvent(defaults: EventDefaults = {}) {
 		this.eventDialog = { open: true, event: null, defaults };

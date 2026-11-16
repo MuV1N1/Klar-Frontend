@@ -1,10 +1,21 @@
 <script lang="ts">
 	import { useLocale, useTranslations } from '#lib/i18n/index.ts';
 	import { calendar, occurrenceKey } from '#lib/stores/calendar.svelte.ts';
+	import { draggable, dropTarget, type DragItem } from '#lib/stores/drag.svelte.ts';
+	import { lists } from '#lib/stores/lists.svelte.ts';
 	import { settings } from '#lib/stores/settings.svelte.ts';
 	import { tasks } from '#lib/stores/tasks.svelte.ts';
-	import { LIST_COLOR_VALUES } from '#lib/types/index.ts';
-	import { formatInstantTime, monthGridISO, parseISODate, todayISO } from '#lib/utils/date.ts';
+	import { ui } from '#lib/stores/ui.svelte.ts';
+	import { colorValue } from '#lib/types/index.ts';
+	import {
+		formatInstantTime,
+		formatTime,
+		monthGridISO,
+		parseISODate,
+		todayISO
+	} from '#lib/utils/date.ts';
+
+	import { dropOnDay } from './dropActions.ts';
 
 	interface Props {
 		/** Any day of the shown month; also the selected day. */
@@ -30,35 +41,59 @@
 			)
 	);
 
-	const MAX_ITEMS = 3;
+	/** Entries per cell: phones 2, tablets 3, wide screens 4; the rest is "+n". */
+	const VISIBLE = [
+		{ count: 2, item: 'flex', more: 'sm:hidden' },
+		{ count: 3, item: 'hidden sm:flex', more: 'hidden sm:block xl:hidden' },
+		{ count: 4, item: 'hidden xl:flex', more: 'hidden xl:block' }
+	];
 
-	function itemsFor(day: string) {
-		const events = calendar.forDay(day).map((event) => ({
+	interface Item {
+		key: string;
+		color: string;
+		label: string;
+		/** Shown as tooltip; the cell itself shows the name. */
+		time: string | null;
+		allDay: boolean;
+		drag: DragItem;
+		open: () => void;
+	}
+
+	function itemsFor(day: string): Item[] {
+		const events: Item[] = calendar.forDay(day).map((event) => ({
 			key: occurrenceKey(event),
-			color: LIST_COLOR_VALUES[event.color],
+			color: colorValue(event.color),
 			label: event.title,
 			time: event.allDay || !event.startsAt ? null : formatInstantTime(event.startsAt, locale()),
 			allDay: event.allDay,
-			done: false
+			drag: { kind: 'event', event },
+			open: () => ui.openEditEvent(event)
 		}));
-		const due = tasks.items
+		const due: Item[] = tasks.open
 			.filter((task) => task.dueDate === day)
 			.map((task) => ({
 				key: `task-${task.id}`,
-				color: 'var(--muted)',
+				color: colorValue(lists.byId(task.listId)?.color ?? 'gray'),
 				label: task.title,
-				time: task.dueTime,
+				time: task.dueTime ? formatTime(task.dueTime, locale()) : null,
 				allDay: false,
-				done: task.completed
+				drag: { kind: 'task', task },
+				open: () => ui.openEditTask(task)
 			}));
-		return [...events, ...due.filter((task) => !task.done)];
+		return [...events, ...due];
+	}
+
+	function itemClass(index: number): string {
+		return VISIBLE.find((v) => index < v.count)?.item ?? 'hidden';
 	}
 </script>
 
 <div class="overflow-hidden rounded-[18px] border border-border bg-surface">
 	<div class="grid grid-cols-7 border-b border-border">
 		{#each weekdayNames as name, i (i)}
-			<div class="px-2 py-2 text-center text-[11px] font-medium tracking-wide text-muted uppercase">
+			<div
+				class="px-2 py-2.5 text-center text-[11px] font-medium tracking-wide text-muted uppercase"
+			>
 				{name}
 			</div>
 		{/each}
@@ -82,46 +117,45 @@
 						onselect(day);
 					}
 				}}
-				class={`flex min-h-16 cursor-pointer flex-col gap-1 border-r border-b border-border p-1.5 text-left transition-colors sm:min-h-28 sm:p-2 [&:nth-child(7n)]:border-r-0 [&:nth-last-child(-n+7)]:border-b-0 ${
+				use:dropTarget={{ accepts: () => true, ondrop: (item) => dropOnDay(item, day, t) }}
+				class={`flex min-h-20 min-w-0 cursor-pointer flex-col gap-1 border-r border-b border-border p-1 text-left transition-colors data-[drop=over]:bg-accent-soft data-[drop=over]:ring-2 data-[drop=over]:ring-accent-line data-[drop=over]:ring-inset sm:min-h-28 sm:p-1.5 lg:min-h-32 xl:min-h-36 [&:nth-child(7n)]:border-r-0 [&:nth-last-child(-n+7)]:border-b-0 ${
 					day === selected ? 'bg-accent-soft' : 'hover:bg-surface-2'
 				} ${inMonth ? '' : 'opacity-45'}`}
 			>
 				<span
-					class={`flex h-6 w-6 items-center justify-center self-center rounded-full text-[12px] font-medium sm:self-start ${
+					class={`flex h-6 w-6 shrink-0 items-center justify-center self-center rounded-full text-[12px] font-medium sm:self-start ${
 						day === today ? 'bg-accent text-accent-fg' : 'text-fg-2'
 					}`}
 				>
 					{parseISODate(day).getDate()}
 				</span>
-				<!-- Phones: coloured dots; larger screens: short entries -->
-				<span class="flex flex-wrap justify-center gap-0.5 sm:hidden">
-					{#each items.slice(0, 4) as item (item.key)}
-						<span class="h-1.5 w-1.5 rounded-full" style={`background:${item.color}`}></span>
-					{/each}
-				</span>
-				<span class="hidden flex-col gap-0.5 sm:flex">
-					{#each items.slice(0, MAX_ITEMS) as item (item.key)}
-						<span
-							class={`flex items-center gap-1 truncate rounded-[6px] px-1.5 py-0.5 text-[11px] leading-tight ${
-								item.allDay ? 'text-fg' : 'text-fg-2'
-							}`}
-							style={item.allDay
-								? `background:color-mix(in srgb, ${item.color} 22%, transparent)`
-								: ''}
+				<span class="flex min-w-0 flex-col gap-0.5">
+					{#each items as item, index (item.key)}
+						<button
+							type="button"
+							use:draggable={item.drag}
+							title={item.time ? `${item.time} · ${item.label}` : item.label}
+							onclick={(e) => {
+								e.stopPropagation();
+								item.open();
+							}}
+							class={`min-w-0 items-center gap-1 rounded-[6px] px-1 py-0.5 text-left text-[10px] leading-tight text-fg transition-[filter] hover:brightness-95 sm:px-1.5 sm:text-[11.5px] ${itemClass(index)}`}
+							style={`background:color-mix(in srgb, ${item.color} ${item.allDay ? 32 : 16}%, transparent)`}
 						>
 							{#if !item.allDay}<span
-									class="h-1.5 w-1.5 shrink-0 rounded-full"
+									class="hidden h-1.5 w-1.5 shrink-0 rounded-full sm:block"
 									style={`background:${item.color}`}
 								></span>{/if}
-							{#if item.time}<span class="shrink-0 text-muted">{item.time}</span>{/if}
 							<span class="truncate">{item.label}</span>
-						</span>
+						</button>
 					{/each}
-					{#if items.length > MAX_ITEMS}
-						<span class="px-1.5 text-[11px] text-muted"
-							>{t('calendar.more', { count: items.length - MAX_ITEMS })}</span
-						>
-					{/if}
+					{#each VISIBLE as visible (visible.count)}
+						{#if items.length > visible.count}
+							<span class={`px-1 text-[10px] text-muted sm:px-1.5 sm:text-[11px] ${visible.more}`}>
+								{t('calendar.more', { count: items.length - visible.count })}
+							</span>
+						{/if}
+					{/each}
 				</span>
 			</div>
 		{/each}

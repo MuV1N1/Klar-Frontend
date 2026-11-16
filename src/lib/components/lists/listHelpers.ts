@@ -1,14 +1,9 @@
-import {
-	LIST_COLOR_VALUES,
-	type ListColor,
-	type ListIcon,
-	type TaskList
-} from '#lib/types/index.ts';
+import { colorValue, type ListColor, type ListIcon, type TaskList } from '#lib/types/index.ts';
 
 import type { IconName } from '../ui/icons.ts';
 
 export function listColorValue(color: ListColor | undefined): string {
-	return LIST_COLOR_VALUES[color ?? 'gray'];
+	return colorValue(color);
 }
 
 export function listIconName(icon: ListIcon | undefined): IconName {

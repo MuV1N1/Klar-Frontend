@@ -580,5 +580,14 @@
 		"how": "Kanal",
 		"remove": "Erinnerung entfernen",
 		"add": "Erinnerung hinzufügen"
+	},
+	"colors": {
+		"custom": "Eigene Farbe"
+	},
+	"dnd": {
+		"taskMoved": "„{title}“ nach {target} verschoben",
+		"taskRescheduled": "„{title}“ verschoben",
+		"eventMoved": "„{title}“ verschoben",
+		"undo": "Rückgängig"
 	}
 }

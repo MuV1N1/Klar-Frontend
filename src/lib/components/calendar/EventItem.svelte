@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { useLocale, useTranslations } from '#lib/i18n/index.ts';
 	import { eventDays } from '#lib/stores/calendar.svelte.ts';
+	import { draggable } from '#lib/stores/drag.svelte.ts';
 	import { ui } from '#lib/stores/ui.svelte.ts';
-	import { LIST_COLOR_VALUES, type CalendarEvent } from '#lib/types/index.ts';
+	import { colorValue, type CalendarEvent } from '#lib/types/index.ts';
 	import { formatInstantTime } from '#lib/utils/date.ts';
 
 	import Icon from '../ui/Icon.svelte';
@@ -33,12 +34,13 @@
 
 <button
 	type="button"
+	use:draggable={{ kind: 'event', event }}
 	onclick={() => ui.openEditEvent(event)}
 	class="flex w-full items-start gap-3 rounded-[16px] border border-border bg-surface px-4 py-3 text-left transition-colors hover:border-border-strong hover:bg-surface-2"
 >
 	<span
 		class="mt-1 h-8 w-1 shrink-0 rounded-full"
-		style={`background:${LIST_COLOR_VALUES[event.color]}`}
+		style={`background:${colorValue(event.color)}`}
 		aria-hidden="true"
 	></span>
 	<span class="flex min-w-0 flex-1 flex-col gap-0.5">

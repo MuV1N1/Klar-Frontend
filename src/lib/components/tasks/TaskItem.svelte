@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 
 	import { localizedHref, useLocale, useTranslations } from '#lib/i18n/index.ts';
+	import { draggable } from '#lib/stores/drag.svelte.ts';
 	import { lists } from '#lib/stores/lists.svelte.ts';
 	import { settings } from '#lib/stores/settings.svelte.ts';
 	import { tasks } from '#lib/stores/tasks.svelte.ts';
@@ -90,8 +91,10 @@
 	]);
 </script>
 
-<!-- Task row (Figma "Heute": surface card, circle check, title, time, list chip) -->
+<!-- Task row (Figma "Heute": surface card, circle check, title, time, list chip).
+     Draggable onto lists in the sidebar and onto calendar days. -->
 <div
+	use:draggable={pending ? null : { kind: 'task', task }}
 	class={`group @container relative flex items-center gap-3 rounded-[18px] border bg-surface px-3 py-3 transition-[border-color,background-color,transform] duration-150 sm:gap-4 sm:px-5 sm:py-4 ${
 		highlight ? 'border-accent-line' : 'border-border hover:border-border-strong'
 	} ${task.completed ? 'opacity-70' : ''} ${pending ? 'pointer-events-none opacity-60' : ''}`}

@@ -1,11 +1,14 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 
+	import { page } from '$app/state';
+
 	import { useTranslations } from '#lib/i18n/index.ts';
 	import { ui } from '#lib/stores/ui.svelte.ts';
 
 	import ListDialog from '../lists/ListDialog.svelte';
 	import EventDialog from '../calendar/EventDialog.svelte';
+	import ScopeDialog from '../calendar/ScopeDialog.svelte';
 	import TaskDialog from '../tasks/TaskDialog.svelte';
 	import IconButton from '../ui/IconButton.svelte';
 	import Logo from '../ui/Logo.svelte';
@@ -16,6 +19,9 @@
 	let { children }: { children: Snippet } = $props();
 
 	const t = useTranslations();
+
+	// The calendar uses the full width; text pages stay narrow for readability.
+	const wide = $derived(/\/app\/calendar(\/|$)/.test(page.url.pathname));
 </script>
 
 <div class="flex min-h-dvh bg-bg">
@@ -62,7 +68,7 @@
 		</header>
 
 		<main
-			class="mx-auto w-full max-w-[1040px] flex-1 px-4 pt-6 pb-28 sm:px-8 md:px-7 md:pt-10 md:pb-16 lg:px-14 lg:pt-12"
+			class={`mx-auto w-full ${wide ? 'max-w-[1560px]' : 'max-w-[1040px]'} flex-1 px-4 pt-6 pb-28 sm:px-8 md:px-7 md:pt-10 md:pb-16 lg:px-14 lg:pt-12`}
 		>
 			{@render children()}
 		</main>
@@ -71,6 +77,12 @@
 	<BottomNav />
 	<TaskDialog />
 	<EventDialog />
+	<ScopeDialog
+		open={ui.scopePrompt !== null}
+		action={ui.scopePrompt?.action ?? 'save'}
+		onchoose={(scope) => ui.answerScope(scope)}
+		onclose={() => ui.answerScope(null)}
+	/>
 	<ListDialog />
 	<SearchDialog />
 </div>

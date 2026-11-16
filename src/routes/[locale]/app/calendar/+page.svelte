@@ -125,7 +125,9 @@
 		<Skeleton class="h-[420px] rounded-[18px]" />
 	</div>
 {:else if view === 'month'}
-	<div class="grid animate-rise-in gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+	<div
+		class="grid animate-rise-in gap-8 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_380px]"
+	>
 		<MonthGrid
 			{selected}
 			onselect={(day) => navigate({ date: day })}

@@ -3,15 +3,10 @@
 	import { lists } from '#lib/stores/lists.svelte.ts';
 	import { toasts } from '#lib/stores/toasts.svelte.ts';
 	import { ui } from '#lib/stores/ui.svelte.ts';
-	import {
-		LIST_COLORS,
-		LIST_COLOR_VALUES,
-		LIST_ICONS,
-		type ListColor,
-		type ListIcon
-	} from '#lib/types/index.ts';
+	import { LIST_ICONS, type ListColor, type ListIcon } from '#lib/types/index.ts';
 
 	import Button from '../ui/Button.svelte';
+	import ColorPicker from '../ui/ColorPicker.svelte';
 	import Dialog from '../ui/Dialog.svelte';
 	import Field from '../ui/Field.svelte';
 	import Icon from '../ui/Icon.svelte';
@@ -102,27 +97,7 @@
 		</Field>
 
 		<Field label={t('lists.color')}>
-			<div class="flex flex-wrap gap-2.5" role="radiogroup" aria-label={t('lists.color')}>
-				{#each LIST_COLORS as option (option)}
-					<button
-						type="button"
-						role="radio"
-						aria-checked={color === option}
-						aria-label={t(`lists.colors.${option}`)}
-						title={t(`lists.colors.${option}`)}
-						onclick={() => (color = option)}
-						class={`flex h-9 w-9 items-center justify-center rounded-full transition-transform hover:scale-110 ${color === option ? 'ring-2 ring-fg ring-offset-2 ring-offset-surface' : ''}`}
-						style={`background:${LIST_COLOR_VALUES[option]}`}
-					>
-						{#if color === option}<Icon
-								name="check"
-								size={14}
-								strokeWidth={3}
-								class="text-white dark:text-[#101114]"
-							/>{/if}
-					</button>
-				{/each}
-			</div>
+			<ColorPicker bind:value={color} label={t('lists.color')} />
 		</Field>
 
 		<Field label={t('lists.icon')}>

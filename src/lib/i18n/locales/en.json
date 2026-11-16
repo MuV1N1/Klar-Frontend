@@ -173,7 +173,7 @@
 		"namePlaceholder": "e.g. Groceries",
 		"listDescription": "Description",
 		"descriptionPlaceholder": "What is this list for?",
-		"color": "Colour",
+		"color": "Color",
 		"icon": "Icon",
 		"nameRequired": "Please enter a name.",
 		"created": "List created",
@@ -406,7 +406,7 @@
 			},
 			"lists": {
 				"title": "Your own lists",
-				"text": "Groceries, household, hobbies. With colours you recognise."
+				"text": "Groceries, household, hobbies. With colors you recognise."
 			},
 			"focus": {
 				"title": "Focus mode",
@@ -468,7 +468,7 @@
 			"reminders": "Reminders",
 			"remindersSeries": "Reminders apply to every event in the series.",
 			"location": "Location",
-			"color": "Colour",
+			"color": "Color",
 			"description": "Notes",
 			"saveAction": "Save",
 			"createAction": "Create event",
@@ -580,5 +580,14 @@
 		"how": "Channel",
 		"remove": "Remove reminder",
 		"add": "Add reminder"
+	},
+	"colors": {
+		"custom": "Custom color"
+	},
+	"dnd": {
+		"taskMoved": "Moved “{title}” to {target}",
+		"taskRescheduled": "Rescheduled “{title}”",
+		"eventMoved": "Moved “{title}”",
+		"undo": "Undo"
 	}
 }

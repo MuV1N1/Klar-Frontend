@@ -7,6 +7,9 @@
 	import { lists } from '#lib/stores/lists.svelte.ts';
 	import { tasks } from '#lib/stores/tasks.svelte.ts';
 	import { ui } from '#lib/stores/ui.svelte.ts';
+	import type { DragItem } from '#lib/stores/drag.svelte.ts';
+
+	import { moveTaskToList } from '../calendar/dropActions.ts';
 
 	import { listColorValue } from '../lists/listHelpers.ts';
 	import Icon from '../ui/Icon.svelte';
@@ -23,6 +26,14 @@
 		exact ? page.url.pathname === href(path) : page.url.pathname.startsWith(href(path));
 
 	const close = () => ui.toggleSidebar(false);
+
+	/** Tasks dragged onto a list (or the inbox) move there. */
+	const taskDrop = (listId: string | null) => ({
+		accepts: (item: DragItem) => item.kind === 'task' && item.task.listId !== listId,
+		ondrop: (item: DragItem) => {
+			if (item.kind === 'task') void moveTaskToList(item.task, listId, t);
+		}
+	});
 
 	// "⌘ K" on Apple keyboards, the translated "Strg K" / "Ctrl K" elsewhere.
 	const isApple = browser && /Mac|iPhone|iPad/.test(navigator.platform);
@@ -83,6 +94,7 @@
 		icon="inbox"
 		active={isActive('/app/inbox')}
 		count={tasks.inbox.length}
+		drop={taskDrop(null)}
 		onclick={close}
 	/>
 	<NavLink
@@ -113,6 +125,7 @@
 				color={listColorValue(list.color)}
 				active={isActive(`/app/lists/${list.id}`)}
 				count={tasks.openCountForList(list.id)}
+				drop={taskDrop(list.id)}
 				onclick={close}
 			/>
 		{/each}

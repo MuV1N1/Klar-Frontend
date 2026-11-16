@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { useLocale, useTranslations } from '#lib/i18n/index.ts';
 	import { calendar, occurrenceKey } from '#lib/stores/calendar.svelte.ts';
+	import { dropTarget } from '#lib/stores/drag.svelte.ts';
 	import { tasks } from '#lib/stores/tasks.svelte.ts';
 	import { ui } from '#lib/stores/ui.svelte.ts';
 	import { formatLongDate, relativeDueKey } from '#lib/utils/date.ts';
@@ -8,6 +9,7 @@
 	import TaskItem from '../tasks/TaskItem.svelte';
 	import Button from '../ui/Button.svelte';
 	import EventItem from './EventItem.svelte';
+	import { dropOnDay } from './dropActions.ts';
 
 	interface Props {
 		day: string;
@@ -23,7 +25,11 @@
 	const relative = $derived(relativeDueKey(day));
 </script>
 
-<section class="flex flex-col gap-3" aria-label={formatLongDate(day, locale())}>
+<section
+	class="-m-2 flex flex-col gap-3 rounded-[20px] p-2 transition-colors data-[drop=over]:bg-accent-soft data-[drop=ready]:bg-surface-2/60"
+	aria-label={formatLongDate(day, locale())}
+	use:dropTarget={{ accepts: () => true, ondrop: (item) => dropOnDay(item, day, t) }}
+>
 	<div class="flex items-center justify-between gap-3">
 		<h2 class="text-[15px] font-semibold text-fg">
 			{#if relative}<span class="text-accent-text">{t(`common.${relative}`)} · </span>{/if}
