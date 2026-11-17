@@ -13,6 +13,7 @@
 	import IconButton from '../ui/IconButton.svelte';
 	import Logo from '../ui/Logo.svelte';
 	import BottomNav from './BottomNav.svelte';
+	import FocusIsland from './FocusIsland.svelte';
 	import SearchDialog from './SearchDialog.svelte';
 	import Sidebar from './Sidebar.svelte';
 
@@ -74,6 +75,7 @@
 		</main>
 	</div>
 
+	<FocusIsland />
 	<BottomNav />
 	<TaskDialog />
 	<EventDialog />
