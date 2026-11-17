@@ -53,7 +53,7 @@
 		if (!name.trim()) return;
 		savingProfile = true;
 		try {
-			await auth.updateProfile({ name: name.trim(), email: email.trim() });
+			await auth.updateProfile({ name: name.trim() });
 			toasts.success(t('settings.profile.saved'));
 		} catch {
 			toasts.error(t('common.errorGeneric'));
@@ -224,7 +224,7 @@
 					<Input id="profile-name" bind:value={name} autocomplete="name" />
 				</Field>
 				<Field label={t('settings.profile.email')} for="profile-email">
-					<Input id="profile-email" type="email" bind:value={email} autocomplete="email" />
+					<Input id="profile-email" type="email" value={email} autocomplete="email" disabled />
 				</Field>
 			</div>
 			<div class="flex flex-wrap items-center justify-between gap-3">
