@@ -199,7 +199,7 @@
 					>
 						<Input
 							type="email"
-							bind:value={emails[group.id]}
+							bind:value={() => emails[group.id] ?? '', (v) => (emails[group.id] = v)}
 							placeholder={t('groups.emailPlaceholder')}
 							aria-label={t('groups.inviteEmail')}
 						/>
