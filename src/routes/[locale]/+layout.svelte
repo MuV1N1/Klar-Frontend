@@ -15,6 +15,11 @@
 
 	setContext(I18N_CONTEXT, translator);
 	setContext(LOCALE_CONTEXT, () => data.locale);
+
+	// SSR fills %lang% in hooks.server.ts; the app has no server and locales also change client-side.
+	$effect(() => {
+		document.documentElement.lang = data.locale;
+	});
 </script>
 
 <svelte:head>

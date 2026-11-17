@@ -12,7 +12,7 @@ export const LOCALE_NAMES: Record<Locale, string> = {
 
 /**
  * All texts of one language, flat: `{ "calendar.event.new": "Neuer Termin", … }`.
- * They come from the backend (`GET /api/i18n/<locale>`, see `$lib/server/i18n.ts`); admins can
+ * They come from the backend (`GET /api/i18n/<locale>`, see `src/routes/+layout.ts`); admins can
  * edit them under /app/admin/translations.
  */
 export type Messages = Record<string, string>;
