@@ -4,4 +4,8 @@
     <string name="title_activity_main">Klar</string>
     <string name="package_name">de.muv1n.klar</string>
     <string name="custom_url_scheme">de.muv1n.klar</string>
+    <string name="live_timer_channel">Focus timer</string>
+    <string name="live_timer_title">Focus</string>
+    <string name="live_timer_running">Stay on it – Klar keeps the time.</string>
+    <string name="live_timer_paused">Paused · %1$s left</string>
 </resources>
