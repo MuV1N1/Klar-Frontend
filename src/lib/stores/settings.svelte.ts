@@ -15,6 +15,9 @@ export interface Settings {
 	focusMinutes: number;
 }
 
+/** Sprint lengths offered on the focus page and in the settings (the backend allows 1–180). */
+export const FOCUS_MINUTES: readonly number[] = [5, 10, 15, 20, 25, 30, 45, 60];
+
 const STORAGE_KEY = 'klar.settings';
 /** Read by the inline script in app.html to avoid a flash of the wrong theme. */
 const THEME_KEY = 'klar.theme';
