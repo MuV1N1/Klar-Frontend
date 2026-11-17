@@ -1,5 +1,7 @@
 import { browser } from '$app/env';
 
+import { syncLiveTimer } from '#lib/native/liveTimer.ts';
+
 export type FocusStatus = 'idle' | 'running' | 'paused' | 'finished';
 
 /** What the sprint is about: one task, a whole list, or nothing (free focus). */
@@ -101,6 +103,7 @@ class FocusTimer {
 
 	#save() {
 		if (!browser) return;
+		syncLiveTimer(this.status, this.#endsAt, this.remaining);
 		try {
 			const saved: Saved = {
 				status: this.status,

@@ -27,8 +27,11 @@ Das Frontend braucht ein laufendes Backend (`PUBLIC_API_BASE_URL`, siehe `.env.e
 
 ## Handy-App (Android, iOS)
 
-Die App ist dieses Frontend als statische SPA in einer [Capacitor](https://capacitorjs.com)-Hülle
-(`capacitor.config.ts`, native Projekte in `android/` und `ios/`).
+Die App ist eine [Capacitor](https://capacitorjs.com)-Hülle (`capacitor.config.ts`, native Projekte
+in `android/` und `ios/`), die die deployte Seite `https://app.muv1n.de` lädt. Jedes Deploy ist damit
+sofort in der App; eine neue APK braucht es nur bei Änderungen am nativen Code (z. B.
+`android/app/src/main/java/de/muv1n/klar/LiveTimerPlugin.java`: der Fokus-Timer als Live Update,
+auf HyperOS in der Super Island).
 
 ```bash
 cp .env.app.example .env.app   # absolute API-URL, die App hat keinen eigenen Server

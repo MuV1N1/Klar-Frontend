@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="live_timer_channel">Fokus-Timer</string>
+    <string name="live_timer_title">Fokus</string>
+    <string name="live_timer_running">Dranbleiben – Klar behält die Zeit im Blick.</string>
+    <string name="live_timer_paused">Pausiert · noch %1$s</string>
+</resources>
