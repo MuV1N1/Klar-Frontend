@@ -21,6 +21,7 @@
 	} from '#lib/i18n/index.ts';
 	import { auth } from '#lib/stores/auth.svelte.ts';
 	import { calendar } from '#lib/stores/calendar.svelte.ts';
+	import { groups } from '#lib/stores/groups.svelte.ts';
 	import { lists } from '#lib/stores/lists.svelte.ts';
 	import { notifications } from '#lib/stores/notifications.svelte.ts';
 	import { focusTimer } from '#lib/stores/focus.svelte.ts';
@@ -139,6 +140,7 @@
 		tasks.reset();
 		focusTimer.reset();
 		lists.reset();
+		groups.reset();
 		calendar.reset();
 		await goto(localizedHref(locale(), '/login'));
 	}

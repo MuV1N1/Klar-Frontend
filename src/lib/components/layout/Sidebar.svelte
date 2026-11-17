@@ -103,6 +103,13 @@
 		active={isActive('/app/completed')}
 		onclick={close}
 	/>
+	<NavLink
+		href={href('/app/groups')}
+		label={t('navigation.groups')}
+		icon="users"
+		active={isActive('/app/groups')}
+		onclick={close}
+	/>
 
 	<div class="mt-6 mb-2 flex items-center justify-between px-3">
 		<a href={href('/app/lists')} class="section-label hover:text-fg" onclick={close}>

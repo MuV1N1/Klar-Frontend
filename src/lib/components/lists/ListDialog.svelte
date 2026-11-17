@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { useLocale, useTranslations } from '#lib/i18n/index.ts';
+	import { auth } from '#lib/stores/auth.svelte.ts';
+	import { groups } from '#lib/stores/groups.svelte.ts';
 	import { lists } from '#lib/stores/lists.svelte.ts';
 	import { toasts } from '#lib/stores/toasts.svelte.ts';
 	import { ui } from '#lib/stores/ui.svelte.ts';
@@ -11,6 +13,7 @@
 	import Field from '../ui/Field.svelte';
 	import Icon from '../ui/Icon.svelte';
 	import Input from '../ui/Input.svelte';
+	import Select from '../ui/Select.svelte';
 	import Textarea from '../ui/Textarea.svelte';
 	import { deleteList } from './listActions.ts';
 	import { listIconName } from './listHelpers.ts';
@@ -25,6 +28,8 @@
 	let description = $state('');
 	let color = $state<ListColor>('lime');
 	let icon = $state<ListIcon>('list');
+	/** '' = private. */
+	let groupId = $state('');
 	let error = $state<string | null>(null);
 	let saving = $state(false);
 	let nameInput = $state<HTMLInputElement | null>(null);
@@ -35,9 +40,16 @@
 		description = dialog.list?.description ?? '';
 		color = dialog.list?.color ?? 'lime';
 		icon = dialog.list?.icon ?? 'list';
+		groupId = dialog.list?.groupId ?? '';
 		error = null;
 		setTimeout(() => nameInput?.focus(), 30);
 	});
+
+	const shareOptions = $derived([
+		{ value: '', label: t('groups.private') },
+		...groups.items.map((g) => ({ value: g.id, label: g.name }))
+	]);
+	const canShare = $derived(!editing || editing.createdBy === auth.user?.id);
 
 	async function submit() {
 		if (!name.trim()) {
@@ -46,7 +58,13 @@
 			return;
 		}
 		saving = true;
-		const input = { name: name.trim(), description: description.trim() || null, color, icon };
+		const input = {
+			name: name.trim(),
+			description: description.trim() || null,
+			color,
+			icon,
+			groupId: groupId || null
+		};
 		try {
 			if (editing) {
 				await lists.update(editing.id, input);
@@ -120,6 +138,16 @@
 				{/each}
 			</div>
 		</Field>
+
+		{#if groups.items.length > 0}
+			<Field
+				label={t('groups.shareWith')}
+				for="list-group"
+				hint={canShare ? undefined : t('groups.onlyCreator')}
+			>
+				<Select id="list-group" bind:value={groupId} options={shareOptions} disabled={!canShare} />
+			</Field>
+		{/if}
 
 		<Field label={t('lists.listDescription')} for="list-description">
 			<Textarea

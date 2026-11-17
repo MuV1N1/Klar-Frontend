@@ -3,7 +3,9 @@
 
 	import type { OccurrenceRef } from '#lib/api/index.ts';
 	import { useTranslations } from '#lib/i18n/index.ts';
+	import { auth } from '#lib/stores/auth.svelte.ts';
 	import { calendar } from '#lib/stores/calendar.svelte.ts';
+	import { groups } from '#lib/stores/groups.svelte.ts';
 	import { notifications } from '#lib/stores/notifications.svelte.ts';
 	import { settings } from '#lib/stores/settings.svelte.ts';
 	import { toasts } from '#lib/stores/toasts.svelte.ts';
@@ -22,6 +24,7 @@
 	import Field from '../ui/Field.svelte';
 	import Icon from '../ui/Icon.svelte';
 	import Input from '../ui/Input.svelte';
+	import Select from '../ui/Select.svelte';
 	import Textarea from '../ui/Textarea.svelte';
 	import Toggle from '../ui/Toggle.svelte';
 	import RecurrenceEditor from './RecurrenceEditor.svelte';
@@ -45,6 +48,8 @@
 	let color = $state<ListColor>('blue');
 	let recurrence = $state<string | null>(null);
 	let reminders = $state<Reminder[]>([]);
+	/** '' = private. */
+	let groupId = $state('');
 	let recurrenceTouched = $state(false);
 	let remindersTouched = $state(false);
 	let error = $state<string | null>(null);
@@ -96,6 +101,7 @@
 				color = event.color;
 				recurrence = event.recurrence;
 				reminders = event.reminders;
+				groupId = event.groupId ?? '';
 			} else {
 				title = '';
 				allDay = defaults.allDay ?? false;
@@ -109,6 +115,7 @@
 				color = 'blue';
 				recurrence = null;
 				reminders = notifications.defaultsFor(allDay);
+				groupId = '';
 			}
 			recurrenceTouched = false;
 			remindersTouched = false;
@@ -182,9 +189,17 @@
 			startDate,
 			startTime: allDay ? null : startTime,
 			endDate,
-			endTime: allDay ? null : endTime
+			endTime: allDay ? null : endTime,
+			// Unchanged is a no-op, so members who did not create the event can send it too.
+			groupId: groupId || null
 		};
 	}
+
+	const shareOptions = $derived([
+		{ value: '', label: t('groups.private') },
+		...groups.items.map((g) => ({ value: g.id, label: g.name }))
+	]);
+	const canShare = $derived(!editing || editing.createdBy === auth.user?.id);
 
 	async function submit() {
 		if (!validate()) return;
@@ -350,6 +365,16 @@
 			/>
 			{#if isSeries}<p class="text-[12px] text-muted">{t('calendar.event.remindersSeries')}</p>{/if}
 		</Field>
+
+		{#if groups.items.length > 0}
+			<Field
+				label={t('groups.shareWith')}
+				for="event-group"
+				hint={canShare ? undefined : t('groups.onlyCreator')}
+			>
+				<Select id="event-group" bind:value={groupId} options={shareOptions} disabled={!canShare} />
+			</Field>
+		{/if}
 
 		<Field label={t('calendar.event.location')} for="event-location">
 			<Input

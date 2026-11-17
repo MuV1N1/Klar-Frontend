@@ -46,6 +46,11 @@ export interface CalendarEvent {
 	endsAt: string | null;
 	/** RRULE of the series (without "RRULE:"), null for single events. */
 	recurrence: string | null;
+	/** null = private; otherwise every member of the group sees and edits the event. */
+	groupId: string | null;
+	/** User id of the creator; only they can change `groupId`. */
+	createdBy: string;
+	/** Only the signed-in user's own reminders. */
 	reminders: Reminder[];
 }
 
@@ -63,6 +68,8 @@ export interface CreateEventInput {
 	recurrence?: string | null;
 	/** Omitted = the defaults from the settings, [] = none. */
 	reminders?: Reminder[];
+	/** Applies to the whole series. */
+	groupId?: string | null;
 }
 
 export type UpdateEventInput = Partial<CreateEventInput>;
