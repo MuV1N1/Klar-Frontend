@@ -89,7 +89,7 @@
 <svelte:head><title>{t('focus.title')} – {t('app.name')}</title></svelte:head>
 
 <div
-	class="mx-auto flex max-w-[720px] animate-rise-in flex-col items-center gap-8 rounded-[24px] border border-border bg-surface px-6 py-12 text-center sm:px-12 sm:py-16"
+	class="mx-auto flex max-w-[720px] animate-rise-in flex-col items-center gap-5 rounded-[24px] border border-border bg-surface px-5 py-8 text-center sm:gap-8 sm:px-12 sm:py-16"
 >
 	<p class="section-label">{t('focus.title')}</p>
 
@@ -137,7 +137,7 @@
 
 	<!-- Timer ring -->
 	<div
-		class="relative flex h-[280px] w-[280px] items-center justify-center sm:h-[340px] sm:w-[340px]"
+		class="relative flex h-[220px] w-[220px] items-center justify-center sm:h-[340px] sm:w-[340px]"
 	>
 		<svg viewBox="0 0 100 100" class="absolute inset-0 h-full w-full -rotate-90">
 			<circle
@@ -162,29 +162,41 @@
 			/>
 		</svg>
 		<span
-			class={`text-[64px] leading-none font-bold tracking-tight tabular-nums sm:text-[80px] ${status === 'finished' ? 'text-accent-text' : 'text-fg'}`}
+			class={`font-bold tracking-tight ${status === 'finished' ? 'max-w-[160px] text-center text-2xl leading-tight text-accent-text sm:max-w-[240px] sm:text-4xl' : 'text-[52px] leading-none text-fg tabular-nums sm:text-[80px]'}`}
 		>
 			{status === 'finished' ? t('focus.finished') : display}
 		</span>
 	</div>
 
-	<div class="flex flex-wrap items-center justify-center gap-3">
+	<div class="flex w-full flex-wrap items-center justify-center gap-3 sm:w-auto">
 		{#if status === 'idle'}
-			<Button variant="primary" size="lg" icon="play" class="min-w-[180px]" onclick={start}
-				>{t('focus.start')}</Button
+			<Button
+				variant="primary"
+				size="lg"
+				icon="play"
+				class="max-sm:flex-1 sm:min-w-[180px]"
+				onclick={start}>{t('focus.start')}</Button
 			>
 		{:else if status === 'running'}
-			<Button variant="primary" size="lg" icon="pause" class="min-w-[180px]" onclick={pause}
-				>{t('focus.pause')}</Button
+			<Button
+				variant="primary"
+				size="lg"
+				icon="pause"
+				class="max-sm:flex-1 sm:min-w-[180px]"
+				onclick={pause}>{t('focus.pause')}</Button
 			>
-			<Button variant="secondary" size="lg" class="min-w-[180px]" onclick={reset}
+			<Button variant="secondary" size="lg" class="max-sm:flex-1 sm:min-w-[180px]" onclick={reset}
 				>{t('focus.stop')}</Button
 			>
 		{:else if status === 'paused'}
-			<Button variant="primary" size="lg" icon="play" class="min-w-[180px]" onclick={start}
-				>{t('focus.resume')}</Button
+			<Button
+				variant="primary"
+				size="lg"
+				icon="play"
+				class="max-sm:flex-1 sm:min-w-[180px]"
+				onclick={start}>{t('focus.resume')}</Button
 			>
-			<Button variant="secondary" size="lg" class="min-w-[180px]" onclick={reset}
+			<Button variant="secondary" size="lg" class="max-sm:flex-1 sm:min-w-[180px]" onclick={reset}
 				>{t('focus.stop')}</Button
 			>
 		{:else}
@@ -193,12 +205,16 @@
 					variant="primary"
 					size="lg"
 					icon="check"
-					class="min-w-[180px]"
+					class="max-sm:flex-1 sm:min-w-[180px]"
 					onclick={completeTask}>{t('focus.markDone')}</Button
 				>
 			{/if}
-			<Button variant="secondary" size="lg" icon="rotate" class="min-w-[180px]" onclick={reset}
-				>{t('focus.reset')}</Button
+			<Button
+				variant="secondary"
+				size="lg"
+				icon="rotate"
+				class="max-sm:flex-1 sm:min-w-[180px]"
+				onclick={reset}>{t('focus.reset')}</Button
 			>
 		{/if}
 	</div>
