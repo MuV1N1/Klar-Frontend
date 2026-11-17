@@ -1,0 +1,35 @@
+# Unsigned iPad/iPhone app (Klar.ipa) for private sideloading, no App Store.
+# The app loads the live site, so only native changes (ios/) need a new build.
+# Run it from the Actions tab ("Run workflow") and download the Klar-ipa artifact.
+name: iOS app
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths: [ios/**, capacitor.config.ts, .github/workflows/ios.yml]
+
+jobs:
+  ipa:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: cp .env.app.example .env.app
+      - run: npx vite build --mode app && npx cap sync ios
+      # Signed later with the free Apple ID by the sideloading tool on the PC
+      - run: >
+          xcodebuild build -project ios/App/App.xcodeproj -scheme App -configuration Release
+          -sdk iphoneos -destination generic/platform=iOS -derivedDataPath ios/DerivedData
+          CODE_SIGNING_ALLOWED=NO
+      - run: |
+          mkdir Payload
+          cp -R ios/DerivedData/Build/Products/Release-iphoneos/App.app Payload/
+          zip -qr Klar.ipa Payload
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Klar-ipa
+          path: Klar.ipa
