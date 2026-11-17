@@ -23,7 +23,7 @@
 	import { calendar } from '#lib/stores/calendar.svelte.ts';
 	import { lists } from '#lib/stores/lists.svelte.ts';
 	import { notifications } from '#lib/stores/notifications.svelte.ts';
-	import { settings, type Theme } from '#lib/stores/settings.svelte.ts';
+	import { FOCUS_MINUTES, settings, type Theme } from '#lib/stores/settings.svelte.ts';
 	import { tasks } from '#lib/stores/tasks.svelte.ts';
 	import { toasts } from '#lib/stores/toasts.svelte.ts';
 	import { TASK_PRIORITIES, type Reminder, type TaskPriority } from '#lib/types/index.ts';
@@ -73,7 +73,7 @@
 		{ value: 'sunday', label: t('settings.tasks.sunday') }
 	]);
 	const focusOptions = $derived(
-		[15, 25, 30, 45, 60].map((m) => ({ value: String(m), label: t('focus.minutes', { count: m }) }))
+		FOCUS_MINUTES.map((m) => ({ value: String(m), label: t('focus.minutes', { count: m }) }))
 	);
 
 	// Notifications

@@ -2,8 +2,10 @@
 	import { page } from '$app/state';
 
 	import Button from '#lib/components/ui/Button.svelte';
+	import Checkbox from '#lib/components/ui/Checkbox.svelte';
 	import { useTranslations } from '#lib/i18n/index.ts';
-	import { settings } from '#lib/stores/settings.svelte.ts';
+	import { lists } from '#lib/stores/lists.svelte.ts';
+	import { FOCUS_MINUTES, settings } from '#lib/stores/settings.svelte.ts';
 	import { tasks } from '#lib/stores/tasks.svelte.ts';
 	import { toasts } from '#lib/stores/toasts.svelte.ts';
 
@@ -11,6 +13,9 @@
 
 	let taskId = $state(page.url.searchParams.get('task') ?? '');
 	const task = $derived(tasks.byId(taskId));
+	// Focus on a whole list: its open tasks can be ticked off during the sprint
+	const list = $derived(lists.byId(page.url.searchParams.get('list')));
+	const listTasks = $derived(list ? tasks.forList(list.id).open : []);
 
 	const totalSeconds = $derived(settings.value.focusMinutes * 60);
 	let remaining = $state(0);
@@ -53,16 +58,20 @@
 		remaining = totalSeconds;
 	}
 
-	async function completeTask() {
-		if (!task) return;
+	async function complete(id: string, title: string) {
 		try {
-			await tasks.setCompleted(task.id, true);
-			toasts.success(t('tasks.completed', { title: task.title }));
-			taskId = '';
-			reset();
+			await tasks.setCompleted(id, true);
+			toasts.success(t('tasks.completed', { title }));
 		} catch {
 			toasts.error(t('common.errorGeneric'));
 		}
+	}
+
+	async function completeTask() {
+		if (!task) return;
+		await complete(task.id, task.title);
+		taskId = '';
+		reset();
 	}
 
 	const display = $derived(
@@ -98,12 +107,32 @@
 	<p class="section-label">{t('focus.title')}</p>
 
 	<h1 class="text-[20px] font-semibold text-fg sm:text-[22px]">
-		{task?.title ?? t('focus.noTask')}
+		{list?.name ?? task?.title ?? t('focus.noTask')}
 	</h1>
 
 	<p class="text-[13px] text-muted">
-		{status === 'finished' ? t('focus.finishedHint') : t('focus.subtitle')}
+		{#if status === 'finished'}{t('focus.finishedHint')}
+		{:else if list}{t('lists.openTasks', { count: listTasks.length })}
+		{:else}{t('focus.subtitle')}{/if}
 	</p>
+
+	{#if status === 'idle'}
+		<div class="flex flex-wrap justify-center gap-2" role="group" aria-label={t('focus.duration')}>
+			{#each FOCUS_MINUTES as minutes (minutes)}
+				<button
+					type="button"
+					aria-pressed={settings.value.focusMinutes === minutes}
+					class={`h-9 rounded-full px-4 text-[13px] font-medium tabular-nums transition-colors ${
+						settings.value.focusMinutes === minutes
+							? 'bg-accent text-accent-fg'
+							: 'bg-surface-2 text-fg-2 hover:bg-surface-3 hover:text-fg'
+					}`}
+					onclick={() => settings.update({ focusMinutes: minutes })}
+					>{t('focus.minutes', { count: minutes })}</button
+				>
+			{/each}
+		</div>
+	{/if}
 
 	<!-- Timer ring -->
 	<div
@@ -172,4 +201,20 @@
 			>
 		{/if}
 	</div>
+
+	{#if list}
+		<ul class="flex w-full max-w-md flex-col gap-2 text-left">
+			{#each listTasks as item (item.id)}
+				<li class="flex items-center gap-3 rounded-[14px] bg-surface-2 px-4 py-3">
+					<Checkbox
+						checked={false}
+						size="sm"
+						label={t('tasks.markDone')}
+						onchange={() => void complete(item.id, item.title)}
+					/>
+					<span class="min-w-0 flex-1 truncate text-[14px] text-fg-2">{item.title}</span>
+				</li>
+			{/each}
+		</ul>
+	{/if}
 </div>

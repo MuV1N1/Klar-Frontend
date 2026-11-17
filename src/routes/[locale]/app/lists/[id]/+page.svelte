@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 
 	import { deleteList } from '#lib/components/lists/listActions.ts';
@@ -78,6 +79,15 @@
 		description={list.description ?? t('lists.openTasks', { count: listTasks.open.length })}
 	>
 		{#snippet actions()}
+			{#if listTasks.open.length}
+				<IconButton
+					icon="clock"
+					label={t('focus.start')}
+					variant="surface"
+					size="lg"
+					onclick={() => void goto(localizedHref(locale(), `/app/focus?list=${list.id}`))}
+				/>
+			{/if}
 			<Menu items={menuItems} label={t('navigation.more')}>
 				{#snippet trigger()}
 					<IconButton

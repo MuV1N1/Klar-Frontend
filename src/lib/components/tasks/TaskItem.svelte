@@ -163,7 +163,7 @@
 
 	{#if !task.completed}
 		<IconButton
-			icon="play"
+			icon="clock"
 			label={t('tasks.focusOn')}
 			size="sm"
 			class="sm:opacity-0 sm:group-hover:opacity-100 sm:focus-visible:opacity-100"
