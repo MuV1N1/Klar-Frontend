@@ -19,7 +19,7 @@
 	const taskResults = $derived(tasks.search(query));
 	const listResults = $derived(
 		query.trim()
-			? lists.items.filter((l) => l.name.toLowerCase().includes(query.trim().toLowerCase()))
+			? lists.todo.filter((l) => l.name.toLowerCase().includes(query.trim().toLowerCase()))
 			: []
 	);
 
@@ -52,7 +52,7 @@
 
 	function openList(id: string) {
 		close();
-		void goto(localizedHref(locale(), `/app/lists/${id}`));
+		void goto(localizedHref(locale(), `/app/todos/${id}`));
 	}
 </script>
 

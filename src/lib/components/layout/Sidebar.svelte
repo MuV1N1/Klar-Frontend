@@ -104,6 +104,13 @@
 		onclick={close}
 	/>
 	<NavLink
+		href={href('/app/shopping')}
+		label={t('navigation.shopping')}
+		icon="cart"
+		active={isActive('/app/shopping')}
+		onclick={close}
+	/>
+	<NavLink
 		href={href('/app/groups')}
 		label={t('navigation.groups')}
 		icon="users"
@@ -112,7 +119,7 @@
 	/>
 
 	<div class="mt-6 mb-2 flex items-center justify-between px-3">
-		<a href={href('/app/lists')} class="section-label hover:text-fg" onclick={close}>
+		<a href={href('/app/todos')} class="section-label hover:text-fg" onclick={close}>
 			{t('navigation.lists')}
 		</a>
 	</div>
@@ -124,12 +131,12 @@
 			<Skeleton class="h-4 w-24" />
 		</div>
 	{:else}
-		{#each lists.items as list (list.id)}
+		{#each lists.todo as list (list.id)}
 			<NavLink
-				href={href(`/app/lists/${list.id}`)}
+				href={href(`/app/todos/${list.id}`)}
 				label={list.name}
 				color={listColorValue(list.color)}
-				active={isActive(`/app/lists/${list.id}`)}
+				active={isActive(`/app/todos/${list.id}`)}
 				count={tasks.openCountForList(list.id)}
 				drop={taskDrop(list.id)}
 				onclick={close}

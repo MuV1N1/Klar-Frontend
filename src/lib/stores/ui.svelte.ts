@@ -2,6 +2,7 @@ import type {
 	CalendarEvent,
 	CreateTaskInput,
 	EditScope,
+	ListKind,
 	Task,
 	TaskList
 } from '#lib/types/index.ts';
@@ -26,7 +27,11 @@ class UiStore {
 		defaults: {}
 	});
 
-	listDialog = $state<{ open: boolean; list: TaskList | null }>({ open: false, list: null });
+	listDialog = $state<{ open: boolean; list: TaskList | null; kind: ListKind }>({
+		open: false,
+		list: null,
+		kind: 'todo'
+	});
 
 	eventDialog = $state<{ open: boolean; event: CalendarEvent | null; defaults: EventDefaults }>({
 		open: false,
@@ -76,12 +81,12 @@ class UiStore {
 		this.taskDialog = { ...this.taskDialog, open: false };
 	}
 
-	openNewList() {
-		this.listDialog = { open: true, list: null };
+	openNewList(kind: ListKind = 'todo') {
+		this.listDialog = { open: true, list: null, kind };
 	}
 
 	openEditList(list: TaskList) {
-		this.listDialog = { open: true, list };
+		this.listDialog = { open: true, list, kind: list.kind };
 	}
 
 	closeListDialog() {

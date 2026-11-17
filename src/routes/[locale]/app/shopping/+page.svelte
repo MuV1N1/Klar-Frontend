@@ -12,15 +12,17 @@
 	const t = useTranslations();
 </script>
 
-<svelte:head><title>{t('lists.title')} – {t('app.name')}</title></svelte:head>
+<svelte:head><title>{t('shopping.title')} – {t('app.name')}</title></svelte:head>
 
 <PageHeader
-	eyebrow={t('lists.eyebrow')}
-	title={t('lists.title')}
-	description={t('lists.description')}
+	eyebrow={t('shopping.eyebrow')}
+	title={t('shopping.title')}
+	description={t('shopping.description')}
 >
 	{#snippet actions()}
-		<Button variant="primary" icon="plus" onclick={() => ui.openNewList()}>{t('lists.new')}</Button>
+		<Button variant="primary" icon="plus" onclick={() => ui.openNewList('shopping')}
+			>{t('shopping.new')}</Button
+		>
 	{/snippet}
 </PageHeader>
 
@@ -35,15 +37,15 @@
 	<div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" aria-busy="true">
 		{#each [1, 2, 3] as i (i)}<Skeleton class="h-[150px] rounded-[18px]" />{/each}
 	</div>
-{:else if lists.items.length === 0}
-	<EmptyState icon="layers" title={t('lists.empty')} description={t('lists.emptyHint')}>
-		<Button variant="primary" size="sm" icon="plus" onclick={() => ui.openNewList()}
-			>{t('lists.new')}</Button
+{:else if lists.shopping.length === 0}
+	<EmptyState icon="cart" title={t('shopping.empty')} description={t('shopping.emptyHint')}>
+		<Button variant="primary" size="sm" icon="plus" onclick={() => ui.openNewList('shopping')}
+			>{t('shopping.new')}</Button
 		>
 	</EmptyState>
 {:else}
 	<div class="grid animate-rise-in gap-3 sm:grid-cols-2 lg:grid-cols-3">
-		{#each lists.items as list (list.id)}
+		{#each lists.shopping as list (list.id)}
 			<ListCard {list} />
 		{/each}
 	</div>
