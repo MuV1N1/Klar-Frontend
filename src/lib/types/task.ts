@@ -13,6 +13,8 @@ export interface Task {
 	/** Optional time of day (HH:mm). */
 	dueTime: string | null;
 	priority: TaskPriority;
+	/** How many to buy (1-200); 1 for regular tasks. */
+	quantity: number;
 	/** null = inbox (no list assigned). */
 	listId: string | null;
 	/** User id of the creator (tasks in shared lists can come from any member). */
@@ -34,6 +36,7 @@ export interface CreateTaskInput {
 	dueDate?: string | null;
 	dueTime?: string | null;
 	priority?: TaskPriority;
+	quantity?: number;
 	listId?: string | null;
 	reminders?: Reminder[];
 }

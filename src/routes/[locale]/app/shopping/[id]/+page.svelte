@@ -31,6 +31,10 @@
 	let query = $state('');
 	const suggestions = $derived(suggestItems(query, locale()));
 
+	// Input binds a string, so the quantity is parsed and clamped to what the backend accepts
+	let amount = $state('1');
+	const amountValue = $derived(Math.min(Math.max(Number.parseInt(amount, 10) || 1, 1), 200));
+
 	const menuItems = $derived<MenuItem[]>([
 		{
 			id: 'edit',
@@ -49,16 +53,19 @@
 
 	const sameName = (task: Task, name: string) => task.title.toLowerCase() === name.toLowerCase();
 
-	/** Like Bring: an item that was bought before goes back on the list instead of a duplicate. */
+	/** Like Bring: an item that is already open gets the amount added instead of a duplicate. */
 	async function add(name: string) {
 		const title = name.trim();
 		if (!title || !list) return;
+		const quantity = amountValue;
 		query = '';
-		if (items.open.some((task) => sameName(task, title))) return;
+		amount = '1';
 		try {
+			const open = items.open.find((task) => sameName(task, title));
 			const bought = items.bought.find((task) => sameName(task, title));
-			if (bought) await tasks.setCompleted(bought.id, false);
-			else await tasks.create({ title, listId: list.id });
+			if (open) await tasks.update(open.id, { quantity: Math.min(open.quantity + quantity, 200) });
+			else if (bought) await tasks.update(bought.id, { completed: false, quantity });
+			else await tasks.create({ title, listId: list.id, quantity });
 		} catch {
 			toasts.error(t('common.errorGeneric'));
 		}
@@ -100,8 +107,8 @@
 			<span class="line-clamp-2 text-[12px] leading-tight font-medium break-words"
 				>{task.title}</span
 			>
-			{#if task.description}
-				<span class="line-clamp-1 text-[11px] text-muted">{task.description}</span>
+			{#if task.quantity > 0}
+				<span class="line-clamp-1 text-[10px] font-medium">{task.quantity}x</span>
 			{/if}
 		</button>
 		{#if bought}
@@ -180,14 +187,42 @@
 					placeholder={t('shopping.addPlaceholder')}
 					aria-label={t('shopping.addPlaceholder')}
 					autocomplete="off"
-					class="flex-1"
+					class="min-w-0 flex-1"
 				/>
+				<div
+					class="flex h-14 flex-none items-center rounded-[12px] bg-surface-2 px-1"
+					role="group"
+					aria-label={t('shopping.quantity')}
+				>
+					<IconButton
+						icon="minus"
+						label={t('shopping.less')}
+						disabled={amountValue <= 1}
+						onclick={() => (amount = String(amountValue - 1))}
+					/>
+					<input
+						bind:value={amount}
+						type="number"
+						inputmode="numeric"
+						min="1"
+						max="200"
+						aria-label={t('shopping.quantity')}
+						class="w-9 [appearance:textfield] border-0 bg-transparent p-0 text-center text-[15px] font-medium text-fg focus:ring-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+					/>
+					<IconButton
+						icon="plus"
+						label={t('shopping.more')}
+						disabled={amountValue >= 200}
+						onclick={() => (amount = String(amountValue + 1))}
+					/>
+				</div>
 				<IconButton
 					icon="plus"
 					type="submit"
 					variant="surface"
 					size="lg"
 					label={t('shopping.add')}
+					class="h-14! w-14!"
 				/>
 			</div>
 			{#if suggestions.length}
