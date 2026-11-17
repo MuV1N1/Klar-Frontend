@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Klar</string>
+    <string name="title_activity_main">Klar</string>
+    <string name="package_name">de.muv1n.klar</string>
+    <string name="custom_url_scheme">de.muv1n.klar</string>
+</resources>

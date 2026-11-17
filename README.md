@@ -25,6 +25,21 @@ npm run format
 Das Frontend braucht ein laufendes Backend (`PUBLIC_API_BASE_URL`, siehe `.env.example` und
 [docs/BACKEND_INTEGRATION.md](docs/BACKEND_INTEGRATION.md)).
 
+## Handy-App (Android, iOS)
+
+Die App ist dieses Frontend als statische SPA in einer [Capacitor](https://capacitorjs.com)-Hülle
+(`capacitor.config.ts`, native Projekte in `android/` und `ios/`).
+
+```bash
+cp .env.app.example .env.app   # absolute API-URL, die App hat keinen eigenen Server
+npm run build:app              # SPA bauen und in android/ und ios/ kopieren
+npx cap open android           # Android Studio; oder: cd android && ./gradlew assembleDebug
+npx cap open ios               # nur auf dem Mac, Xcode
+```
+
+Android braucht JDK 21 (neuere JDKs versteht das Gradle der Vorlage nicht) und das Android SDK
+(`ANDROID_HOME`). Icons und Splash entstehen aus `assets/` mit `npx @capacitor/assets generate`.
+
 ## Struktur
 
 ```
