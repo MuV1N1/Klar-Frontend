@@ -41,9 +41,9 @@ export interface ResetPasswordInput {
 	password: string;
 }
 
+/** Only the name; changing the email would need a new verification. */
 export interface UpdateProfileInput {
-	name?: string;
-	email?: string;
+	name: string;
 }
 
 export interface AuthSession {
