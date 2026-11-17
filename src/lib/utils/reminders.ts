@@ -1,5 +1,4 @@
 import type { Locale, Translator } from '#lib/i18n/index.ts';
-import type { Reminder } from '#lib/types/index.ts';
 
 import { formatTime } from './date.ts';
 
@@ -38,20 +37,4 @@ export function describeReminder(
 	if (minutesBefore % 1440 === 0) return t('reminders.daysBefore', { count: minutesBefore / 1440 });
 	if (minutesBefore % 60 === 0) return t('reminders.hoursBefore', { count: minutesBefore / 60 });
 	return t('reminders.minutesBefore', { count: minutesBefore });
-}
-
-/** Sorted like the backend: earliest reminder first. */
-export function sortReminders(reminders: Reminder[]): Reminder[] {
-	return [...reminders].sort((a, b) => b.minutesBefore - a.minutesBefore);
-}
-
-/** Keeps the first of reminders with the same time and channel. */
-export function dedupeReminders(reminders: Reminder[]): Reminder[] {
-	const seen = new Set<string>();
-	return reminders.filter((r) => {
-		const key = `${r.minutesBefore}:${r.channel}`;
-		if (seen.has(key)) return false;
-		seen.add(key);
-		return true;
-	});
 }

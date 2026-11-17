@@ -8,35 +8,23 @@ Pfade lassen sich zentral in `src/lib/api/config.ts` anpassen.
 
 ```
 src/lib/api/
-├── config.ts          # Basis-URL, Mock-Schalter, Endpunkt-Pfade (zentral)
+├── config.ts          # Basis-URL, Endpunkt-Pfade (zentral)
 ├── http.ts            # fetch-Wrapper: JSON, Bearer-Token, Fehler → ApiError
 ├── errors.ts          # ApiError (code: network | unauthorized | not_found | validation | server | …)
-├── index.ts           # exportiert `api` – wählt Mock oder REST anhand PUBLIC_USE_MOCK_API
+├── index.ts           # exportiert `api`
 ├── services/          # REST-Implementierung (spricht mit Spring Boot)
 │   ├── types.ts       # Interfaces TasksApi, ListsApi, AuthApi
 │   ├── tasks.ts
 │   ├── lists.ts
 │   └── auth.ts
-└── mock/              # Mock-Implementierung (localStorage + simulierte Latenz)
-    ├── seed.ts        # Demo-Daten
-    ├── storage.ts
-    ├── tasks.ts / lists.ts / auth.ts
-    └── index.ts
 ```
 
 Die Stores in `src/lib/stores/*.svelte.ts` kennen nur das `api`-Objekt und die Interfaces aus
 `services/types.ts`. UI-Komponenten greifen ausschließlich auf die Stores zu.
 
-### Umschalten auf das echte Backend
+### Backend-URL
 
-1. `.env` anlegen (siehe `.env.example`):
-   ```
-   PUBLIC_USE_MOCK_API=false
-   PUBLIC_API_BASE_URL=http://localhost:8080/api
-   ```
-2. Dev-Server neu starten. Ab jetzt werden `services/*.ts` verwendet.
-3. Die Mock-Dateien unter `src/lib/api/mock/` können später gelöscht werden; dann auch
-   `resetMockData` aus `services/types.ts` und die Demo-Hinweise in Login/Einstellungen entfernen.
+`.env` anlegen (siehe `.env.example`), z. B. `PUBLIC_API_BASE_URL=http://localhost:8080/api`.
 
 ### CORS
 
@@ -148,6 +136,5 @@ verworfen, Redirect zum Login), 403 → `forbidden`, 404 → `not_found`, 5xx �
 
 - [ ] Endpunkte wie oben bereitstellen (oder Pfade in `config.ts` anpassen)
 - [ ] CORS für `http://localhost:5173` erlauben
-- [ ] `.env` mit `PUBLIC_USE_MOCK_API=false` anlegen
+- [ ] `.env` mit `PUBLIC_API_BASE_URL` anlegen
 - [ ] Login-Flow testen (`/auth/login` → `/auth/me` beim Reload)
-- [ ] Demo-Hinweise entfernen (`apiConfig.useMock` wird dafür bereits abgefragt)

@@ -23,11 +23,7 @@ import type {
 	VerifyEmailInput
 } from '#lib/types/index.ts';
 
-/**
- * Service contracts. Both the REST implementation (services/*.ts) and the
- * mock implementation (mock/*.ts) implement these interfaces, so the UI never
- * knows which one it is talking to.
- */
+/** Service contracts of the REST implementation (services/*.ts). */
 export interface TasksApi {
 	list(): Promise<Task[]>;
 	get(id: string): Promise<Task>;
@@ -102,6 +98,4 @@ export interface Api {
 	notifications: NotificationsApi;
 	auth: AuthApi;
 	admin: AdminApi;
-	/** Only available in mock mode: restores the seed data. */
-	resetMockData?: () => Promise<void>;
 }
