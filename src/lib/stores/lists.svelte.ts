@@ -9,6 +9,9 @@ class ListStore {
 	#status = $state<LoadStatus>('idle');
 	#error = $state<ApiError | null>(null);
 
+	readonly todo = $derived(this.#lists.filter((l) => l.kind !== 'shopping'));
+	readonly shopping = $derived(this.#lists.filter((l) => l.kind === 'shopping'));
+
 	get items(): TaskList[] {
 		return this.#lists;
 	}

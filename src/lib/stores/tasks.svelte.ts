@@ -6,7 +6,7 @@ import type { CreateTaskInput, Task, UpdateTaskInput } from '#lib/types/index.ts
 import { isPast, isToday, isWithinLastDays, todayISO } from '#lib/utils/date.ts';
 import { compareByCompleted, compareByDue } from '#lib/utils/sort.ts';
 
-import type { LoadStatus } from './lists.svelte.ts';
+import { lists, type LoadStatus } from './lists.svelte.ts';
 
 class TaskStore {
 	#tasks = $state<Task[]>([]);
@@ -16,8 +16,10 @@ class TaskStore {
 	#pending = new SvelteSet<string>();
 
 	// --- derived views -------------------------------------------------------
-	readonly open = $derived(this.#tasks.filter((t) => !t.completed).sort(compareByDue));
-	readonly completed = $derived(this.#tasks.filter((t) => t.completed).sort(compareByCompleted));
+	/** Everything but the items of shopping lists; all task views below build on it. */
+	readonly #todo = $derived(this.#tasks.filter((t) => lists.byId(t.listId)?.kind !== 'shopping'));
+	readonly open = $derived(this.#todo.filter((t) => !t.completed).sort(compareByDue));
+	readonly completed = $derived(this.#todo.filter((t) => t.completed).sort(compareByCompleted));
 	readonly today = $derived(this.open.filter((t) => isToday(t.dueDate)));
 	readonly overdue = $derived(this.open.filter((t) => isPast(t.dueDate)));
 	readonly upcoming = $derived(
@@ -70,6 +72,17 @@ class TaskStore {
 		};
 	}
 
+	/** Items of a shopping list: to buy (oldest first) and bought (most recent first). */
+	forShoppingList(listId: string): { open: Task[]; bought: Task[] } {
+		const items = this.#tasks.filter((t) => t.listId === listId);
+		return {
+			open: items
+				.filter((t) => !t.completed)
+				.sort((a, b) => a.createdAt.localeCompare(b.createdAt)),
+			bought: items.filter((t) => t.completed).sort(compareByCompleted)
+		};
+	}
+
 	openCountForList(listId: string): number {
 		return this.open.filter((t) => t.listId === listId).length;
 	}
@@ -77,7 +90,7 @@ class TaskStore {
 	search(query: string): Task[] {
 		const q = query.trim().toLowerCase();
 		if (!q) return [];
-		return this.#tasks
+		return this.#todo
 			.filter(
 				(t) => t.title.toLowerCase().includes(q) || (t.description ?? '').toLowerCase().includes(q)
 			)
@@ -163,6 +176,11 @@ class TaskStore {
 	}
 
 	/** Called when a list is deleted so the UI updates without a refetch. */
+	/** Local copy of the backend deleting a shopping list together with its items. */
+	dropList(listId: string) {
+		this.#tasks = this.#tasks.filter((t) => t.listId !== listId);
+	}
+
 	detachFromList(listId: string) {
 		this.#tasks = this.#tasks.map((t) => (t.listId === listId ? { ...t, listId: null } : t));
 	}

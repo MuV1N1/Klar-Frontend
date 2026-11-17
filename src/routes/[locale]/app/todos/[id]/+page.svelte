@@ -67,7 +67,7 @@
 		<Button
 			variant="outline"
 			size="sm"
-			href={localizedHref(locale(), '/app/lists')}
+			href={localizedHref(locale(), '/app/todos')}
 			icon="arrowLeft">{t('common.back')}</Button
 		>
 	</EmptyState>

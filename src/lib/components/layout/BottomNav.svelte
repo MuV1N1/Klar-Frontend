@@ -15,8 +15,9 @@
 	const items = $derived<{ path: string; label: string; icon: IconName; exact?: boolean }[]>([
 		{ path: '/app', label: t('navigation.dashboard'), icon: 'sun', exact: true },
 		{ path: '/app/calendar', label: t('navigation.calendar'), icon: 'calendar' },
-		{ path: '/app/lists', label: t('navigation.lists'), icon: 'layers' },
-		{ path: '/app/settings', label: t('navigation.settings'), icon: 'settings' }
+		{ path: '/app/todos', label: t('navigation.lists'), icon: 'layers' },
+		// Settings stay in the menu (sidebar); a sixth tab would not fit on small phones.
+		{ path: '/app/shopping', label: t('navigation.shopping'), icon: 'cart' }
 	]);
 
 	const isActive = (path: string, exact?: boolean) =>

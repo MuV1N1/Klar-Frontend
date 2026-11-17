@@ -9,7 +9,7 @@
 	import IconButton from '../ui/IconButton.svelte';
 	import Menu, { type MenuItem } from '../ui/Menu.svelte';
 	import { deleteList } from './listActions.ts';
-	import { listColorValue, listIconName } from './listHelpers.ts';
+	import { listColorValue, listIconName, listPath } from './listHelpers.ts';
 
 	let { list }: { list: TaskList } = $props();
 
@@ -17,8 +17,18 @@
 	const locale = useLocale();
 
 	const color = $derived(listColorValue(list.color));
-	const open = $derived(tasks.openCountForList(list.id));
-	const done = $derived(tasks.forList(list.id).completed.length);
+	const counts = $derived.by(() => {
+		if (list.kind !== 'shopping') {
+			return {
+				open: tasks.openCountForList(list.id),
+				done: tasks.forList(list.id).completed.length
+			};
+		}
+		const items = tasks.forShoppingList(list.id);
+		return { open: items.open.length, done: items.bought.length };
+	});
+	const open = $derived(counts.open);
+	const done = $derived(counts.done);
 	const total = $derived(open + done);
 	const percent = $derived(total > 0 ? Math.round((done / total) * 100) : 0);
 
@@ -36,7 +46,7 @@
 
 <div class="group relative">
 	<a
-		href={localizedHref(locale(), `/app/lists/${list.id}`)}
+		href={localizedHref(locale(), listPath(list))}
 		class="flex flex-col gap-3 rounded-[18px] border border-border bg-surface px-5 py-4 transition-colors duration-150 hover:border-border-strong"
 	>
 		<div class="flex items-center gap-3 pr-9">
@@ -52,7 +62,7 @@
 			{/if}
 			<span
 				class="text-[13px] text-muted tabular-nums"
-				title={t('lists.openTasks', { count: open })}
+				title={t(list.kind === 'shopping' ? 'shopping.toBuy' : 'lists.openTasks', { count: open })}
 			>
 				{open}
 			</span>

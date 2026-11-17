@@ -68,7 +68,7 @@
 
 	const listOptions = $derived([
 		{ value: '', label: t('dashboard.allLists') },
-		...lists.items.map((l) => ({ value: l.id, label: l.name }))
+		...lists.todo.map((l) => ({ value: l.id, label: l.name }))
 	]);
 
 	const sortOptions = $derived([

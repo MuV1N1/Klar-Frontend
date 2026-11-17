@@ -66,12 +66,16 @@ export const LIST_ICONS: readonly ListIcon[] = [
 	'music'
 ];
 
+/** `shopping`: the tasks are items to buy, "completed" means bought. Fixed once created. */
+export type ListKind = 'todo' | 'shopping';
+
 export interface TaskList {
 	id: string;
 	name: string;
 	description: string | null;
 	color: ListColor;
 	icon: ListIcon;
+	kind: ListKind;
 	/** null = private; otherwise every member of the group sees and edits the list. */
 	groupId: string | null;
 	/** User id of the creator; only they can change `groupId`. */
@@ -88,6 +92,7 @@ export interface CreateListInput {
 	color?: ListColor;
 	icon?: ListIcon;
 	groupId?: string | null;
+	kind?: ListKind;
 }
 
-export type UpdateListInput = Partial<CreateListInput>;
+export type UpdateListInput = Partial<Omit<CreateListInput, 'kind'>>;

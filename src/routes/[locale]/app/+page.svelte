@@ -136,12 +136,12 @@
 		<!-- Lists overview -->
 		<section class="flex animate-rise-in flex-col gap-4">
 			<div class="flex items-center justify-between">
-				<h2 class="section-label">{t('dashboard.lists')} · {lists.items.length}</h2>
-				<a href={href('/app/lists')} class="text-[12px] text-muted hover:text-fg"
+				<h2 class="section-label">{t('dashboard.lists')} · {lists.todo.length}</h2>
+				<a href={href('/app/todos')} class="text-[12px] text-muted hover:text-fg"
 					>{t('dashboard.allLists')}</a
 				>
 			</div>
-			{#if lists.items.length === 0}
+			{#if lists.todo.length === 0}
 				<EmptyState
 					icon="layers"
 					title={t('dashboard.noLists')}
@@ -154,7 +154,7 @@
 				</EmptyState>
 			{:else}
 				<div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-					{#each lists.items.slice(0, 6) as list (list.id)}
+					{#each lists.todo.slice(0, 6) as list (list.id)}
 						<ListCard {list} />
 					{/each}
 				</div>

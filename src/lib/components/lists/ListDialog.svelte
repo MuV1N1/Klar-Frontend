@@ -23,6 +23,7 @@
 
 	const dialog = $derived(ui.listDialog);
 	const editing = $derived(dialog.list);
+	const shopping = $derived(dialog.kind === 'shopping');
 
 	let name = $state('');
 	let description = $state('');
@@ -39,7 +40,7 @@
 		name = dialog.list?.name ?? '';
 		description = dialog.list?.description ?? '';
 		color = dialog.list?.color ?? 'lime';
-		icon = dialog.list?.icon ?? 'list';
+		icon = dialog.list?.icon ?? (dialog.kind === 'shopping' ? 'cart' : 'list');
 		groupId = dialog.list?.groupId ?? '';
 		error = null;
 		setTimeout(() => nameInput?.focus(), 30);
@@ -70,7 +71,7 @@
 				await lists.update(editing.id, input);
 				toasts.success(t('lists.updated'));
 			} else {
-				await lists.create(input);
+				await lists.create({ ...input, kind: dialog.kind });
 				toasts.success(t('lists.created'));
 			}
 			ui.closeListDialog();
@@ -89,7 +90,7 @@
 
 <Dialog
 	open={dialog.open}
-	title={editing ? t('lists.edit') : t('lists.new')}
+	title={editing ? t('lists.edit') : t(shopping ? 'shopping.new' : 'lists.new')}
 	closeLabel={t('common.close')}
 	size="sm"
 	onclose={() => ui.closeListDialog()}
@@ -108,7 +109,7 @@
 				bind:ref={nameInput}
 				bind:value={name}
 				size="lg"
-				placeholder={t('lists.namePlaceholder')}
+				placeholder={t(shopping ? 'shopping.namePlaceholder' : 'lists.namePlaceholder')}
 				invalid={!!error}
 				oninput={() => (error = null)}
 			/>

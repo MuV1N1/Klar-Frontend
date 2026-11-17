@@ -51,7 +51,7 @@
 
 	const listOptions = $derived([
 		{ value: '', label: t('tasks.noList') },
-		...lists.items.map((l) => ({ value: l.id, label: l.name }))
+		...lists.todo.map((l) => ({ value: l.id, label: l.name }))
 	]);
 
 	const priorityOptions = $derived(
