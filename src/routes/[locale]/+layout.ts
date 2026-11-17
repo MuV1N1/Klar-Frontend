@@ -2,10 +2,10 @@ import { error } from '@sveltejs/kit';
 
 import { isLocale, type Locale } from '#lib/i18n/index.ts';
 
-import type { LayoutServerLoad } from './$types';
+import type { LayoutLoad } from './$types';
 
-/** The texts themselves come from the root layout (src/routes/+layout.server.ts). */
-export const load: LayoutServerLoad = ({ params }) => {
+/** The texts themselves come from the root layout (src/routes/+layout.ts). */
+export const load: LayoutLoad = ({ params }) => {
 	const locale = params.locale;
 
 	if (!isLocale(locale)) {
