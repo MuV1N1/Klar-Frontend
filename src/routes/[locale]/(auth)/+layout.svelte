@@ -16,7 +16,9 @@
 	});
 </script>
 
-<div class="flex min-h-dvh flex-col bg-bg px-4 py-8 sm:px-6">
+<div
+	class="flex min-h-dvh flex-col bg-bg px-4 pt-[calc(2rem+env(safe-area-inset-top))] pb-[calc(2rem+env(safe-area-inset-bottom))] sm:px-6"
+>
 	<a href={localizedHref(locale(), '/')} class="mx-auto sm:mx-0"><Logo size={40} /></a>
 
 	<div class="flex flex-1 items-center justify-center py-10">

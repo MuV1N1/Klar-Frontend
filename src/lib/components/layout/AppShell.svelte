@@ -43,7 +43,7 @@
 				onclick={() => ui.toggleSidebar(false)}
 			></button>
 			<aside
-				class="absolute inset-y-0 left-0 w-[300px] max-w-[85vw] animate-rise-in bg-sidebar shadow-2xl"
+				class="absolute inset-y-0 left-0 w-[300px] max-w-[85vw] animate-rise-in bg-sidebar pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] shadow-2xl"
 			>
 				<Sidebar />
 			</aside>
@@ -53,7 +53,7 @@
 	<div class="flex min-w-0 flex-1 flex-col">
 		<!-- Mobile top bar -->
 		<header
-			class="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-border bg-bg/90 px-4 backdrop-blur md:hidden"
+			class="sticky top-0 z-20 flex h-[calc(3.5rem+env(safe-area-inset-top))] items-center justify-between border-b border-border bg-bg/90 px-4 pt-[env(safe-area-inset-top)] backdrop-blur md:hidden"
 		>
 			<IconButton
 				icon="menu"

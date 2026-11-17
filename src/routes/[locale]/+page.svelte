@@ -33,7 +33,7 @@
 	<title>{t('app.name')} – {t('app.tagline')}</title>
 </svelte:head>
 
-<div class="min-h-dvh bg-bg text-fg">
+<div class="min-h-dvh bg-bg pt-[env(safe-area-inset-top)] text-fg">
 	<!-- Nav (Figma 06) -->
 	<header class="mx-auto flex max-w-[1280px] items-center justify-between px-6 py-6 sm:px-10">
 		<Logo size={40} />
@@ -43,7 +43,7 @@
 			<a href="#pricing" class="hover:text-fg">{t('landing.nav.pricing')}</a>
 		</nav>
 		<div class="flex items-center gap-2 sm:gap-4">
-			<div class="hidden items-center gap-1 text-[12px] text-muted sm:flex">
+			<div class="flex items-center gap-1 text-[12px] text-muted">
 				{#each LOCALES as l (l)}
 					<a
 						href={localizedHref(l, '/')}
@@ -55,13 +55,13 @@
 					</a>
 				{/each}
 			</div>
-			<a href={href('/login')} class="text-[13px] text-fg-2 hover:text-fg"
+			<a href={href('/login')} class="hidden text-[13px] text-fg-2 hover:text-fg sm:inline"
 				>{t('landing.nav.login')}</a
 			>
 			<Button
 				href={href('/register')}
 				variant="primary"
-				class="!bg-fg !text-bg dark:!bg-white dark:!text-[#101114]"
+				class="!bg-fg !text-bg max-sm:!hidden dark:!bg-white dark:!text-[#101114]"
 			>
 				{t('landing.nav.start')}
 			</Button>
@@ -70,9 +70,11 @@
 
 	<!-- Hero -->
 	<section
-		class="mx-auto grid max-w-[1280px] items-center gap-12 px-6 pt-10 pb-20 sm:px-10 lg:grid-cols-[1.1fr_1fr] lg:pt-16"
+		class="mx-auto grid max-w-[1280px] items-center gap-12 px-6 pb-20 max-sm:pt-4 sm:px-10 sm:pt-10 lg:grid-cols-[1.1fr_1fr] lg:pt-16"
 	>
-		<div class="flex animate-rise-in flex-col items-start gap-8">
+		<div
+			class="flex animate-rise-in flex-col items-start gap-8 max-sm:min-h-[calc(100svh-88px-env(safe-area-inset-top)-1rem)] max-sm:pb-[calc(1.5rem+env(safe-area-inset-bottom))]"
+		>
 			<span
 				class="inline-flex items-center gap-2 rounded-full border border-border px-4 py-1.5 text-[12px] text-muted"
 			>
@@ -86,19 +88,34 @@
 				{t('landing.headline2')} <span class="text-accent-text">{t('landing.headline3')}</span>
 			</h1>
 			<p class="max-w-md text-[15px] leading-7 text-muted">{t('landing.lead')}</p>
-			<div class="flex flex-wrap items-center gap-3">
+			<div class="flex flex-wrap items-center gap-3 max-sm:mt-auto max-sm:w-full max-sm:flex-col">
 				<Button
 					href={href('/register')}
 					variant="primary"
 					size="lg"
 					iconRight="arrowRight"
-					class="!rounded-full !px-8"
+					class="!rounded-full !px-8 max-sm:!h-14 max-sm:w-full max-sm:text-base"
 				>
 					{t('landing.cta')}
 				</Button>
-				<Button href="#how" variant="outline" size="lg" class="!rounded-full !px-8">
+				<Button
+					href={href('/login')}
+					variant="outline"
+					size="lg"
+					class="!h-14 w-full !rounded-full text-base sm:!hidden"
+				>
+					{t('landing.nav.login')}
+				</Button>
+				<Button href="#how" variant="outline" size="lg" class="!rounded-full !px-8 max-sm:!hidden">
 					{t('landing.secondary')}
 				</Button>
+				<a
+					href="#features"
+					class="mt-3 flex items-center gap-1 text-[13px] text-muted hover:text-fg sm:hidden"
+				>
+					{t('landing.secondary')}
+					<Icon name="chevronDown" size={16} />
+				</a>
 			</div>
 		</div>
 
