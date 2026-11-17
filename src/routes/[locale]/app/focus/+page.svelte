@@ -2,7 +2,6 @@
 	import { page } from '$app/state';
 
 	import Button from '#lib/components/ui/Button.svelte';
-	import Select from '#lib/components/ui/Select.svelte';
 	import { useTranslations } from '#lib/i18n/index.ts';
 	import { settings } from '#lib/stores/settings.svelte.ts';
 	import { tasks } from '#lib/stores/tasks.svelte.ts';
@@ -89,11 +88,6 @@
 		}
 		return parts.join(' ');
 	});
-
-	const taskOptions = $derived([
-		{ value: '', label: t('focus.noTask') },
-		...tasks.open.map((task) => ({ value: task.id, label: task.title }))
-	]);
 </script>
 
 <svelte:head><title>{t('focus.title')} – {t('app.name')}</title></svelte:head>
@@ -103,18 +97,9 @@
 >
 	<p class="section-label">{t('focus.title')}</p>
 
-	{#if status === 'idle'}
-		<Select
-			bind:value={taskId}
-			options={taskOptions}
-			class="w-full max-w-sm"
-			aria-label={t('focus.chooseTask')}
-		/>
-	{:else}
-		<h1 class="text-[20px] font-semibold text-fg sm:text-[22px]">
-			{task?.title ?? t('focus.noTask')}
-		</h1>
-	{/if}
+	<h1 class="text-[20px] font-semibold text-fg sm:text-[22px]">
+		{task?.title ?? t('focus.noTask')}
+	</h1>
 
 	<p class="text-[13px] text-muted">
 		{status === 'finished' ? t('focus.finishedHint') : t('focus.subtitle')}
