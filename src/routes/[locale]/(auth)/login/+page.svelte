@@ -8,9 +8,11 @@
 	import { apiErrorCode } from '#lib/api/errors.ts';
 	import { localizedHref, useLocale, useTranslations } from '#lib/i18n/index.ts';
 	import { auth } from '#lib/stores/auth.svelte.ts';
+	import { redirectParam, withQuery } from '#lib/utils/url.ts';
 
 	const t = useTranslations();
 	const locale = useLocale();
+	const keep = $derived(redirectParam(page.url.search));
 
 	let email = $state('');
 	let password = $state('');
@@ -32,13 +34,10 @@
 		errors = {};
 		try {
 			await auth.login({ email, password });
-			const redirect = page.url.searchParams.get('redirect');
-			await goto(redirect?.startsWith('/') ? redirect : localizedHref(locale(), '/app'));
+			await goto(keep.redirect ?? localizedHref(locale(), '/app'));
 		} catch (error) {
 			if (apiErrorCode(error) === 'email_not_verified') {
-				await goto(
-					`${localizedHref(locale(), '/verify-email')}?email=${encodeURIComponent(email)}`
-				);
+				await goto(localizedHref(locale(), '/verify-email') + withQuery('', { email, ...keep }));
 				return;
 			}
 			errors = { form: t('auth.errors.failed') };
@@ -104,7 +103,7 @@
 <p class="mt-8 text-center text-[13px] text-muted">
 	{t('auth.login.noAccount')}
 	<a
-		href={localizedHref(locale(), '/register')}
+		href={localizedHref(locale(), '/register') + withQuery('', keep)}
 		class="font-medium text-accent-text hover:underline"
 	>
 		{t('auth.login.register')}

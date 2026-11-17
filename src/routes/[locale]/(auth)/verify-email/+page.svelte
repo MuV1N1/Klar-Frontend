@@ -8,9 +8,11 @@
 	import { apiErrorCode } from '#lib/api/errors.ts';
 	import { localizedHref, useLocale, useTranslations } from '#lib/i18n/index.ts';
 	import { auth } from '#lib/stores/auth.svelte.ts';
+	import { redirectParam, withQuery } from '#lib/utils/url.ts';
 
 	const t = useTranslations();
 	const locale = useLocale();
+	const keep = $derived(redirectParam(page.url.search));
 
 	let email = $state(page.url.searchParams.get('email') ?? '');
 	let code = $state('');
@@ -40,7 +42,7 @@
 		notice = null;
 		try {
 			await auth.verifyEmail({ email: email.trim(), code: code.replace(/\s/g, ''), password });
-			await goto(localizedHref(locale(), '/app'));
+			await goto(keep.redirect ?? localizedHref(locale(), '/app'));
 		} catch (err) {
 			error =
 				apiErrorCode(err) === 'invalid_code'
@@ -132,7 +134,7 @@
 <p class="mt-8 text-center text-[13px] text-muted">
 	{t('auth.verify.wrongEmail')}
 	<a
-		href={localizedHref(locale(), '/register')}
+		href={localizedHref(locale(), '/register') + withQuery('', keep)}
 		class="font-medium text-accent-text hover:underline"
 	>
 		{t('auth.register.action')}

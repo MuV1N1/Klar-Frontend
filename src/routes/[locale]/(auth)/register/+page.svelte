@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 
 	import Button from '#lib/components/ui/Button.svelte';
 	import Field from '#lib/components/ui/Field.svelte';
@@ -7,9 +8,11 @@
 	import { ApiError } from '#lib/api/errors.ts';
 	import { localizedHref, useLocale, useTranslations } from '#lib/i18n/index.ts';
 	import { auth } from '#lib/stores/auth.svelte.ts';
+	import { redirectParam, withQuery } from '#lib/utils/url.ts';
 
 	const t = useTranslations();
 	const locale = useLocale();
+	const keep = $derived(redirectParam(page.url.search));
 
 	let name = $state('');
 	let email = $state('');
@@ -35,7 +38,7 @@
 			const result = await auth.register({ name, email, password });
 			const target = result.verificationRequired ? '/verify-email' : '/login';
 			await goto(
-				`${localizedHref(locale(), target)}?email=${encodeURIComponent(result.user.email)}`
+				localizedHref(locale(), target) + withQuery('', { email: result.user.email, ...keep })
 			);
 		} catch (error) {
 			errors = {
@@ -106,7 +109,10 @@
 
 <p class="mt-8 text-center text-[13px] text-muted">
 	{t('auth.register.hasAccount')}
-	<a href={localizedHref(locale(), '/login')} class="font-medium text-accent-text hover:underline">
+	<a
+		href={localizedHref(locale(), '/login') + withQuery('', keep)}
+		class="font-medium text-accent-text hover:underline"
+	>
 		{t('auth.register.login')}
 	</a>
 </p>
