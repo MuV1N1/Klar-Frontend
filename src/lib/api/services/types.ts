@@ -4,6 +4,9 @@ import type {
 	CalendarEvent,
 	CreateEventInput,
 	EditScope,
+	Group,
+	GroupInvite,
+	InvitePreview,
 	NotificationSettings,
 	PushConfig,
 	CreateListInput,
@@ -38,6 +41,19 @@ export interface ListsApi {
 	create(input: CreateListInput): Promise<TaskList>;
 	update(id: string, input: UpdateListInput): Promise<TaskList>;
 	remove(id: string): Promise<void>;
+}
+
+export interface GroupsApi {
+	list(): Promise<Group[]>;
+	create(name: string): Promise<Group>;
+	rename(id: string, name: string): Promise<Group>;
+	remove(id: string): Promise<void>;
+	/** Leave (own id) or, as an admin, remove a member. */
+	removeMember(id: string, userId: string): Promise<void>;
+	/** Without `email` a shareable link; with one, Klar mails a one-time link. */
+	invite(id: string, email?: string): Promise<GroupInvite>;
+	preview(token: string): Promise<InvitePreview>;
+	accept(token: string): Promise<Group>;
 }
 
 /** Which occurrence of a series a change refers to; omit for single events. */
@@ -95,6 +111,7 @@ export interface Api {
 	tasks: TasksApi;
 	lists: ListsApi;
 	events: EventsApi;
+	groups: GroupsApi;
 	notifications: NotificationsApi;
 	auth: AuthApi;
 	admin: AdminApi;

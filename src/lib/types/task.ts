@@ -15,6 +15,8 @@ export interface Task {
 	priority: TaskPriority;
 	/** null = inbox (no list assigned). */
 	listId: string | null;
+	/** User id of the creator (tasks in shared lists can come from any member). */
+	createdBy: string;
 	completed: boolean;
 	/** ISO timestamp, set when the task was completed. */
 	completedAt: string | null;

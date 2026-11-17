@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { localizedHref, useLocale, useTranslations } from '#lib/i18n/index.ts';
+	import { groups } from '#lib/stores/groups.svelte.ts';
 	import { tasks } from '#lib/stores/tasks.svelte.ts';
 	import { ui } from '#lib/stores/ui.svelte.ts';
 	import type { TaskList } from '#lib/types/index.ts';
@@ -41,6 +42,14 @@
 		<div class="flex items-center gap-3 pr-9">
 			<span style={`color:${color}`}><Icon name={listIconName(list.icon)} size={17} /></span>
 			<h3 class="min-w-0 flex-1 truncate text-[14px] font-medium text-fg">{list.name}</h3>
+			{#if list.groupId}
+				<span
+					class="text-muted"
+					title={t('groups.sharedWith', { name: groups.byId(list.groupId)?.name ?? '' })}
+				>
+					<Icon name="users" size={14} />
+				</span>
+			{/if}
 			<span
 				class="text-[13px] text-muted tabular-nums"
 				title={t('lists.openTasks', { count: open })}

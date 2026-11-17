@@ -1,6 +1,7 @@
 import { adminApi } from './services/admin.ts';
 import { authApi } from './services/auth.ts';
 import { eventsApi } from './services/events.ts';
+import { groupsApi } from './services/groups.ts';
 import { listsApi } from './services/lists.ts';
 import { notificationsApi } from './services/notifications.ts';
 import { tasksApi } from './services/tasks.ts';
@@ -11,6 +12,7 @@ export const api: Api = {
 	tasks: tasksApi,
 	lists: listsApi,
 	events: eventsApi,
+	groups: groupsApi,
 	notifications: notificationsApi,
 	auth: authApi,
 	admin: adminApi
@@ -22,6 +24,7 @@ export type {
 	Api,
 	AuthApi,
 	EventsApi,
+	GroupsApi,
 	ListsApi,
 	NotificationsApi,
 	OccurrenceRef,

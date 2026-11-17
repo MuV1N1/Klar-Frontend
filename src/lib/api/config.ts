@@ -38,6 +38,17 @@ export const endpoints = {
 		collection: '/events',
 		item: (id: string) => `/events/${encodeURIComponent(id)}`
 	},
+	groups: {
+		collection: '/groups',
+		item: (id: string) => `/groups/${encodeURIComponent(id)}`,
+		member: (id: string, userId: string) =>
+			`/groups/${encodeURIComponent(id)}/members/${encodeURIComponent(userId)}`,
+		invites: (id: string) => `/groups/${encodeURIComponent(id)}/invites`
+	},
+	invites: {
+		item: (token: string) => `/invites/${encodeURIComponent(token)}`,
+		accept: (token: string) => `/invites/${encodeURIComponent(token)}/accept`
+	},
 	settings: '/users/me/settings',
 	push: {
 		config: '/push/config',

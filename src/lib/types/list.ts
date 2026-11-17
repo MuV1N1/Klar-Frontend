@@ -72,6 +72,10 @@ export interface TaskList {
 	description: string | null;
 	color: ListColor;
 	icon: ListIcon;
+	/** null = private; otherwise every member of the group sees and edits the list. */
+	groupId: string | null;
+	/** User id of the creator; only they can change `groupId`. */
+	createdBy: string;
 	/** ISO timestamp. */
 	createdAt: string;
 	/** ISO timestamp. */
@@ -83,6 +87,7 @@ export interface CreateListInput {
 	description?: string | null;
 	color?: ListColor;
 	icon?: ListIcon;
+	groupId?: string | null;
 }
 
 export type UpdateListInput = Partial<CreateListInput>;

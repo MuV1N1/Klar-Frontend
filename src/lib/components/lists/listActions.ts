@@ -22,6 +22,8 @@ export async function deleteList(list: TaskList, t: Translator, locale: Locale):
 	try {
 		await lists.remove(list.id);
 		tasks.detachFromList(list.id);
+		// Tasks of other members move to their inbox, out of sight.
+		if (list.groupId) void tasks.load(true);
 		if (settings.value.defaultListId === list.id) settings.update({ defaultListId: null });
 		toasts.success(t('lists.deleted'));
 		// The page of a deleted list no longer exists.
