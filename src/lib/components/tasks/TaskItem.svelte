@@ -75,13 +75,6 @@
 			onSelect: () => void toggle(!task.completed)
 		},
 		{
-			id: 'focus',
-			label: t('tasks.focusOn'),
-			icon: 'zap',
-			disabled: task.completed,
-			onSelect: () => void goto(localizedHref(locale(), `/app/focus?task=${task.id}`))
-		},
-		{
 			id: 'delete',
 			label: t('common.delete'),
 			icon: 'trash',
@@ -167,6 +160,16 @@
 			<Chip color={listColor ?? undefined}>{list.name}</Chip>
 		{/if}
 	</div>
+
+	{#if !task.completed}
+		<IconButton
+			icon="play"
+			label={t('tasks.focusOn')}
+			size="sm"
+			class="sm:opacity-0 sm:group-hover:opacity-100 sm:focus-visible:opacity-100"
+			onclick={() => void goto(localizedHref(locale(), `/app/focus?task=${task.id}`))}
+		/>
+	{/if}
 
 	<Menu items={menuItems} label={t('navigation.more')}>
 		{#snippet trigger(open)}

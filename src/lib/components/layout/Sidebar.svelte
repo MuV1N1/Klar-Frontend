@@ -15,7 +15,6 @@
 	import Icon from '../ui/Icon.svelte';
 	import Logo from '../ui/Logo.svelte';
 	import Skeleton from '../ui/Skeleton.svelte';
-	import FocusCard from './FocusCard.svelte';
 	import NavLink from './NavLink.svelte';
 
 	const t = useTranslations();
@@ -144,7 +143,6 @@
 	</button>
 
 	<div class="mt-auto flex flex-col gap-3 pt-6">
-		<FocusCard />
 		<NavLink
 			href={href('/app/settings')}
 			label={t('navigation.settings')}
