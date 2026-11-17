@@ -2,8 +2,9 @@
 	import { page } from '$app/state';
 
 	import Button from '#lib/components/ui/Button.svelte';
-	import Checkbox from '#lib/components/ui/Checkbox.svelte';
+	import Input from '#lib/components/ui/Input.svelte';
 	import { useTranslations } from '#lib/i18n/index.ts';
+	import { focusTimer, formatCountdown } from '#lib/stores/focus.svelte.ts';
 	import { lists } from '#lib/stores/lists.svelte.ts';
 	import { FOCUS_MINUTES, settings } from '#lib/stores/settings.svelte.ts';
 	import { tasks } from '#lib/stores/tasks.svelte.ts';
@@ -11,51 +12,40 @@
 
 	const t = useTranslations();
 
-	let taskId = $state(page.url.searchParams.get('task') ?? '');
-	const task = $derived(tasks.byId(taskId));
+	// A running sprint wins over the URL, so opening the page never stops it.
+	const target = $derived(
+		focusTimer.active
+			? focusTimer.target
+			: { taskId: page.url.searchParams.get('task'), listId: page.url.searchParams.get('list') }
+	);
+	const task = $derived(tasks.byId(target.taskId));
 	// Focus on a whole list: its open tasks can be ticked off during the sprint
-	const list = $derived(lists.byId(page.url.searchParams.get('list')));
+	const list = $derived(lists.byId(target.listId));
 	const listTasks = $derived(list ? tasks.forList(list.id).open : []);
 
-	const totalSeconds = $derived(settings.value.focusMinutes * 60);
-	let remaining = $state(0);
-	let status = $state<'idle' | 'running' | 'paused' | 'finished'>('idle');
-	let interval: ReturnType<typeof setInterval> | null = null;
+	const status = $derived(focusTimer.status);
+	const totalSeconds = $derived(
+		status === 'idle' ? settings.value.focusMinutes * 60 : focusTimer.totalSeconds
+	);
+	const remaining = $derived(status === 'idle' ? totalSeconds : focusTimer.remaining);
 
-	// Keep the idle timer in sync with the configured sprint length
-	$effect(() => {
-		if (status === 'idle') remaining = totalSeconds;
-	});
-
-	$effect(() => () => stopTicking());
-
-	function stopTicking() {
-		if (interval) clearInterval(interval);
-		interval = null;
+	let customMinutes = $state(String(settings.value.focusMinutes));
+	function setMinutes(minutes: number) {
+		if (!Number.isInteger(minutes) || minutes < 1 || minutes > 180) return;
+		customMinutes = String(minutes);
+		settings.update({ focusMinutes: minutes });
 	}
 
 	function start() {
-		status = 'running';
-		stopTicking();
-		interval = setInterval(() => {
-			remaining -= 1;
-			if (remaining <= 0) {
-				remaining = 0;
-				stopTicking();
-				status = 'finished';
-			}
-		}, 1000);
+		focusTimer.start(target, totalSeconds);
 	}
 
 	function pause() {
-		stopTicking();
-		status = 'paused';
+		focusTimer.pause();
 	}
 
 	function reset() {
-		stopTicking();
-		status = 'idle';
-		remaining = totalSeconds;
+		focusTimer.reset();
 	}
 
 	async function complete(id: string, title: string) {
@@ -70,13 +60,10 @@
 	async function completeTask() {
 		if (!task) return;
 		await complete(task.id, task.title);
-		taskId = '';
 		reset();
 	}
 
-	const display = $derived(
-		`${String(Math.floor(remaining / 60)).padStart(2, '0')}:${String(remaining % 60).padStart(2, '0')}`
-	);
+	const display = $derived(formatCountdown(remaining));
 
 	// Ring: 8 dashed segments like the Figma focus screen. The lime ring shows the
 	// remaining fraction; its dash array is computed so the segment pattern is kept.
@@ -127,10 +114,24 @@
 							? 'bg-accent text-accent-fg'
 							: 'bg-surface-2 text-fg-2 hover:bg-surface-3 hover:text-fg'
 					}`}
-					onclick={() => settings.update({ focusMinutes: minutes })}
-					>{t('focus.minutes', { count: minutes })}</button
+					onclick={() => setMinutes(minutes)}>{t('focus.minutes', { count: minutes })}</button
 				>
 			{/each}
+			<label
+				class="flex h-9 items-center gap-2 rounded-full bg-surface-2 pr-3 pl-1 text-[13px] text-muted"
+			>
+				<Input
+					type="number"
+					min="1"
+					max="180"
+					inputmode="numeric"
+					bind:value={customMinutes}
+					onchange={() => setMinutes(Number(customMinutes))}
+					class="h-7 w-16 rounded-full px-2 text-center tabular-nums"
+					aria-label={t('focus.customMinutes')}
+				/>
+				{t('focus.minutesShort')}
+			</label>
 		</div>
 	{/if}
 
@@ -205,14 +206,20 @@
 	{#if list}
 		<ul class="flex w-full max-w-md flex-col gap-2 text-left">
 			{#each listTasks as item (item.id)}
-				<li class="flex items-center gap-3 rounded-[14px] bg-surface-2 px-4 py-3">
-					<Checkbox
-						checked={false}
-						size="sm"
-						label={t('tasks.markDone')}
-						onchange={() => void complete(item.id, item.title)}
-					/>
-					<span class="min-w-0 flex-1 truncate text-[14px] text-fg-2">{item.title}</span>
+				<li>
+					<!-- The whole row ticks the task off, not only the circle -->
+					<button
+						type="button"
+						class="flex w-full items-center gap-3 rounded-[14px] bg-surface-2 px-4 py-3 text-left transition-colors hover:bg-surface-3"
+						aria-label={`${t('tasks.markDone')}: ${item.title}`}
+						onclick={() => void complete(item.id, item.title)}
+					>
+						<span
+							class="h-5 w-5 shrink-0 rounded-full border-[2.5px] border-border-strong"
+							aria-hidden="true"
+						></span>
+						<span class="min-w-0 flex-1 truncate text-[14px] text-fg-2">{item.title}</span>
+					</button>
 				</li>
 			{/each}
 		</ul>

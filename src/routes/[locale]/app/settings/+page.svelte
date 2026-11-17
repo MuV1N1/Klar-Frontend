@@ -23,6 +23,7 @@
 	import { calendar } from '#lib/stores/calendar.svelte.ts';
 	import { lists } from '#lib/stores/lists.svelte.ts';
 	import { notifications } from '#lib/stores/notifications.svelte.ts';
+	import { focusTimer } from '#lib/stores/focus.svelte.ts';
 	import { FOCUS_MINUTES, settings, type Theme } from '#lib/stores/settings.svelte.ts';
 	import { tasks } from '#lib/stores/tasks.svelte.ts';
 	import { toasts } from '#lib/stores/toasts.svelte.ts';
@@ -73,7 +74,10 @@
 		{ value: 'sunday', label: t('settings.tasks.sunday') }
 	]);
 	const focusOptions = $derived(
-		FOCUS_MINUTES.map((m) => ({ value: String(m), label: t('focus.minutes', { count: m }) }))
+		// A custom length from the focus page is offered too
+		[...new Set([...FOCUS_MINUTES, settings.value.focusMinutes])]
+			.sort((a, b) => a - b)
+			.map((m) => ({ value: String(m), label: t('focus.minutes', { count: m }) }))
 	);
 
 	// Notifications
@@ -133,6 +137,7 @@
 		await notifications.reset();
 		await auth.logout();
 		tasks.reset();
+		focusTimer.reset();
 		lists.reset();
 		calendar.reset();
 		await goto(localizedHref(locale(), '/login'));
