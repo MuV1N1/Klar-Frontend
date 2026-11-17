@@ -103,7 +103,7 @@ class FocusTimer {
 
 	#save() {
 		if (!browser) return;
-		syncLiveTimer(this.status, this.#endsAt, this.remaining);
+		syncLiveTimer(this.status, this.#endsAt, this.remaining, this.totalSeconds, this.target);
 		try {
 			const saved: Saved = {
 				status: this.status,

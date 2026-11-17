@@ -2,6 +2,7 @@
 <resources>
     <string name="live_timer_channel">Fokus-Timer</string>
     <string name="live_timer_title">Fokus</string>
-    <string name="live_timer_running">Dranbleiben – Klar behält die Zeit im Blick.</string>
+    <string name="live_timer_running">Fokus · endet um %1$s</string>
     <string name="live_timer_paused">Pausiert · noch %1$s</string>
+    <string name="live_timer_minutes">%1$d Min.</string>
 </resources>
