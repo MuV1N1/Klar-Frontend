@@ -1,16 +1,10 @@
-import { PUBLIC_API_BASE_URL, PUBLIC_USE_MOCK_API } from '$app/env/public';
+import { PUBLIC_API_BASE_URL } from '$app/env/public';
 
 /**
- * Central API configuration.
- *
- * - `PUBLIC_USE_MOCK_API` (default: true) switches between the local mock
- *   service and the real REST client.
- * - `PUBLIC_API_BASE_URL` is the base URL of the Spring Boot backend.
- *
- * Both are declared in `src/env.ts` and configured via `.env` (see `.env.example`).
+ * Central API configuration. `PUBLIC_API_BASE_URL` is the base URL of the Spring Boot backend,
+ * declared in `src/env.ts` and configured via `.env` (see `.env.example`).
  */
 export const apiConfig = {
-	useMock: PUBLIC_USE_MOCK_API,
 	baseUrl: PUBLIC_API_BASE_URL,
 	/** Storage key for the auth token (used by the HTTP client). */
 	tokenStorageKey: 'klar.accessToken'

@@ -1,7 +1,7 @@
 export type ApiErrorCode =
 	'network' | 'unauthorized' | 'forbidden' | 'not_found' | 'validation' | 'server' | 'unknown';
 
-/** Unified error type thrown by every API service (mock and real). */
+/** Unified error type thrown by every API service. */
 export class ApiError extends Error {
 	readonly code: ApiErrorCode;
 	readonly status: number | null;

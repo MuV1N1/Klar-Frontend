@@ -11,8 +11,6 @@
 	import Select from '#lib/components/ui/Select.svelte';
 	import Toggle from '#lib/components/ui/Toggle.svelte';
 	import ReminderEditor from '#lib/components/calendar/ReminderEditor.svelte';
-	import { api } from '#lib/api/index.ts';
-	import { apiConfig } from '#lib/api/config.ts';
 	import {
 		LOCALES,
 		LOCALE_NAMES,
@@ -130,13 +128,6 @@
 		}
 	});
 
-	async function resetData() {
-		if (!confirm(t('settings.data.resetConfirm'))) return;
-		await api.resetMockData?.();
-		await Promise.all([lists.load(true), tasks.load(true)]);
-		toasts.success(t('settings.data.resetDone'));
-	}
-
 	async function logout() {
 		// Before logging out: unsubscribing this device needs the session.
 		await notifications.reset();
@@ -230,9 +221,6 @@
 				</Field>
 			</div>
 			<div class="flex flex-wrap items-center justify-between gap-3">
-				{#if apiConfig.useMock}<p class="text-[12px] text-muted">
-						{t('settings.profile.demoHint')}
-					</p>{/if}
 				<Button type="submit" variant="primary" loading={savingProfile} class="ml-auto"
 					>{t('settings.profile.save')}</Button
 				>
@@ -380,11 +368,6 @@
 		<h2 class="text-[15px] font-semibold text-fg">{t('settings.data.title')}</h2>
 		<p class="mt-1 text-[13px] text-muted">{t('settings.data.description')}</p>
 		<div class="mt-5 flex flex-wrap gap-2">
-			{#if apiConfig.useMock}
-				<Button variant="outline" icon="refresh" onclick={resetData}
-					>{t('settings.data.reset')}</Button
-				>
-			{/if}
 			<Button variant="danger" icon="logOut" onclick={logout}>{t('settings.data.logout')}</Button>
 		</div>
 	</section>

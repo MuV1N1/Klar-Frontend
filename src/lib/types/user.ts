@@ -48,6 +48,6 @@ export interface UpdateProfileInput {
 
 export interface AuthSession {
 	user: User;
-	/** Bearer token issued by the backend (mock: a fake token). */
+	/** Bearer token issued by the backend. */
 	accessToken: string;
 }

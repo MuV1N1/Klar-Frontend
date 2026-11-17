@@ -5,8 +5,6 @@
 	import Button from '#lib/components/ui/Button.svelte';
 	import Field from '#lib/components/ui/Field.svelte';
 	import Input from '#lib/components/ui/Input.svelte';
-	import { DEMO_CREDENTIALS } from '#lib/api/mock/seed.ts';
-	import { apiConfig } from '#lib/api/config.ts';
 	import { apiErrorCode } from '#lib/api/errors.ts';
 	import { localizedHref, useLocale, useTranslations } from '#lib/i18n/index.ts';
 	import { auth } from '#lib/stores/auth.svelte.ts';
@@ -28,18 +26,18 @@
 		return Object.keys(next).length === 0;
 	}
 
-	async function submit(credentials = { email, password }) {
+	async function submit() {
 		if (!validate()) return;
 		submitting = true;
 		errors = {};
 		try {
-			await auth.login(credentials);
+			await auth.login({ email, password });
 			const redirect = page.url.searchParams.get('redirect');
 			await goto(redirect?.startsWith('/') ? redirect : localizedHref(locale(), '/app'));
 		} catch (error) {
 			if (apiErrorCode(error) === 'email_not_verified') {
 				await goto(
-					`${localizedHref(locale(), '/verify-email')}?email=${encodeURIComponent(credentials.email)}`
+					`${localizedHref(locale(), '/verify-email')}?email=${encodeURIComponent(email)}`
 				);
 				return;
 			}
@@ -47,12 +45,6 @@
 		} finally {
 			submitting = false;
 		}
-	}
-
-	function demoLogin() {
-		email = DEMO_CREDENTIALS.email;
-		password = DEMO_CREDENTIALS.password;
-		void submit(DEMO_CREDENTIALS);
 	}
 </script>
 
@@ -107,20 +99,6 @@
 	<Button type="submit" variant="primary" size="lg" block loading={submitting}
 		>{t('auth.login.action')}</Button
 	>
-
-	{#if apiConfig.useMock}
-		<Button
-			type="button"
-			variant="outline"
-			size="lg"
-			block
-			icon="zap"
-			onclick={demoLogin}
-			disabled={submitting}
-		>
-			{t('auth.login.demoLogin')}
-		</Button>
-	{/if}
 </form>
 
 <p class="mt-8 text-center text-[13px] text-muted">

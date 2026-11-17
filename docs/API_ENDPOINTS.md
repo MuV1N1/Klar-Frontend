@@ -134,7 +134,6 @@ Diese Funktionen laufen rein im Frontend und brauchen **keinen** Endpunkt:
 - **Einstellungen** (Theme, Standardliste, Standardpriorität, Wochenbeginn, Fokus-Dauer, Bestätigungen): gespeichert im `localStorage` (`klar.settings`, `klar.theme`). Sie werden **nicht** zwischen Geräten synchronisiert. Falls das gewünscht ist, bräuchte es z. B. `GET/PATCH /users/me/settings`.
 - **Ansichten und Filter** (Heute, Überfällig, Demnächst, Suche, Fortschritt): clientseitig aus `GET /tasks` berechnet.
 - **Fokus-Modus**: Timer läuft im Browser; nur das Abhaken nutzt `PATCH /tasks/{id}`.
-- **Mock-Daten zurücksetzen** (`resetMockData`): existiert nur im Mock-Modus und hat kein REST-Gegenstück.
 
 ## Offene Punkte für das Backend
 
