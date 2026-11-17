@@ -19,12 +19,13 @@
 	);
 </script>
 
-<!-- Small pill at the top while a sprint runs elsewhere in the app (like iOS' Dynamic Island) -->
+<!-- Small pill at the top while a sprint runs elsewhere in the app (like iOS' Dynamic Island).
+     Not on phones: it covers the top bar there, and the phone app has the real island. -->
 {#if focusTimer.active && !onFocusPage}
 	<a
 		href={localizedHref(locale(), focusPath(focusTimer.target))}
 		aria-label={t('focus.title')}
-		class="fixed top-[calc(0.5rem+env(safe-area-inset-top))] left-1/2 z-30 flex h-10 max-w-[min(90vw,360px)] -translate-x-1/2 animate-fade-in items-center gap-2.5 rounded-full bg-fg py-1 pr-4 pl-1.5 text-bg shadow-lg transition-transform hover:scale-[1.03] md:top-4"
+		class="fixed top-4 left-1/2 z-30 hidden h-10 max-w-[min(90vw,360px)] -translate-x-1/2 animate-fade-in items-center gap-2.5 rounded-full bg-fg py-1 pr-4 pl-1.5 text-bg shadow-lg transition-transform hover:scale-[1.03] md:flex"
 	>
 		<span
 			class={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-accent-fg ${focusTimer.status === 'running' ? 'animate-pulse' : ''}`}
