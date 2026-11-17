@@ -7,3 +7,7 @@ bun.lockb
 
 # Miscellaneous
 /static/
+
+# Native Capacitor projects (generated)
+/android/
+/ios/
