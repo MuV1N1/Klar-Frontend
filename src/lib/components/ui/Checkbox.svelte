@@ -15,6 +15,8 @@
 	const dimension = $derived(
 		size === 'sm' ? 'h-[18px] w-[18px]' : 'h-6 w-6 sm:h-[22px] sm:w-[22px]'
 	);
+	// Invisible hit area around the small circle: at least 44px to tap, layout unchanged
+	const hitArea = $derived(size === 'sm' ? 'before:-inset-[13px]' : 'before:-inset-[11px]');
 
 	// Only pop when the user ticks it, not when a done task renders
 	let popped = $state(false);
@@ -32,7 +34,7 @@
 		popped = !checked;
 		onchange(!checked);
 	}}
-	class={`group/check relative inline-flex shrink-0 items-center justify-center rounded-full border-[1.5px] transition-all duration-150 active:scale-90 disabled:opacity-50 ${dimension} ${
+	class={`group/check relative inline-flex shrink-0 items-center justify-center rounded-full border-[1.5px] transition-all duration-150 before:absolute before:rounded-full before:content-[''] active:scale-90 disabled:opacity-50 ${dimension} ${hitArea} ${
 		checked
 			? `border-accent-line bg-accent ${popped ? 'animate-check-pop' : ''}`
 			: 'bg-transparent hover:border-accent-line hover:bg-accent-soft'
