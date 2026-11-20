@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-
-	import { localizedHref, useLocale, useTranslations } from '#lib/i18n/index.ts';
+	import { useLocale, useTranslations } from '#lib/i18n/index.ts';
 	import { draggable } from '#lib/stores/drag.svelte.ts';
 	import { lists } from '#lib/stores/lists.svelte.ts';
 	import { settings } from '#lib/stores/settings.svelte.ts';
@@ -87,7 +85,7 @@
      Draggable onto lists in the sidebar and onto calendar days. -->
 <div
 	use:draggable={pending ? null : { kind: 'task', task }}
-	class={`group @container relative flex animate-row-in items-center gap-3 rounded-[12px] px-3 py-2.5 transition-[background-color,transform] duration-150 sm:gap-3.5 ${
+	class={`group @container relative flex items-center gap-3 rounded-[12px] px-3 py-2.5 transition-[background-color,transform] duration-150 sm:gap-3.5 ${
 		highlight ? 'bg-surface-2' : 'hover:bg-surface-2'
 	} ${task.completed ? 'opacity-70' : ''} ${pending ? 'pointer-events-none opacity-60' : ''}`}
 >
@@ -174,7 +172,7 @@
 			label={t('tasks.focusOn')}
 			size="sm"
 			class="sm:opacity-0 sm:group-hover:opacity-100 sm:focus-visible:opacity-100"
-			onclick={() => void goto(localizedHref(locale(), `/app/focus?task=${task.id}`))}
+			onclick={() => ui.openFocus({ taskId: task.id, listId: null })}
 		/>
 	{/if}
 

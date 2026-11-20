@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 
+	import { onNavigate } from '$app/navigation';
 	import { page } from '$app/state';
 
 	import { useTranslations } from '#lib/i18n/index.ts';
@@ -8,6 +9,7 @@
 
 	import ListDialog from '../lists/ListDialog.svelte';
 	import EventDialog from '../calendar/EventDialog.svelte';
+	import FocusDialog from '../focus/FocusDialog.svelte';
 	import ScopeDialog from '../calendar/ScopeDialog.svelte';
 	import TaskDialog from '../tasks/TaskDialog.svelte';
 	import IconButton from '../ui/IconButton.svelte';
@@ -20,6 +22,21 @@
 	let { children }: { children: Snippet } = $props();
 
 	const t = useTranslations();
+
+	// Cross-fade the content sheet between pages; browsers without the API just switch
+	onNavigate((navigation) => {
+		if (
+			!document.startViewTransition ||
+			navigation.from?.url.pathname === navigation.to?.url.pathname
+		)
+			return;
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
+	});
 
 	// The calendar uses the full width; text pages stay narrow for readability.
 	const wide = $derived(/\/app\/calendar(\/|$)/.test(page.url.pathname));
@@ -71,6 +88,7 @@
 		</header>
 
 		<main
+			style="view-transition-name: page"
 			class={`mx-auto w-full ${wide ? 'max-w-[1560px]' : 'max-w-[1040px]'} flex-1 px-4 pt-6 pb-28 sm:px-8 md:px-7 md:pt-10 md:pb-16 lg:px-14 lg:pt-12`}
 		>
 			{@render children()}
@@ -80,6 +98,7 @@
 	<FocusIsland />
 	<BottomNav />
 	<TaskDialog />
+	<FocusDialog />
 	<EventDialog />
 	<ScopeDialog
 		open={ui.scopePrompt !== null}

@@ -45,7 +45,7 @@
 		onclose();
 	}}
 	onclick={onBackdropClick}
-	class={`m-auto w-[calc(100%-2rem)] ${widths[size]} rounded-[22px] border-0 bg-surface p-0 text-fg shadow-[0_32px_64px_-16px_rgba(14,20,27,0.32),0_0_0_1px_var(--border)] backdrop:bg-overlay open:animate-pop-in`}
+	class={`m-auto w-[calc(100%-2rem)] ${widths[size]} rounded-[22px] border-0 bg-surface p-0 text-fg shadow-[0_32px_64px_-16px_rgba(14,20,27,0.32),0_0_0_1px_var(--border)] backdrop:animate-fade-in backdrop:bg-overlay open:animate-pop-in`}
 >
 	{#if open}
 		<div class="flex max-h-[calc(100dvh-4rem)] flex-col">
