@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 
 	import { deleteList } from '#lib/components/lists/listActions.ts';
@@ -85,7 +84,7 @@
 					label={t('focus.start')}
 					variant="surface"
 					size="lg"
-					onclick={() => void goto(localizedHref(locale(), `/app/focus?list=${list.id}`))}
+					onclick={() => ui.openFocus({ taskId: null, listId: list.id })}
 				/>
 			{/if}
 			<Menu items={menuItems} label={t('navigation.more')}>

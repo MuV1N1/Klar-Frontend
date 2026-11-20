@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-
-	import { localizedHref, useLocale, useTranslations } from '#lib/i18n/index.ts';
+	import { useLocale, useTranslations } from '#lib/i18n/index.ts';
 	import { draggable } from '#lib/stores/drag.svelte.ts';
 	import { lists } from '#lib/stores/lists.svelte.ts';
 	import { settings } from '#lib/stores/settings.svelte.ts';
@@ -13,7 +11,6 @@
 
 	import { colorOf } from '../lists/listHelpers.ts';
 	import Checkbox from '../ui/Checkbox.svelte';
-	import Chip from '../ui/Chip.svelte';
 	import Icon from '../ui/Icon.svelte';
 	import IconButton from '../ui/IconButton.svelte';
 	import Menu, { type MenuItem } from '../ui/Menu.svelte';
@@ -84,18 +81,18 @@
 	]);
 </script>
 
-<!-- Task row (Figma "Heute": surface card, circle check, title, time, list chip).
+<!-- Task row: flat line on the sheet, circle check, title, meta (list dot, time).
      Draggable onto lists in the sidebar and onto calendar days. -->
 <div
 	use:draggable={pending ? null : { kind: 'task', task }}
-	class={`group @container relative flex items-center gap-3 rounded-[18px] border bg-surface px-3 py-3 transition-[border-color,background-color,transform] duration-150 sm:gap-4 sm:px-5 sm:py-4 ${
-		highlight ? 'border-accent-line' : 'border-border hover:border-border-strong'
+	class={`group @container relative flex items-center gap-3 rounded-[12px] px-3 py-2.5 transition-[background-color,transform] duration-150 sm:gap-3.5 ${
+		highlight ? 'bg-surface-2' : 'hover:bg-surface-2'
 	} ${task.completed ? 'opacity-70' : ''} ${pending ? 'pointer-events-none opacity-60' : ''}`}
 >
 	<Checkbox
 		checked={task.completed}
 		label={task.completed ? t('tasks.markOpen') : t('tasks.markDone')}
-		color={task.priority === 'high' && !task.completed ? 'var(--danger)' : listColor}
+		color={task.priority === 'high' && !task.completed ? 'var(--danger)' : null}
 		onchange={toggle}
 	/>
 
@@ -105,7 +102,7 @@
 		onclick={() => ui.openEditTask(task)}
 	>
 		<span
-			class={`w-full truncate text-[14px] font-medium text-fg-2 group-hover:text-fg ${task.completed ? 'line-through decoration-muted/60' : ''}`}
+			class={`w-full truncate text-[15px] font-medium text-fg ${task.completed ? 'text-muted line-through decoration-muted/60' : ''}`}
 		>
 			{task.title}
 		</span>
@@ -127,9 +124,19 @@
 				</span>
 			{/if}
 			{#if list && !hideList}
-				<Chip color={listColor ?? undefined} size="sm">{list.name}</Chip>
+				<span class="flex items-center gap-1.5 text-[12px] text-muted">
+					<span class="h-[7px] w-[7px] rounded-full" style={`background:${listColor}`}></span>
+					{list.name}
+				</span>
 			{/if}
 		</span>
+		<!-- Desktop meta line under the title -->
+		{#if list && !hideList}
+			<span class="hidden items-center gap-1.5 text-[13px] text-muted @xl:flex">
+				<span class="h-[7px] w-[7px] rounded-full" style={`background:${listColor}`}></span>
+				{list.name}
+			</span>
+		{/if}
 	</button>
 
 	<!-- Desktop meta -->
@@ -140,6 +147,7 @@
 				title={t('tasks.priorities.high')}
 			>
 				<Icon name="flag" size={13} />
+				{t('tasks.priorities.high')}
 			</span>
 		{:else if task.priority === 'low' && !task.completed}
 			<span class="text-muted/60" title={t('tasks.priorities.low')}
@@ -148,16 +156,13 @@
 		{/if}
 		{#if (!hideDate && dueLabel) || task.dueTime}
 			<span
-				class={`flex items-center gap-1.5 text-[12px] ${overdue ? 'text-danger-text' : 'text-muted'}`}
+				class={`flex items-center gap-1.5 text-[13px] font-medium ${overdue ? 'text-danger-text' : 'text-muted'}`}
 			>
 				<Icon name="clock" size={13} />
 				{#if !hideDate && dueLabel}{dueLabel}{/if}
 				{#if !hideDate && dueLabel && task.dueTime}<span aria-hidden="true">·</span>{/if}
 				{#if task.dueTime}{formatTime(task.dueTime, locale())}{/if}
 			</span>
-		{/if}
-		{#if list && !hideList}
-			<Chip color={listColor ?? undefined}>{list.name}</Chip>
 		{/if}
 	</div>
 
@@ -167,7 +172,7 @@
 			label={t('tasks.focusOn')}
 			size="sm"
 			class="sm:opacity-0 sm:group-hover:opacity-100 sm:focus-visible:opacity-100"
-			onclick={() => void goto(localizedHref(locale(), `/app/focus?task=${task.id}`))}
+			onclick={() => ui.openFocus({ taskId: task.id, listId: null })}
 		/>
 	{/if}
 

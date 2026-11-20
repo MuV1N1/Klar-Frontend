@@ -14,7 +14,7 @@
 		placeholder: string;
 		/** Pre-filled values for the created task (e.g. today's date or a list id). */
 		defaults?: Partial<CreateTaskInput>;
-		/** 'plus' shows the lime plus circle (Figma "Heute"), 'button' shows an explicit button (Figma "Posteingang"). */
+		/** 'plus' shows the accent plus tile, 'button' shows an explicit button (Figma "Posteingang"). */
 		variant?: 'plus' | 'button';
 	}
 
@@ -56,7 +56,7 @@
 		event.preventDefault();
 		void submit();
 	}}
-	class="group flex items-center gap-3 rounded-[18px] border border-border bg-surface py-2.5 pr-2.5 pl-3 transition-colors focus-within:border-border-strong hover:border-border-strong sm:gap-4 sm:py-3 sm:pr-3 sm:pl-5"
+	class="group flex min-h-12 items-center gap-3 rounded-[14px] bg-surface py-2 pr-2 pl-2.5 shadow-[0_0_0_1px_var(--border),0_1px_2px_rgba(14,20,27,0.06)] transition-shadow focus-within:shadow-[0_0_0_1px_var(--accent-line),0_0_0_4px_var(--accent-soft)]"
 >
 	{#if variant === 'plus'}
 		<button
@@ -64,12 +64,12 @@
 			aria-label={t('navigation.newTask')}
 			title={t('navigation.newTask')}
 			onclick={openDetails}
-			class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-accent-fg shadow-[inset_0_0_0_1px_var(--accent-line)] transition-transform hover:scale-105 active:scale-95"
+			class="flex h-7 w-7 shrink-0 items-center justify-center rounded-[8px] bg-accent text-accent-fg transition-transform hover:scale-105 active:scale-95"
 		>
 			{#if submitting}<Spinner size={16} />{:else}<Icon
 					name="plus"
-					size={18}
-					strokeWidth={2.5}
+					size={15}
+					strokeWidth={2.6}
 				/>{/if}
 		</button>
 	{:else}
@@ -82,7 +82,7 @@
 		{placeholder}
 		aria-label={placeholder}
 		enterkeyhint="done"
-		class="min-w-0 flex-1 bg-transparent text-sm text-fg placeholder:text-muted focus:outline-none"
+		class="min-w-0 flex-1 bg-transparent text-[15px] text-fg placeholder:text-muted focus:outline-none"
 	/>
 
 	{#if variant === 'button'}

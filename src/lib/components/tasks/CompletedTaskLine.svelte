@@ -30,7 +30,7 @@
 		type="button"
 		aria-label={t('tasks.markOpen')}
 		onclick={reopen}
-		class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-accent-text transition-colors group-hover:bg-accent-soft"
+		class="relative flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-accent-text transition-colors group-hover:bg-accent-soft before:absolute before:-inset-3 before:rounded-full before:content-['']"
 	>
 		<Icon name="check" size={13} strokeWidth={2.5} />
 	</button>

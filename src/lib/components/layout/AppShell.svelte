@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 
+	import { onNavigate } from '$app/navigation';
 	import { page } from '$app/state';
 
 	import { useTranslations } from '#lib/i18n/index.ts';
@@ -8,6 +9,7 @@
 
 	import ListDialog from '../lists/ListDialog.svelte';
 	import EventDialog from '../calendar/EventDialog.svelte';
+	import FocusDialog from '../focus/FocusDialog.svelte';
 	import ScopeDialog from '../calendar/ScopeDialog.svelte';
 	import TaskDialog from '../tasks/TaskDialog.svelte';
 	import IconButton from '../ui/IconButton.svelte';
@@ -21,14 +23,29 @@
 
 	const t = useTranslations();
 
+	// Cross-fade the content sheet between pages; browsers without the API just switch
+	onNavigate((navigation) => {
+		if (
+			!document.startViewTransition ||
+			navigation.from?.url.pathname === navigation.to?.url.pathname
+		)
+			return;
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
+	});
+
 	// The calendar uses the full width; text pages stay narrow for readability.
 	const wide = $derived(/\/app\/calendar(\/|$)/.test(page.url.pathname));
 </script>
 
 <div class="flex min-h-dvh bg-bg">
-	<!-- Desktop sidebar (Figma: 330px, darker surface, right border) -->
+	<!-- Desktop sidebar sits on the page background; the content gets its own sheet -->
 	<aside
-		class="sticky top-0 hidden h-dvh w-[244px] shrink-0 border-r border-border bg-sidebar md:block lg:w-[290px] xl:w-[320px]"
+		class="sticky top-0 hidden h-dvh w-[244px] shrink-0 bg-sidebar md:block lg:w-[272px] xl:w-[288px]"
 	>
 		<Sidebar />
 	</aside>
@@ -50,10 +67,12 @@
 		</div>
 	{/if}
 
-	<div class="flex min-w-0 flex-1 flex-col">
+	<div
+		class="flex min-w-0 flex-1 flex-col bg-surface md:my-2.5 md:mr-2.5 md:min-h-[calc(100dvh-20px)] md:rounded-[20px] md:shadow-[0_0_0_1px_var(--border)]"
+	>
 		<!-- Mobile top bar -->
 		<header
-			class="sticky top-0 z-20 flex h-[calc(3.5rem+env(safe-area-inset-top))] items-center justify-between border-b border-border bg-bg/90 px-4 pt-[env(safe-area-inset-top)] backdrop-blur md:hidden"
+			class="sticky top-0 z-20 flex h-[calc(3.5rem+env(safe-area-inset-top))] items-center justify-between border-b border-line bg-surface/90 px-4 pt-[env(safe-area-inset-top)] backdrop-blur md:hidden"
 		>
 			<IconButton
 				icon="menu"
@@ -69,6 +88,7 @@
 		</header>
 
 		<main
+			style="view-transition-name: page"
 			class={`mx-auto w-full ${wide ? 'max-w-[1560px]' : 'max-w-[1040px]'} flex-1 px-4 pt-6 pb-28 sm:px-8 md:px-7 md:pt-10 md:pb-16 lg:px-14 lg:pt-12`}
 		>
 			{@render children()}
@@ -78,6 +98,7 @@
 	<FocusIsland />
 	<BottomNav />
 	<TaskDialog />
+	<FocusDialog />
 	<EventDialog />
 	<ScopeDialog
 		open={ui.scopePrompt !== null}

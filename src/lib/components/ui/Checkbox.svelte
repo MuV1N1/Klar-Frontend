@@ -12,10 +12,17 @@
 
 	let { checked, label, color = null, size = 'md', disabled = false, onchange }: Props = $props();
 
-	const dimension = $derived(size === 'sm' ? 'h-5 w-5' : 'h-7 w-7 sm:h-8 sm:w-8');
+	const dimension = $derived(
+		size === 'sm' ? 'h-[18px] w-[18px]' : 'h-6 w-6 sm:h-[22px] sm:w-[22px]'
+	);
+	// Invisible hit area around the small circle: at least 44px to tap, layout unchanged
+	const hitArea = $derived(size === 'sm' ? 'before:-inset-[13px]' : 'before:-inset-[11px]');
+
+	// Only pop when the user ticks it, not when a done task renders
+	let popped = $state(false);
 </script>
 
-<!-- Circle checkbox from the Figma task row: ring in the list colour, filled lime when done -->
+<!-- Circle checkbox: neutral ring (red for high priority), filled accent when done -->
 <button
 	type="button"
 	role="checkbox"
@@ -24,17 +31,20 @@
 	{disabled}
 	onclick={(event) => {
 		event.stopPropagation();
+		popped = !checked;
 		onchange(!checked);
 	}}
-	class={`group/check relative inline-flex shrink-0 items-center justify-center rounded-full border-[2.5px] transition-all duration-150 active:scale-90 disabled:opacity-50 ${dimension} ${
-		checked ? 'border-accent-line bg-accent' : 'bg-transparent hover:bg-surface-3'
+	class={`group/check relative inline-flex shrink-0 items-center justify-center rounded-full border-[1.5px] transition-all duration-150 before:absolute before:rounded-full before:content-[''] active:scale-90 disabled:opacity-50 ${dimension} ${hitArea} ${
+		checked
+			? `border-accent-line bg-accent ${popped ? 'animate-check-pop' : ''}`
+			: 'bg-transparent hover:border-accent-line hover:bg-accent-soft'
 	}`}
 	style={checked ? '' : `border-color: ${color ?? 'var(--border-strong)'}`}
 >
 	<Icon
 		name="check"
-		size={size === 'sm' ? 11 : 15}
-		strokeWidth={3}
+		size={size === 'sm' ? 10 : 13}
+		strokeWidth={3.2}
 		class={`text-accent-fg transition-opacity duration-150 ${checked ? 'opacity-100' : 'opacity-0 group-hover/check:opacity-40'}`}
 	/>
 </button>

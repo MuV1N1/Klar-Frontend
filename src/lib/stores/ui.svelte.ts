@@ -6,6 +6,7 @@ import type {
 	Task,
 	TaskList
 } from '#lib/types/index.ts';
+import type { FocusTarget } from '#lib/stores/focus.svelte.ts';
 
 /** Prefill for a new event, e.g. from clicking a day or a time slot. */
 export interface EventDefaults {
@@ -40,6 +41,20 @@ class UiStore {
 	});
 
 	searchOpen = $state(false);
+
+	/** Focus timer dialog; the target is only used while no sprint is running. */
+	focusDialog = $state<{ open: boolean; target: FocusTarget }>({
+		open: false,
+		target: { taskId: null, listId: null }
+	});
+
+	openFocus(target: FocusTarget = { taskId: null, listId: null }) {
+		this.focusDialog = { open: true, target };
+	}
+
+	closeFocus() {
+		this.focusDialog = { ...this.focusDialog, open: false };
+	}
 
 	/** "Only this / following / all" question for recurring events (used by drag & drop). */
 	scopePrompt = $state<{

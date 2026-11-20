@@ -45,19 +45,19 @@
 		onclose();
 	}}
 	onclick={onBackdropClick}
-	class={`m-auto w-[calc(100%-2rem)] ${widths[size]} rounded-[24px] border border-border bg-surface p-0 text-fg shadow-2xl backdrop:bg-overlay open:animate-pop-in`}
+	class={`m-auto w-[calc(100%-2rem)] ${widths[size]} rounded-[22px] border-0 bg-surface p-0 text-fg shadow-[0_32px_64px_-16px_rgba(14,20,27,0.32),0_0_0_1px_var(--border)] backdrop:animate-fade-in backdrop:bg-overlay open:animate-pop-in`}
 >
 	{#if open}
 		<div class="flex max-h-[calc(100dvh-4rem)] flex-col">
-			<header class="flex items-center justify-between gap-4 px-6 pt-6 pb-2 sm:px-11 sm:pt-10">
-				<h2 class="text-[15px] font-semibold text-fg">{title}</h2>
+			<header class="flex items-center justify-between gap-4 pt-4 pr-4 pb-1 pl-6">
+				<h2 class="text-[13px] font-medium text-muted">{title}</h2>
 				<IconButton icon="x" label={closeLabel} size="sm" onclick={onclose} />
 			</header>
-			<div class="thin-scrollbar flex-1 overflow-y-auto px-6 py-4 sm:px-11">
+			<div class="thin-scrollbar flex-1 overflow-y-auto px-6 py-4">
 				{@render children()}
 			</div>
 			{#if footer}
-				<footer class="px-6 pt-2 pb-6 sm:px-11 sm:pb-10">
+				<footer class="border-t border-line py-3.5 pr-4 pl-6">
 					{@render footer()}
 				</footer>
 			{/if}

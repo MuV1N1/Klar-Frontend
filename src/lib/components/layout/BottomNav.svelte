@@ -24,7 +24,7 @@
 		exact ? page.url.pathname === href(path) : page.url.pathname.startsWith(href(path));
 </script>
 
-<!-- Mobile navigation: four tabs with a centred lime "new task" button -->
+<!-- Mobile navigation: four tabs with a centred accent "new task" button -->
 <nav
 	class="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-sidebar/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
 	aria-label={t('navigation.menu')}

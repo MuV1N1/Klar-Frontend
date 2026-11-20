@@ -2,92 +2,99 @@
 @plugin '@tailwindcss/forms' {
 	strategy: 'class';
 }
-@import '@fontsource-variable/inter';
+@import '@fontsource-variable/dm-sans';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ---------------------------------------------------------------------------
-   Design tokens (Figma "08 / Design Tokens" and "09 / Light Mode")
+   Design tokens (Redesign "Hellblau")
 
-   Dark is the primary design. The light theme is built around the same lime:
-   because lime has almost no contrast against white, light mode uses a cool grey
-   page (so white cards and lime fills stand out), near-black ink for text, a
-   darker lime (`--accent-line`) for outlines and a deep green for lime-coloured
-   text. List colours get darker light-mode variants for the same reason.
+   Light blue is the brand fill (buttons, checks, badges) with dark text on it.
+   It is too light for lines and text on a light page, so those use the deeper
+   `--accent-line` / `--accent-text`. The light page is a dimmed cool grey with
+   an off-white content sheet; dark mode is neutral graphite without a tint.
    --------------------------------------------------------------------------- */
 :root {
-	--bg: #e8eaed;
-	--sidebar: #f3f4f6;
-	--surface: #ffffff;
-	--surface-2: #f0f1f4;
-	--surface-3: #e1e4e9;
-	--border: #d5d8de;
-	--border-strong: #a3a8b3;
-	--track: #cfd3da;
-	--fg: #0d0e12;
-	--fg-2: #1f2229;
-	--muted: #535865;
-	--accent: #c7ff35;
-	--accent-fg: #101114;
-	--accent-text: #3e6a00;
-	--accent-line: #7db000;
-	--accent-soft: rgba(199, 255, 53, 0.4);
-	--danger: #d93036;
-	--danger-text: #b3261e;
-	--warning: #b56a00;
-	--overlay: rgba(13, 14, 18, 0.45);
-	--ring: rgba(62, 106, 0, 0.4);
+	--bg: #cfd6de;
+	--sidebar: #cfd6de;
+	--surface: #f5f7fa;
+	--surface-2: #e9edf2;
+	--surface-3: #dce2ea;
+	--border: #c5ced8;
+	--border-strong: #8e99a6;
+	--track: #c5ced8;
+	--line: #e2e7ed;
+	--fg: #0e141b;
+	--fg-2: #1d2530;
+	--muted: #4b5664;
+	--accent: #7cc4ff;
+	--accent-fg: #06121e;
+	--accent-text: #1a5fae;
+	--accent-line: #1f6fc5;
+	--accent-soft: rgba(124, 196, 255, 0.28);
+	--danger: #c8323a;
+	--danger-text: #a8262d;
+	--warning: #a86200;
+	--overlay: rgba(10, 16, 24, 0.5);
+	--ring: rgba(31, 111, 197, 0.4);
+	--ink: #0f1a26;
+	--ink-fg: #f1f5f9;
+	--ink-muted: #93a3b5;
 
-	--list-orange: #d4491f;
-	--list-blue: #2f63d8;
-	--list-purple: #7a45d1;
+	--list-orange: #c8461f;
+	--list-blue: #2f5fcf;
+	--list-purple: #7444c8;
 	--list-lime: #4f7d00;
-	--list-pink: #cc3380;
-	--list-teal: #0b8a78;
-	--list-yellow: #946a00;
-	--list-gray: #5a5f6b;
+	--list-pink: #c2337b;
+	--list-teal: #0b8574;
+	--list-yellow: #8f6600;
+	--list-gray: #5a6470;
 
 	color-scheme: light;
 }
 
 .dark {
-	--bg: #0d0e12;
-	--sidebar: #111319;
-	--surface: #15171e;
-	--surface-2: #1b1e26;
-	--surface-3: #252931;
-	--border: #292c36;
-	--border-strong: #555b69;
-	--track: #292d35;
-	--fg: #f4f4f1;
-	--fg-2: #e7e7e5;
-	--muted: #9296a2;
-	--accent: #c7ff35;
-	--accent-fg: #101114;
-	--accent-text: #c7ff35;
-	--accent-line: #c7ff35;
-	--accent-soft: rgba(199, 255, 53, 0.14);
+	--bg: #101215;
+	--sidebar: #101215;
+	--surface: #17191d;
+	--surface-2: #1f2227;
+	--surface-3: #2a2e34;
+	--border: #2a2e34;
+	--border-strong: #545a63;
+	--track: #2a2e34;
+	--line: #25292e;
+	--fg: #eef0f3;
+	--fg-2: #dadee3;
+	--muted: #9aa1ab;
+	--accent: #7cc4ff;
+	--accent-fg: #06121e;
+	--accent-text: #9ad2ff;
+	--accent-line: #7cc4ff;
+	--accent-soft: rgba(124, 196, 255, 0.14);
 	--danger: #ff6b6b;
-	--danger-text: #ff8080;
+	--danger-text: #ff8a8a;
 	--warning: #ffc266;
-	--overlay: rgba(5, 6, 9, 0.65);
-	--ring: rgba(199, 255, 53, 0.45);
+	--overlay: rgba(4, 5, 7, 0.65);
+	--ring: rgba(124, 196, 255, 0.45);
+	--ink: #0a0b0d;
+	--ink-fg: #eef0f3;
+	--ink-muted: #9aa1ab;
 
-	--list-orange: #ff805e;
-	--list-blue: #80a8ff;
-	--list-purple: #b58aff;
-	--list-lime: #c7ff35;
-	--list-pink: #ff7ab6;
-	--list-teal: #4ed8c3;
+	--list-orange: #ff8a66;
+	--list-blue: #8ab0ff;
+	--list-purple: #b994ff;
+	--list-lime: #9fdc5a;
+	--list-pink: #ff85bd;
+	--list-teal: #5ed8c6;
 	--list-yellow: #ffd166;
-	--list-gray: #9296a2;
+	--list-gray: #9aa1ab;
 
 	color-scheme: dark;
 }
 
 @theme inline {
 	--font-sans:
-		'Inter Variable', Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+		'DM Sans Variable', 'DM Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
 		'Helvetica Neue', Arial, sans-serif;
 
 	--color-bg: var(--bg);
@@ -111,6 +118,10 @@
 	--color-warning: var(--warning);
 	--color-overlay: var(--overlay);
 	--color-ring: var(--ring);
+	--color-line: var(--line);
+	--color-ink: var(--ink);
+	--color-ink-fg: var(--ink-fg);
+	--color-ink-muted: var(--ink-muted);
 
 	--radius-sm: 10px;
 	--radius-md: 14px;
@@ -159,7 +170,7 @@
 
 	dialog::backdrop {
 		background: var(--overlay);
-		backdrop-filter: blur(2px);
+		backdrop-filter: blur(4px);
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -173,14 +184,49 @@
 }
 
 @layer components {
-	/* Section label like "OFFEN · 4" */
+	/* Section heading like "Heute 4": sentence case, count in muted */
 	.section-label {
-		@apply text-[11px] font-medium tracking-[0.08em] text-muted uppercase;
+		@apply text-[14px] font-semibold tracking-[-0.01em] text-fg;
 	}
 
 	.thin-scrollbar {
 		scrollbar-width: thin;
 		scrollbar-color: var(--border-strong) transparent;
+	}
+}
+
+/* Page change: only the content sheet moves, the sidebar stays put */
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation: none;
+}
+
+::view-transition-old(page) {
+	animation: page-out 120ms ease-in both;
+}
+
+::view-transition-new(page) {
+	animation: page-in 260ms cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	::view-transition-old(page),
+	::view-transition-new(page) {
+		animation: none;
+	}
+}
+
+@keyframes page-out {
+	to {
+		opacity: 0;
+		transform: translateY(-4px);
+	}
+}
+
+@keyframes page-in {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
 	}
 }
 
@@ -207,7 +253,7 @@
 @keyframes pop-in {
 	from {
 		opacity: 0;
-		transform: scale(0.97);
+		transform: translateY(12px) scale(0.97);
 	}
 	to {
 		opacity: 1;
@@ -223,6 +269,22 @@
 	animation: rise-in 220ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
+@keyframes check-pop {
+	0% {
+		transform: scale(0.7);
+	}
+	60% {
+		transform: scale(1.15);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+@utility animate-check-pop {
+	animation: check-pop 320ms cubic-bezier(0.3, 1.6, 0.6, 1);
+}
+
 @utility animate-pop-in {
-	animation: pop-in 160ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+	animation: pop-in 280ms cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
 }

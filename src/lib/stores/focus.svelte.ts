@@ -125,10 +125,3 @@ export const focusTimer = new FocusTimer();
 export function formatCountdown(seconds: number): string {
 	return `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
 }
-
-/** Link back to the focus page of a running sprint. */
-export function focusPath(target: FocusTarget): string {
-	if (target.listId) return `/app/focus?list=${encodeURIComponent(target.listId)}`;
-	if (target.taskId) return `/app/focus?task=${encodeURIComponent(target.taskId)}`;
-	return '/app/focus';
-}

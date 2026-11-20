@@ -17,17 +17,18 @@
 		class="shrink-0"
 		style={`border-radius: ${Math.round(size * 0.26)}px`}
 	>
-		<rect width="64" height="64" rx="16" fill="#C7FF35" />
+		<rect width="64" height="64" rx="16" fill="var(--accent)" />
 		<path
 			d="M18 33.5 27.5 43 46 23"
 			fill="none"
-			stroke="#101114"
+			stroke="var(--accent-fg)"
 			stroke-width="7"
 			stroke-linecap="round"
 			stroke-linejoin="round"
 		/>
 	</svg>
 	{#if showWordmark}
-		<span class="text-[15px] font-semibold tracking-tight text-fg">Klar.</span>
+		<!-- Inherits the text colour, so it works on the page and on the dark hero -->
+		<span class="text-[17px] font-bold tracking-tight">Klar</span>
 	{/if}
 </span>
