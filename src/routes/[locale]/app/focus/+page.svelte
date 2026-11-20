@@ -65,7 +65,7 @@
 
 	const display = $derived(formatCountdown(remaining));
 
-	// Ring: 8 dashed segments like the Figma focus screen. The lime ring shows the
+	// Ring: 8 dashed segments like the Figma focus screen. The accent ring shows the
 	// remaining fraction; its dash array is computed so the segment pattern is kept.
 	const RADIUS = 46;
 	const SEGMENTS = 8;

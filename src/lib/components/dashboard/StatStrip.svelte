@@ -9,19 +9,23 @@
 	let { stats }: { stats: Stat[] } = $props();
 </script>
 
-<!-- One quiet row of numbers instead of four separate cards -->
-<dl
-	class="grid grid-cols-2 gap-px overflow-hidden rounded-[18px] border border-border bg-border lg:grid-cols-4"
->
-	{#each stats as stat (stat.label)}
+<!-- One hairline strip of numbers: no boxes, overdue only in red -->
+<dl class="grid grid-cols-2 border-y border-line lg:grid-cols-4">
+	{#each stats as stat, index (stat.label)}
 		<svelte:element
 			this={stat.href ? 'a' : 'div'}
 			href={stat.href}
-			class={`flex flex-col gap-1 bg-surface px-5 py-4 ${stat.href ? 'transition-colors hover:bg-surface-2' : ''}`}
+			class={`flex items-baseline gap-2.5 py-3.5 ${index > 0 ? 'lg:border-l lg:border-line lg:pl-6' : ''} ${
+				index % 2 === 1 ? 'max-lg:border-l max-lg:border-line max-lg:pl-5' : ''
+			} ${stat.href ? 'transition-opacity hover:opacity-70' : ''}`}
 		>
-			<dt class="order-2 truncate text-[12px] text-muted">{stat.label}</dt>
+			<dt
+				class={`order-2 truncate text-[13px] ${stat.tone === 'danger' ? 'text-danger-text' : 'text-muted'}`}
+			>
+				{stat.label}
+			</dt>
 			<dd
-				class={`order-1 text-[24px] leading-none font-semibold tracking-tight tabular-nums ${
+				class={`order-1 text-[26px] leading-none font-semibold tracking-tight tabular-nums ${
 					stat.tone === 'danger' ? 'text-danger-text' : 'text-fg'
 				}`}
 			>

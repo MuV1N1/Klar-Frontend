@@ -37,9 +37,9 @@
 
 	const variants: Record<Variant, string> = {
 		primary:
-			'bg-accent text-accent-fg hover:brightness-95 active:brightness-90 shadow-[inset_0_0_0_1px_var(--accent-line)]',
-		secondary: 'bg-surface-3 text-fg hover:bg-border active:brightness-95',
-		outline: 'border border-border bg-transparent text-fg hover:bg-surface-2',
+			'bg-accent text-accent-fg font-semibold hover:brightness-95 active:brightness-90 shadow-[inset_0_-1px_0_rgba(0,0,0,0.12)]',
+		secondary: 'bg-surface-2 text-fg hover:bg-surface-3 active:brightness-95',
+		outline: 'border border-border bg-surface text-fg hover:border-border-strong',
 		ghost: 'bg-transparent text-fg-2 hover:bg-surface-2 hover:text-fg',
 		danger: 'bg-transparent text-danger-text hover:bg-danger/10'
 	};

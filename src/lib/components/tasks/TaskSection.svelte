@@ -31,10 +31,11 @@
 	}: Props = $props();
 </script>
 
-<section class="flex animate-rise-in flex-col gap-4">
+<section class="flex animate-rise-in flex-col gap-1.5">
 	<div class="flex items-center justify-between gap-3">
-		<h2 class="section-label">
-			{count !== undefined ? `${label} · ${count}` : label}
+		<h2 class="section-label flex items-baseline gap-2 px-3">
+			{label}
+			{#if count !== undefined}<span class="font-medium text-muted tabular-nums">{count}</span>{/if}
 		</h2>
 		{#if action}{@render action()}{/if}
 	</div>
@@ -48,7 +49,7 @@
 			{/each}
 		</div>
 	{:else}
-		<div class="flex flex-col gap-3">
+		<div class="flex flex-col divide-y divide-line">
 			{#each tasks as task, index (task.id)}
 				<TaskItem {task} {hideList} {hideDate} highlight={highlightFirst && index === 0} />
 			{/each}

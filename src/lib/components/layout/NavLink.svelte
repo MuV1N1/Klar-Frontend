@@ -28,28 +28,28 @@
 	}: Props = $props();
 </script>
 
-<!-- Sidebar nav item (Figma: 54px tall rounded row, active = raised surface, lime count badge) -->
+<!-- Sidebar nav item: compact row, active = raised sheet-coloured pill with an accent count -->
 <a
 	{href}
 	{onclick}
 	aria-current={active ? 'page' : undefined}
 	use:dropTarget={drop}
-	class={`flex h-11 items-center gap-3 rounded-[12px] px-3 text-[13.5px] transition-colors duration-150 data-[drop=over]:bg-accent-soft data-[drop=over]:ring-2 data-[drop=over]:ring-accent-line data-[drop=ready]:ring-1 data-[drop=ready]:ring-border-strong ${
-		active ? 'bg-surface-3 font-medium text-fg' : 'text-fg-2 hover:bg-surface-2 hover:text-fg'
+	class={`flex h-9 items-center gap-2.5 rounded-[10px] px-2.5 text-[14px] font-medium transition-colors duration-150 data-[drop=over]:bg-accent-soft data-[drop=over]:ring-2 data-[drop=over]:ring-accent-line data-[drop=ready]:ring-1 data-[drop=ready]:ring-border-strong ${
+		active
+			? 'bg-surface text-fg shadow-[0_1px_2px_rgba(14,20,27,0.07)] dark:bg-surface-3 dark:shadow-none'
+			: 'text-fg-2 hover:bg-surface-3 dark:hover:bg-surface-2'
 	}`}
 >
 	{#if color}
-		<span class="ml-0.5 h-3.5 w-3.5 shrink-0 rounded-full" style={`background:${color}`}></span>
+		<span class="mx-1 h-2.5 w-2.5 shrink-0 rounded-[3px]" style={`background:${color}`}></span>
 	{:else if icon}
 		<Icon name={icon} size={16} class={active ? 'text-fg' : 'text-muted'} />
 	{/if}
 	<span class="min-w-0 flex-1 truncate">{label}</span>
 	{#if count !== undefined && count > 0}
 		<span
-			class={`flex h-6 min-w-6 items-center justify-center rounded-full px-1.5 text-[12px] font-semibold ${
-				active
-					? 'bg-accent text-accent-fg shadow-[inset_0_0_0_1px_var(--accent-line)]'
-					: 'bg-surface-3 text-muted'
+			class={`flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[12px] tabular-nums ${
+				active ? 'bg-accent font-semibold text-accent-fg' : 'font-medium text-muted'
 			}`}
 		>
 			{count}

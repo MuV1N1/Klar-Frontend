@@ -26,9 +26,9 @@
 </script>
 
 <div class="flex min-h-dvh bg-bg">
-	<!-- Desktop sidebar (Figma: 330px, darker surface, right border) -->
+	<!-- Desktop sidebar sits on the page background; the content gets its own sheet -->
 	<aside
-		class="sticky top-0 hidden h-dvh w-[244px] shrink-0 border-r border-border bg-sidebar md:block lg:w-[290px] xl:w-[320px]"
+		class="sticky top-0 hidden h-dvh w-[244px] shrink-0 bg-sidebar md:block lg:w-[272px] xl:w-[288px]"
 	>
 		<Sidebar />
 	</aside>
@@ -50,10 +50,12 @@
 		</div>
 	{/if}
 
-	<div class="flex min-w-0 flex-1 flex-col">
+	<div
+		class="flex min-w-0 flex-1 flex-col bg-surface md:my-2.5 md:mr-2.5 md:min-h-[calc(100dvh-20px)] md:rounded-[20px] md:shadow-[0_0_0_1px_var(--border)]"
+	>
 		<!-- Mobile top bar -->
 		<header
-			class="sticky top-0 z-20 flex h-[calc(3.5rem+env(safe-area-inset-top))] items-center justify-between border-b border-border bg-bg/90 px-4 pt-[env(safe-area-inset-top)] backdrop-blur md:hidden"
+			class="sticky top-0 z-20 flex h-[calc(3.5rem+env(safe-area-inset-top))] items-center justify-between border-b border-line bg-surface/90 px-4 pt-[env(safe-area-inset-top)] backdrop-blur md:hidden"
 		>
 			<IconButton
 				icon="menu"

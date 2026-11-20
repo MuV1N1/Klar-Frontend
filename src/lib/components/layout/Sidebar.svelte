@@ -40,11 +40,11 @@
 </script>
 
 <nav
-	class="thin-scrollbar flex h-full flex-col gap-1 overflow-y-auto px-4 py-6 *:shrink-0 lg:px-5"
+	class="thin-scrollbar flex h-full flex-col gap-0.5 overflow-y-auto px-3.5 py-5 *:shrink-0"
 	aria-label={t('navigation.menu')}
 >
-	<a href={href('/app')} class="mb-6 flex items-center px-1" onclick={close}>
-		<Logo size={40} />
+	<a href={href('/app')} class="mb-4 flex items-center px-1.5" onclick={close}>
+		<Logo size={32} />
 	</a>
 
 	<!-- Search (Figma: muted input-like row) -->
@@ -54,12 +54,12 @@
 			close();
 			ui.searchOpen = true;
 		}}
-		class="mb-4 flex h-12 items-center gap-2.5 rounded-[14px] bg-surface-2 px-4 text-[13px] text-muted transition-colors hover:bg-surface-3 hover:text-fg-2"
+		class="mb-3 flex h-[38px] items-center gap-2.5 rounded-[10px] bg-surface px-2.5 text-[14px] text-muted shadow-[0_0_0_1px_var(--border)] transition-colors hover:text-fg-2"
 	>
 		<Icon name="search" size={15} />
 		<span class="flex-1 text-left">{t('navigation.search')}</span>
 		<kbd
-			class="hidden rounded-md border border-border px-1.5 py-0.5 font-sans text-[10px] font-medium text-muted pointer-fine:lg:inline"
+			class="hidden rounded-md bg-surface-2 px-1.5 py-0.5 font-sans text-[11px] font-medium text-muted pointer-fine:lg:inline"
 		>
 			{shortcut}
 		</kbd>
@@ -118,8 +118,12 @@
 		onclick={close}
 	/>
 
-	<div class="mt-6 mb-2 flex items-center justify-between px-3">
-		<a href={href('/app/todos')} class="section-label hover:text-fg" onclick={close}>
+	<div class="mt-4 mb-1 flex items-center justify-between px-2.5">
+		<a
+			href={href('/app/todos')}
+			class="text-[13px] font-semibold text-muted hover:text-fg"
+			onclick={close}
+		>
 			{t('navigation.lists')}
 		</a>
 	</div>
@@ -150,7 +154,7 @@
 			close();
 			ui.openNewList();
 		}}
-		class="mt-1 flex h-10 items-center gap-2 rounded-[12px] px-3 text-[13px] font-medium text-accent-text transition-colors hover:bg-surface-2"
+		class="mt-0.5 flex h-9 items-center gap-2.5 rounded-[10px] px-2.5 text-[14px] font-medium text-muted transition-colors hover:bg-surface-3 hover:text-fg dark:hover:bg-surface-2"
 	>
 		<Icon name="plus" size={15} strokeWidth={2.5} />
 		{t('navigation.newList')}
