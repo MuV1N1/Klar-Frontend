@@ -4,28 +4,29 @@
 		value: number;
 		tone?: 'default' | 'danger';
 		href?: string;
+		/** Colour of the tile, a list colour value. */
+		color: string;
 	}
 
 	let { stats }: { stats: Stat[] } = $props();
 </script>
 
-<!-- One hairline strip of numbers: no boxes, overdue only in red -->
-<dl class="grid grid-cols-2 border-y border-line lg:grid-cols-4">
-	{#each stats as stat, index (stat.label)}
+<!-- Numbers as soft colour tiles; overdue only turns red when there is something overdue -->
+<dl class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+	{#each stats as stat (stat.label)}
 		<svelte:element
 			this={stat.href ? 'a' : 'div'}
 			href={stat.href}
-			class={`flex items-baseline gap-2.5 py-3.5 ${index > 0 ? 'lg:border-l lg:border-line lg:pl-6' : ''} ${
-				index % 2 === 1 ? 'max-lg:border-l max-lg:border-line max-lg:pl-5' : ''
-			} ${stat.href ? 'transition-opacity hover:opacity-70' : ''}`}
+			style={`--c:${stat.color}`}
+			class={`fill-card flex flex-col gap-1 rounded-[20px] px-5 py-4 ${stat.href ? 'pressable hover:brightness-[0.98]' : ''}`}
 		>
 			<dt
-				class={`order-2 truncate text-[13px] ${stat.tone === 'danger' ? 'text-danger-text' : 'text-muted'}`}
+				class={`order-2 truncate text-[13px] font-medium ${stat.tone === 'danger' ? 'text-danger-text' : 'text-fg-2'}`}
 			>
 				{stat.label}
 			</dt>
 			<dd
-				class={`order-1 text-[26px] leading-none font-semibold tracking-tight tabular-nums ${
+				class={`order-1 font-display text-[40px] leading-[44px] font-bold tracking-tight tabular-nums ${
 					stat.tone === 'danger' ? 'text-danger-text' : 'text-fg'
 				}`}
 			>

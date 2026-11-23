@@ -49,7 +49,9 @@
 
 <svelte:head><title>{t('auth.login.action')} – {t('app.name')}</title></svelte:head>
 
-<h1 class="text-[24px] font-semibold tracking-tight text-fg">{t('auth.login.title')}</h1>
+<h1 class="font-display text-[30px] leading-tight font-bold tracking-[-0.025em] text-fg">
+	{t('auth.login.title')}
+</h1>
 <p class="mt-1.5 text-sm text-muted">{t('auth.login.subtitle')}</p>
 
 <form

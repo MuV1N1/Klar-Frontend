@@ -16,14 +16,14 @@
 	<div class="flex min-w-0 flex-col gap-2">
 		{#if eyebrow}<p class="text-[13px] text-muted">{eyebrow}</p>{/if}
 		<h1
-			class="flex items-center gap-3 text-[26px] leading-tight font-semibold tracking-tight text-fg sm:text-[30px]"
+			class="flex items-center gap-3 font-display text-[30px] leading-[1.1] font-bold tracking-[-0.025em] text-fg sm:text-[38px]"
 		>
 			{#if titleAccent}
-				<span class="h-3.5 w-3.5 shrink-0 rounded-full" style={`background:${titleAccent}`}></span>
+				<span class="h-4 w-4 shrink-0 rounded-[5px]" style={`background:${titleAccent}`}></span>
 			{/if}
 			<span class="truncate">{title}</span>
 		</h1>
-		{#if description}<p class="text-sm text-muted">{description}</p>{/if}
+		{#if description}<p class="max-w-xl text-[15px] text-fg-2">{description}</p>{/if}
 	</div>
 	{#if actions}<div class="flex shrink-0 items-center gap-2">{@render actions()}</div>{/if}
 </header>

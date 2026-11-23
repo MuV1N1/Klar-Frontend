@@ -7,10 +7,20 @@
 		color?: string | null;
 		size?: 'sm' | 'md';
 		disabled?: boolean;
+		/** Fill when checked, usually the task's list colour; light blue without one. */
+		fill?: string | null;
 		onchange: (checked: boolean) => void;
 	}
 
-	let { checked, label, color = null, size = 'md', disabled = false, onchange }: Props = $props();
+	let {
+		checked,
+		label,
+		color = null,
+		fill = null,
+		size = 'md',
+		disabled = false,
+		onchange
+	}: Props = $props();
 
 	const dimension = $derived(
 		size === 'sm' ? 'h-[18px] w-[18px]' : 'h-6 w-6 sm:h-[22px] sm:w-[22px]'
@@ -22,7 +32,7 @@
 	let popped = $state(false);
 </script>
 
-<!-- Circle checkbox: neutral ring (red for high priority), filled accent when done -->
+<!-- Circle checkbox: neutral ring (red for high priority), filled with the list colour when done -->
 <button
 	type="button"
 	role="checkbox"
@@ -34,17 +44,17 @@
 		popped = !checked;
 		onchange(!checked);
 	}}
-	class={`group/check relative inline-flex shrink-0 items-center justify-center rounded-full border-[1.5px] transition-all duration-150 before:absolute before:rounded-full before:content-[''] active:scale-90 disabled:opacity-50 ${dimension} ${hitArea} ${
-		checked
-			? `border-accent-line bg-accent ${popped ? 'animate-check-pop' : ''}`
-			: 'bg-transparent hover:border-accent-line hover:bg-accent-soft'
+	class={`group/check relative inline-flex shrink-0 items-center justify-center rounded-full border-2 transition-[background-color,border-color] duration-150 before:absolute before:rounded-full before:content-[''] disabled:opacity-50 ${dimension} ${hitArea} ${
+		checked ? (popped ? 'animate-check-pop' : '') : 'bg-transparent hover:bg-accent-soft'
 	}`}
-	style={checked ? '' : `border-color: ${color ?? 'var(--border-strong)'}`}
+	style={checked
+		? `background:${fill ?? 'var(--accent)'};border-color:${fill ?? 'var(--accent)'}`
+		: `border-color: ${color ?? 'var(--border-strong)'}`}
 >
 	<Icon
 		name="check"
 		size={size === 'sm' ? 10 : 13}
 		strokeWidth={3.2}
-		class={`text-accent-fg transition-opacity duration-150 ${checked ? 'opacity-100' : 'opacity-0 group-hover/check:opacity-40'}`}
+		class={`transition-opacity duration-150 ${fill ? 'text-surface' : 'text-accent-fg'} ${checked ? 'opacity-100' : 'opacity-0 group-hover/check:opacity-40'}`}
 	/>
 </button>

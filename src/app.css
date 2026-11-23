@@ -3,30 +3,33 @@
 	strategy: 'class';
 }
 @import '@fontsource-variable/dm-sans';
+@import '@fontsource-variable/bricolage-grotesque/opsz.css';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ---------------------------------------------------------------------------
-   Design tokens (Redesign "Hellblau")
+   Design tokens (Redesign "Verspielt & bunt")
 
-   Light blue is the brand fill (buttons, checks, badges) with dark text on it.
-   It is too light for lines and text on a light page, so those use the deeper
-   `--accent-line` / `--accent-text`. The light page is a dimmed cool grey with
-   an off-white content sheet; dark mode is neutral graphite without a tint.
+   Light blue stays the brand fill (buttons, active nav) with dark text on it;
+   lines and text use the deeper `--accent-line` / `--accent-text`. Colour lives
+   in the lists: cards, stats and shopping items are soft fills of a list colour
+   (see `fill()` in listHelpers). Surfaces are a warm off-white, dark mode is
+   neutral graphite. Controls get a solid bottom edge (`--edge`) you press into.
    --------------------------------------------------------------------------- */
 :root {
-	--bg: #cfd6de;
-	--sidebar: #cfd6de;
-	--surface: #f5f7fa;
-	--surface-2: #e9edf2;
-	--surface-3: #dce2ea;
-	--border: #c5ced8;
-	--border-strong: #8e99a6;
-	--track: #c5ced8;
-	--line: #e2e7ed;
-	--fg: #0e141b;
-	--fg-2: #1d2530;
-	--muted: #4b5664;
+	--bg: #efeee9;
+	--sidebar: #efeee9;
+	--surface: #fffefb;
+	--surface-2: #f4f3ee;
+	--surface-3: #e8e6e0;
+	--border: #dedcd5;
+	--border-strong: #a8a59c;
+	--track: #e2e0da;
+	--line: #ebe9e3;
+	--fg: #17171a;
+	--fg-2: #2b2b30;
+	--muted: #5f5d57;
+	--edge: rgba(23, 23, 26, 0.2);
 	--accent: #7cc4ff;
 	--accent-fg: #06121e;
 	--accent-text: #1a5fae;
@@ -37,9 +40,11 @@
 	--warning: #a86200;
 	--overlay: rgba(10, 16, 24, 0.5);
 	--ring: rgba(31, 111, 197, 0.4);
-	--ink: #0f1a26;
-	--ink-fg: #f1f5f9;
-	--ink-muted: #93a3b5;
+	/* Landing hero and closing band: a light-blue sky by day, deep ink by night */
+	--ink: #cbe8ff;
+	--ink-fg: #0c1a2b;
+	--ink-muted: #3c5570;
+	--ink-line: rgba(12, 26, 43, 0.12);
 
 	--list-orange: #c8461f;
 	--list-blue: #2f5fcf;
@@ -54,15 +59,16 @@
 }
 
 .dark {
-	--bg: #101215;
-	--sidebar: #101215;
-	--surface: #17191d;
-	--surface-2: #1f2227;
-	--surface-3: #2a2e34;
-	--border: #2a2e34;
-	--border-strong: #545a63;
-	--track: #2a2e34;
-	--line: #25292e;
+	--bg: #121214;
+	--sidebar: #121214;
+	--surface: #19191c;
+	--surface-2: #212125;
+	--surface-3: #2b2b30;
+	--border: #2b2b30;
+	--border-strong: #55555c;
+	--track: #2b2b30;
+	--line: #26262a;
+	--edge: rgba(0, 0, 0, 0.55);
 	--fg: #eef0f3;
 	--fg-2: #dadee3;
 	--muted: #9aa1ab;
@@ -76,9 +82,10 @@
 	--warning: #ffc266;
 	--overlay: rgba(4, 5, 7, 0.65);
 	--ring: rgba(124, 196, 255, 0.45);
-	--ink: #0a0b0d;
-	--ink-fg: #eef0f3;
-	--ink-muted: #9aa1ab;
+	--ink: #0d1a26;
+	--ink-fg: #eef3f8;
+	--ink-muted: #9fb2c6;
+	--ink-line: rgba(238, 243, 248, 0.1);
 
 	--list-orange: #ff8a66;
 	--list-blue: #8ab0ff;
@@ -96,6 +103,7 @@
 	--font-sans:
 		'DM Sans Variable', 'DM Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
 		'Helvetica Neue', Arial, sans-serif;
+	--font-display: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', var(--font-sans);
 
 	--color-bg: var(--bg);
 	--color-sidebar: var(--sidebar);
@@ -122,6 +130,8 @@
 	--color-ink: var(--ink);
 	--color-ink-fg: var(--ink-fg);
 	--color-ink-muted: var(--ink-muted);
+	--color-ink-line: var(--ink-line);
+	--color-edge: var(--edge);
 
 	--radius-sm: 10px;
 	--radius-md: 14px;
@@ -186,7 +196,25 @@
 @layer components {
 	/* Section heading like "Heute 4": sentence case, count in muted */
 	.section-label {
-		@apply text-[14px] font-semibold tracking-[-0.01em] text-fg;
+		@apply font-display text-[18px] font-semibold tracking-[-0.01em] text-fg;
+	}
+
+	/* Soft colour block of a list colour (`--c`), with a darker solid bottom edge */
+	.fill-card {
+		background: color-mix(in srgb, var(--c) 22%, var(--surface));
+		box-shadow: 0 3px 0 color-mix(in srgb, var(--c) 45%, var(--surface));
+	}
+
+	/* Tactile control: pressing moves it down onto its edge */
+	.pressable {
+		transition:
+			transform 120ms var(--ease),
+			box-shadow 120ms var(--ease),
+			background-color 150ms var(--ease);
+	}
+	.pressable:active {
+		transform: translateY(2px);
+		box-shadow: none;
 	}
 
 	.thin-scrollbar {
@@ -206,7 +234,7 @@
 }
 
 ::view-transition-new(page) {
-	animation: page-in 260ms cubic-bezier(0.2, 0.8, 0.3, 1) both;
+	animation: page-in 300ms var(--ease) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -214,6 +242,11 @@
 	::view-transition-new(page) {
 		animation: none;
 	}
+}
+
+/* One easing curve for everything */
+:root {
+	--ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @keyframes page-out {
@@ -253,7 +286,7 @@
 @keyframes pop-in {
 	from {
 		opacity: 0;
-		transform: translateY(12px) scale(0.97);
+		transform: translateY(8px) scale(0.98);
 	}
 	to {
 		opacity: 1;
@@ -266,7 +299,7 @@
 }
 
 @utility animate-rise-in {
-	animation: rise-in 220ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+	animation: rise-in 300ms var(--ease) both;
 }
 
 @keyframes check-pop {
@@ -274,7 +307,7 @@
 		transform: scale(0.7);
 	}
 	60% {
-		transform: scale(1.15);
+		transform: scale(1.1);
 	}
 	100% {
 		transform: scale(1);
@@ -282,9 +315,21 @@
 }
 
 @utility animate-check-pop {
-	animation: check-pop 320ms cubic-bezier(0.3, 1.6, 0.6, 1);
+	animation: check-pop 280ms var(--ease);
 }
 
 @utility animate-pop-in {
-	animation: pop-in 280ms cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
+	animation: pop-in 220ms var(--ease) both;
+}
+
+/* Shopping item cards: dropping in when added, leaving when bought */
+@keyframes card-in {
+	from {
+		opacity: 0;
+		transform: translateY(-10px) scale(0.96);
+	}
+}
+
+@utility animate-card-in {
+	animation: card-in 320ms var(--ease) both;
 }

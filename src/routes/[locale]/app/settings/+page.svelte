@@ -152,8 +152,10 @@
 
 <div class="flex animate-rise-in flex-col gap-6">
 	<!-- Appearance -->
-	<section class="rounded-[18px] border border-border bg-surface p-5 sm:p-7">
-		<h2 class="text-[15px] font-semibold text-fg">{t('settings.appearance.title')}</h2>
+	<section
+		class="rounded-[22px] bg-surface p-5 shadow-[inset_0_0_0_1.5px_var(--border),0_3px_0_var(--border)] sm:p-7"
+	>
+		<h2 class="font-display text-[18px] font-bold text-fg">{t('settings.appearance.title')}</h2>
 		<p class="mt-1 text-[13px] text-muted">{t('settings.appearance.description')}</p>
 		<div
 			class="mt-5 grid grid-cols-3 gap-2"
@@ -180,8 +182,10 @@
 	</section>
 
 	<!-- Language -->
-	<section class="rounded-[18px] border border-border bg-surface p-5 sm:p-7">
-		<h2 class="text-[15px] font-semibold text-fg">{t('settings.language.title')}</h2>
+	<section
+		class="rounded-[22px] bg-surface p-5 shadow-[inset_0_0_0_1.5px_var(--border),0_3px_0_var(--border)] sm:p-7"
+	>
+		<h2 class="font-display text-[18px] font-bold text-fg">{t('settings.language.title')}</h2>
 		<p class="mt-1 text-[13px] text-muted">{t('settings.language.description')}</p>
 		<div
 			class="mt-5 grid grid-cols-2 gap-2"
@@ -209,8 +213,10 @@
 	</section>
 
 	<!-- Profile -->
-	<section class="rounded-[18px] border border-border bg-surface p-5 sm:p-7">
-		<h2 class="text-[15px] font-semibold text-fg">{t('settings.profile.title')}</h2>
+	<section
+		class="rounded-[22px] bg-surface p-5 shadow-[inset_0_0_0_1.5px_var(--border),0_3px_0_var(--border)] sm:p-7"
+	>
+		<h2 class="font-display text-[18px] font-bold text-fg">{t('settings.profile.title')}</h2>
 		<p class="mt-1 text-[13px] text-muted">{t('settings.profile.description')}</p>
 		<form
 			class="mt-5 flex flex-col gap-5"
@@ -236,8 +242,10 @@
 	</section>
 
 	<!-- Task behaviour -->
-	<section class="rounded-[18px] border border-border bg-surface p-5 sm:p-7">
-		<h2 class="text-[15px] font-semibold text-fg">{t('settings.tasks.title')}</h2>
+	<section
+		class="rounded-[22px] bg-surface p-5 shadow-[inset_0_0_0_1.5px_var(--border),0_3px_0_var(--border)] sm:p-7"
+	>
+		<h2 class="font-display text-[18px] font-bold text-fg">{t('settings.tasks.title')}</h2>
 		<p class="mt-1 text-[13px] text-muted">{t('settings.tasks.description')}</p>
 		<div class="mt-5 grid gap-5 sm:grid-cols-2">
 			<Field label={t('settings.tasks.defaultList')} for="default-list">
@@ -282,8 +290,10 @@
 	</section>
 
 	<!-- Notifications -->
-	<section class="rounded-[18px] border border-border bg-surface p-5 sm:p-7">
-		<h2 class="text-[15px] font-semibold text-fg">{t('settings.notifications.title')}</h2>
+	<section
+		class="rounded-[22px] bg-surface p-5 shadow-[inset_0_0_0_1.5px_var(--border),0_3px_0_var(--border)] sm:p-7"
+	>
+		<h2 class="font-display text-[18px] font-bold text-fg">{t('settings.notifications.title')}</h2>
 		<p class="mt-1 text-[13px] text-muted">{t('settings.notifications.description')}</p>
 
 		<div class="mt-5 flex flex-col gap-3 rounded-[14px] bg-surface-2 p-4">
@@ -342,8 +352,10 @@
 	</section>
 
 	<!-- Focus -->
-	<section class="rounded-[18px] border border-border bg-surface p-5 sm:p-7">
-		<h2 class="text-[15px] font-semibold text-fg">{t('settings.focus.title')}</h2>
+	<section
+		class="rounded-[22px] bg-surface p-5 shadow-[inset_0_0_0_1.5px_var(--border),0_3px_0_var(--border)] sm:p-7"
+	>
+		<h2 class="font-display text-[18px] font-bold text-fg">{t('settings.focus.title')}</h2>
 		<p class="mt-1 text-[13px] text-muted">{t('settings.focus.description')}</p>
 		<div class="mt-5 sm:max-w-xs">
 			<Field label={t('settings.focus.duration')} for="focus-duration">
@@ -359,8 +371,10 @@
 
 	{#if auth.user?.role === 'admin'}
 		<!-- Admin (also the way in on phones, where the sidebar is not visible) -->
-		<section class="rounded-[18px] border border-border bg-surface p-5 sm:p-7">
-			<h2 class="text-[15px] font-semibold text-fg">{t('settings.admin.title')}</h2>
+		<section
+			class="rounded-[22px] bg-surface p-5 shadow-[inset_0_0_0_1.5px_var(--border),0_3px_0_var(--border)] sm:p-7"
+		>
+			<h2 class="font-display text-[18px] font-bold text-fg">{t('settings.admin.title')}</h2>
 			<p class="mt-1 text-[13px] text-muted">{t('settings.admin.description')}</p>
 			<div class="mt-5">
 				<Button variant="outline" icon="shield" href={localizedHref(locale(), '/app/admin')}>
@@ -371,8 +385,10 @@
 	{/if}
 
 	<!-- Data -->
-	<section class="rounded-[18px] border border-border bg-surface p-5 sm:p-7">
-		<h2 class="text-[15px] font-semibold text-fg">{t('settings.data.title')}</h2>
+	<section
+		class="rounded-[22px] bg-surface p-5 shadow-[inset_0_0_0_1.5px_var(--border),0_3px_0_var(--border)] sm:p-7"
+	>
+		<h2 class="font-display text-[18px] font-bold text-fg">{t('settings.data.title')}</h2>
 		<p class="mt-1 text-[13px] text-muted">{t('settings.data.description')}</p>
 		<div class="mt-5 flex flex-wrap gap-2">
 			<Button variant="danger" icon="logOut" onclick={logout}>{t('settings.data.logout')}</Button>

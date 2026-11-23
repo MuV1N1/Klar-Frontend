@@ -93,18 +93,18 @@
 	}
 </script>
 
-<div class="overflow-hidden rounded-[18px] border border-border bg-surface">
+<div
+	class="overflow-hidden rounded-[22px] bg-surface shadow-[inset_0_0_0_1.5px_var(--border),0_3px_0_var(--border)]"
+>
 	<div class="flex border-b border-border">
 		<div
-			class="w-7 shrink-0 border-r border-border py-2.5 text-center text-[10px] font-medium tracking-wide text-muted uppercase sm:w-9 sm:text-[11px]"
+			class="w-7 shrink-0 border-r border-border py-2.5 text-center text-[11px] font-medium text-muted sm:w-9 sm:text-[12px]"
 		>
 			{t('calendar.weekShort')}
 		</div>
 		<div class="grid flex-1 grid-cols-7">
 			{#each weekdayNames as name, i (i)}
-				<div
-					class="px-2 py-2.5 text-center text-[11px] font-medium tracking-wide text-muted uppercase"
-				>
+				<div class="px-2 py-2.5 text-center text-[12px] font-medium text-muted">
 					{name}
 				</div>
 			{/each}

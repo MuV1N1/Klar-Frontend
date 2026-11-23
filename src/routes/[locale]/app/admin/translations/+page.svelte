@@ -175,7 +175,9 @@
 	{:else}
 		<div class="flex flex-col gap-3">
 			{#each filtered.slice(0, limit) as entry (entry.key)}
-				<section class="rounded-[18px] border border-border bg-surface p-4 sm:p-5">
+				<section
+					class="rounded-[22px] bg-surface p-4 shadow-[inset_0_0_0_1.5px_var(--border),0_3px_0_var(--border)] sm:p-5"
+				>
 					<div class="mb-3 flex items-center gap-2">
 						<code class="truncate font-mono text-[12px] text-fg-2">{entry.key}</code>
 						{#if isChanged(entry)}
@@ -193,7 +195,7 @@
 							{@const dirty = id in drafts && drafts[id] !== current(entry, locale)}
 							{@const vars = placeholders(entry.defaults[locale])}
 							<div class="flex flex-col gap-1.5">
-								<span class="text-[11px] font-medium tracking-wide text-muted uppercase">
+								<span class="text-[12px] font-medium text-muted">
 									{LOCALE_NAMES[locale]}
 								</span>
 								<Textarea

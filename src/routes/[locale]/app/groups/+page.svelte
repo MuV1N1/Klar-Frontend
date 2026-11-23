@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Avatar from '#lib/components/ui/Avatar.svelte';
 	import Button from '#lib/components/ui/Button.svelte';
 	import EmptyState from '#lib/components/ui/EmptyState.svelte';
 	import ErrorState from '#lib/components/ui/ErrorState.svelte';
@@ -129,9 +130,13 @@
 	<div class="flex animate-rise-in flex-col gap-4">
 		{#each groups.items as group (group.id)}
 			{@const admin = group.role === 'admin'}
-			<section class="rounded-[18px] border border-border bg-surface p-5 sm:p-7">
+			<section
+				class="rounded-[22px] bg-surface p-5 shadow-[inset_0_0_0_1.5px_var(--border),0_3px_0_var(--border)] sm:p-7"
+			>
 				<div class="flex items-center gap-2">
-					<h2 class="min-w-0 flex-1 truncate text-[15px] font-semibold text-fg">{group.name}</h2>
+					<h2 class="min-w-0 flex-1 truncate font-display text-[20px] font-bold text-fg">
+						{group.name}
+					</h2>
 					{#if admin}
 						<IconButton icon="pencil" label={t('groups.rename')} onclick={() => rename(group)} />
 						<IconButton icon="trash" label={t('groups.delete')} onclick={() => remove(group)} />
@@ -143,11 +148,7 @@
 					{#each group.members as member (member.id)}
 						{@const self = member.id === auth.user?.id}
 						<li class="flex items-center gap-3 border-b border-border py-2.5 last:border-b-0">
-							<span
-								class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-3 text-[12px] font-semibold text-fg"
-							>
-								{member.name.slice(0, 1).toUpperCase()}
-							</span>
+							<Avatar id={member.id} name={member.name} />
 							<span class="flex min-w-0 flex-1 flex-col">
 								<span class="truncate text-[13px] font-medium text-fg">
 									{member.name}{self ? ` (${t('groups.you')})` : ''}

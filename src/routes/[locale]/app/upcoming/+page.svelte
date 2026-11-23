@@ -96,9 +96,7 @@
 	</div>
 {:else}
 	<!-- Filter bar (Figma: "Filter Alle Listen · Sortieren: Fälligkeitsdatum") -->
-	<div
-		class="mb-8 flex flex-wrap items-center gap-x-6 gap-y-3 rounded-[18px] border border-border bg-surface px-4 py-3 sm:px-5"
-	>
+	<div class="mb-8 flex flex-wrap items-center gap-x-6 gap-y-3 border-b border-line pb-4">
 		<label class="flex items-center gap-2 text-[12px] text-muted">
 			{t('upcoming.filterList')}
 			<Select bind:value={listFilter} options={listOptions} size="sm" class="w-40" />

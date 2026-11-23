@@ -8,7 +8,7 @@
 	let { size = 42, showWordmark = true, class: className = '' }: Props = $props();
 </script>
 
-<span class={`inline-flex items-center gap-3 ${className}`}>
+<span class={`inline-flex items-center gap-2.5 ${className}`}>
 	<svg
 		width={size}
 		height={size}
@@ -29,6 +29,6 @@
 	</svg>
 	{#if showWordmark}
 		<!-- Inherits the text colour, so it works on the page and on the dark hero -->
-		<span class="text-[17px] font-bold tracking-tight">Klar</span>
+		<span class="font-display text-[20px] font-bold tracking-tight">Klar</span>
 	{/if}
 </span>
