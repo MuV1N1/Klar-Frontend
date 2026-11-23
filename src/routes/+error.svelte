@@ -15,7 +15,9 @@
 
 <div class="flex min-h-dvh flex-col items-center justify-center gap-6 bg-bg px-6 text-center">
 	<Logo size={48} showWordmark={false} />
-	<p class="text-[72px] leading-none font-bold tracking-tight text-fg">{page.status}</p>
+	<p class="font-display text-[72px] leading-none font-bold tracking-tight text-fg">
+		{page.status}
+	</p>
 	<div>
 		<p class="text-[15px] font-medium text-fg">
 			{page.status === 404 ? t('errors.notFound') : t('common.errorTitle')}

@@ -22,7 +22,7 @@
 		type="button"
 		onclick={() => ui.openFocus(focusTimer.target)}
 		aria-label={t('focus.title')}
-		class="fixed top-4 left-1/2 z-30 hidden h-10 max-w-[min(90vw,360px)] -translate-x-1/2 animate-fade-in items-center gap-2.5 rounded-full bg-fg py-1 pr-4 pl-1.5 text-bg shadow-lg transition-transform hover:scale-[1.03] md:flex"
+		class="fixed top-4 left-1/2 z-30 hidden h-10 max-w-[min(90vw,360px)] -translate-x-1/2 animate-fade-in items-center gap-2.5 rounded-full bg-fg py-1 pr-4 pl-1.5 text-bg shadow-[0_3px_0_var(--edge)] transition-colors hover:bg-fg-2 md:flex"
 	>
 		<span
 			class={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-accent-fg ${focusTimer.status === 'running' ? 'animate-pulse' : ''}`}

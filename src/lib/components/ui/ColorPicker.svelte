@@ -26,7 +26,7 @@
 	});
 
 	const swatch =
-		'relative flex h-8 w-8 items-center justify-center rounded-full transition-transform hover:scale-110';
+		'relative flex h-8 w-8 items-center justify-center rounded-full transition-shadow hover:ring-2 hover:ring-border-strong';
 	const selected = 'ring-2 ring-fg ring-offset-2 ring-offset-surface';
 </script>
 

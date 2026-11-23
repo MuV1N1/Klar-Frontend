@@ -1,230 +1,290 @@
 /**
- * Emoji for shopping items. A name matches an entry by a whole word or a word ending, so German
- * compounds work ("Vollkornbrot" → 🍞); the longest match wins ("Erdnussbutter" → 🥜, not 🧈).
- * The first word per language is the name shown in suggestions.
+ * Aisle of a shopping item. A name matches an entry by a whole word or a word ending, so German
+ * compounds work ("Vollkornbrot" → bakery); the longest match wins ("Erdnussbutter" → pantry,
+ * not dairy). The first word per language is the name shown in suggestions.
  */
+export const ITEM_CATEGORIES = [
+	'produce',
+	'bakery',
+	'dairy',
+	'meat',
+	'pantry',
+	'drinks',
+	'household',
+	'other'
+] as const;
+export type ItemCategory = (typeof ITEM_CATEGORIES)[number];
+
+/** Each aisle borrows a list colour, so the item cards tell the aisles apart at a glance. */
+export const CATEGORY_COLORS: Record<ItemCategory, string> = {
+	produce: 'var(--list-lime)',
+	bakery: 'var(--list-yellow)',
+	dairy: 'var(--list-blue)',
+	meat: 'var(--list-pink)',
+	pantry: 'var(--list-orange)',
+	drinks: 'var(--list-purple)',
+	household: 'var(--list-teal)',
+	other: 'var(--list-gray)'
+};
+
 interface Entry {
-	emoji: string;
+	category: ItemCategory;
 	de: string[];
 	en: string[];
 }
 
 const CATALOG: Entry[] = [
 	// Obst & Gemüse
-	{ emoji: '🍎', de: ['Äpfel', 'apfel'], en: ['Apples', 'apple'] },
-	{ emoji: '🍐', de: ['Birnen', 'birne'], en: ['Pears', 'pear'] },
-	{ emoji: '🍌', de: ['Bananen', 'banane'], en: ['Bananas', 'banana'] },
+	{ category: 'produce', de: ['Äpfel', 'apfel'], en: ['Apples', 'apple'] },
+	{ category: 'produce', de: ['Birnen', 'birne'], en: ['Pears', 'pear'] },
+	{ category: 'produce', de: ['Bananen', 'banane'], en: ['Bananas', 'banana'] },
 	{
-		emoji: '🍊',
+		category: 'produce',
 		de: ['Orangen', 'orange', 'mandarine', 'mandarinen', 'clementine'],
 		en: ['Oranges', 'orange', 'tangerine']
 	},
 	{
-		emoji: '🍋',
+		category: 'produce',
 		de: ['Zitronen', 'zitrone', 'limette', 'limetten'],
 		en: ['Lemons', 'lemon', 'lime', 'limes']
 	},
-	{ emoji: '🍇', de: ['Trauben', 'weintrauben'], en: ['Grapes', 'grape'] },
-	{ emoji: '🍓', de: ['Erdbeeren', 'erdbeere'], en: ['Strawberries', 'strawberry'] },
+	{ category: 'produce', de: ['Trauben', 'weintrauben'], en: ['Grapes', 'grape'] },
+	{ category: 'produce', de: ['Erdbeeren', 'erdbeere'], en: ['Strawberries', 'strawberry'] },
 	{
-		emoji: '🫐',
+		category: 'produce',
 		de: ['Heidelbeeren', 'blaubeeren', 'beeren', 'himbeeren'],
 		en: ['Blueberries', 'berries', 'raspberries']
 	},
-	{ emoji: '🍒', de: ['Kirschen', 'kirsche'], en: ['Cherries', 'cherry'] },
+	{ category: 'produce', de: ['Kirschen', 'kirsche'], en: ['Cherries', 'cherry'] },
 	{
-		emoji: '🍑',
+		category: 'produce',
 		de: ['Pfirsiche', 'pfirsich', 'nektarinen', 'aprikosen'],
 		en: ['Peaches', 'peach', 'apricots']
 	},
-	{ emoji: '🍍', de: ['Ananas'], en: ['Pineapple'] },
-	{ emoji: '🥭', de: ['Mango', 'mangos'], en: ['Mango', 'mangoes'] },
-	{ emoji: '🍉', de: ['Melone', 'wassermelone'], en: ['Watermelon', 'melon'] },
-	{ emoji: '🥝', de: ['Kiwis', 'kiwi'], en: ['Kiwis', 'kiwi'] },
-	{ emoji: '🥑', de: ['Avocado', 'avocados'], en: ['Avocado', 'avocados'] },
-	{ emoji: '🍅', de: ['Tomaten', 'tomate'], en: ['Tomatoes', 'tomato'] },
-	{ emoji: '🥒', de: ['Gurke', 'gurken', 'zucchini'], en: ['Cucumber', 'cucumbers', 'zucchini'] },
-	{ emoji: '🥕', de: ['Karotten', 'karotte', 'möhren', 'möhre'], en: ['Carrots', 'carrot'] },
-	{ emoji: '🥔', de: ['Kartoffeln', 'kartoffel'], en: ['Potatoes', 'potato'] },
-	{ emoji: '🧅', de: ['Zwiebeln', 'zwiebel'], en: ['Onions', 'onion'] },
-	{ emoji: '🧄', de: ['Knoblauch'], en: ['Garlic'] },
-	{ emoji: '🫑', de: ['Paprika'], en: ['Peppers', 'pepper', 'bell pepper'] },
-	{ emoji: '🌶️', de: ['Chili', 'peperoni'], en: ['Chili', 'chilli'] },
-	{ emoji: '🥦', de: ['Brokkoli', 'blumenkohl'], en: ['Broccoli', 'cauliflower'] },
+	{ category: 'produce', de: ['Ananas'], en: ['Pineapple'] },
+	{ category: 'produce', de: ['Mango', 'mangos'], en: ['Mango', 'mangoes'] },
+	{ category: 'produce', de: ['Melone', 'wassermelone'], en: ['Watermelon', 'melon'] },
+	{ category: 'produce', de: ['Kiwis', 'kiwi'], en: ['Kiwis', 'kiwi'] },
+	{ category: 'produce', de: ['Avocado', 'avocados'], en: ['Avocado', 'avocados'] },
+	{ category: 'produce', de: ['Tomaten', 'tomate'], en: ['Tomatoes', 'tomato'] },
 	{
-		emoji: '🥬',
+		category: 'produce',
+		de: ['Gurke', 'gurken', 'zucchini'],
+		en: ['Cucumber', 'cucumbers', 'zucchini']
+	},
+	{
+		category: 'produce',
+		de: ['Karotten', 'karotte', 'möhren', 'möhre'],
+		en: ['Carrots', 'carrot']
+	},
+	{ category: 'produce', de: ['Kartoffeln', 'kartoffel'], en: ['Potatoes', 'potato'] },
+	{ category: 'produce', de: ['Zwiebeln', 'zwiebel'], en: ['Onions', 'onion'] },
+	{ category: 'produce', de: ['Knoblauch'], en: ['Garlic'] },
+	{ category: 'produce', de: ['Paprika'], en: ['Peppers', 'pepper', 'bell pepper'] },
+	{ category: 'produce', de: ['Chili', 'peperoni'], en: ['Chili', 'chilli'] },
+	{ category: 'produce', de: ['Brokkoli', 'blumenkohl'], en: ['Broccoli', 'cauliflower'] },
+	{
+		category: 'produce',
 		de: ['Salat', 'spinat', 'kohl', 'rucola'],
 		en: ['Lettuce', 'salad', 'spinach', 'cabbage']
 	},
-	{ emoji: '🌽', de: ['Mais'], en: ['Corn'] },
-	{ emoji: '🍄', de: ['Pilze', 'champignons'], en: ['Mushrooms', 'mushroom'] },
-	{ emoji: '🍆', de: ['Aubergine', 'auberginen'], en: ['Eggplant', 'aubergine'] },
+	{ category: 'produce', de: ['Mais'], en: ['Corn'] },
+	{ category: 'produce', de: ['Pilze', 'champignons'], en: ['Mushrooms', 'mushroom'] },
+	{ category: 'produce', de: ['Aubergine', 'auberginen'], en: ['Eggplant', 'aubergine'] },
 	{
-		emoji: '🌿',
+		category: 'produce',
 		de: ['Kräuter', 'petersilie', 'basilikum', 'schnittlauch'],
 		en: ['Herbs', 'parsley', 'basil']
 	},
-	{ emoji: '🫘', de: ['Bohnen', 'linsen', 'kichererbsen'], en: ['Beans', 'lentils', 'chickpeas'] },
 	{
-		emoji: '🥜',
+		category: 'produce',
+		de: ['Bohnen', 'linsen', 'kichererbsen'],
+		en: ['Beans', 'lentils', 'chickpeas']
+	},
+	{
+		category: 'produce',
 		de: ['Nüsse', 'erdnüsse', 'nuss', 'erdnussbutter', 'mandeln'],
 		en: ['Nuts', 'peanuts', 'peanut butter', 'almonds']
 	},
 
 	// Brot & Backwaren
-	{ emoji: '🍞', de: ['Brot', 'toast', 'toastbrot'], en: ['Bread', 'toast'] },
-	{ emoji: '🥖', de: ['Baguette'], en: ['Baguette'] },
+	{ category: 'bakery', de: ['Brot', 'toast', 'toastbrot'], en: ['Bread', 'toast'] },
+	{ category: 'bakery', de: ['Baguette'], en: ['Baguette'] },
 	{
-		emoji: '🥐',
+		category: 'bakery',
 		de: ['Croissants', 'croissant', 'gebäck'],
 		en: ['Croissants', 'croissant', 'pastry']
 	},
-	{ emoji: '🥯', de: ['Brötchen', 'semmeln', 'bagels'], en: ['Rolls', 'buns', 'bagels'] },
-	{ emoji: '🥨', de: ['Brezeln', 'brezel', 'breze'], en: ['Pretzels', 'pretzel'] },
-	{ emoji: '🍰', de: ['Kuchen', 'torte'], en: ['Cake'] },
-	{ emoji: '🧇', de: ['Waffeln'], en: ['Waffles'] },
+	{ category: 'bakery', de: ['Brötchen', 'semmeln', 'bagels'], en: ['Rolls', 'buns', 'bagels'] },
+	{ category: 'bakery', de: ['Brezeln', 'brezel', 'breze'], en: ['Pretzels', 'pretzel'] },
+	{ category: 'bakery', de: ['Kuchen', 'torte'], en: ['Cake'] },
+	{ category: 'bakery', de: ['Waffeln'], en: ['Waffles'] },
 
 	// Milch & Kühlregal
-	{ emoji: '🥛', de: ['Milch', 'hafermilch', 'buttermilch'], en: ['Milk', 'oat milk'] },
-	{ emoji: '🧈', de: ['Butter', 'margarine'], en: ['Butter', 'margarine'] },
+	{ category: 'dairy', de: ['Milch', 'hafermilch', 'buttermilch'], en: ['Milk', 'oat milk'] },
+	{ category: 'dairy', de: ['Butter', 'margarine'], en: ['Butter', 'margarine'] },
 	{
-		emoji: '🧀',
+		category: 'dairy',
 		de: ['Käse', 'gouda', 'mozzarella', 'parmesan', 'feta'],
 		en: ['Cheese', 'mozzarella', 'parmesan']
 	},
-	{ emoji: '🥚', de: ['Eier', 'ei'], en: ['Eggs', 'egg'] },
+	{ category: 'dairy', de: ['Eier', 'ei'], en: ['Eggs', 'egg'] },
 	{
-		emoji: '🍦',
+		category: 'dairy',
 		de: ['Joghurt', 'jogurt', 'quark', 'skyr', 'pudding'],
 		en: ['Yogurt', 'yoghurt', 'pudding']
 	},
-	{ emoji: '🍶', de: ['Sahne', 'schmand', 'saure sahne'], en: ['Cream', 'sour cream'] },
+	{ category: 'dairy', de: ['Sahne', 'schmand', 'saure sahne'], en: ['Cream', 'sour cream'] },
 
 	// Fleisch & Fisch
 	{
-		emoji: '🥩',
+		category: 'meat',
 		de: ['Fleisch', 'steak', 'rind', 'hackfleisch', 'hack'],
 		en: ['Meat', 'steak', 'beef', 'mince']
 	},
-	{ emoji: '🍗', de: ['Hähnchen', 'hühnchen', 'huhn', 'pute'], en: ['Chicken', 'turkey'] },
-	{ emoji: '🥓', de: ['Speck', 'bacon', 'schinken'], en: ['Bacon', 'ham'] },
+	{ category: 'meat', de: ['Hähnchen', 'hühnchen', 'huhn', 'pute'], en: ['Chicken', 'turkey'] },
+	{ category: 'meat', de: ['Speck', 'bacon', 'schinken'], en: ['Bacon', 'ham'] },
 	{
-		emoji: '🌭',
+		category: 'meat',
 		de: ['Würstchen', 'wurst', 'salami', 'aufschnitt'],
 		en: ['Sausages', 'sausage', 'salami']
 	},
-	{ emoji: '🐟', de: ['Fisch', 'lachs', 'thunfisch'], en: ['Fish', 'salmon', 'tuna'] },
-	{ emoji: '🦐', de: ['Garnelen', 'shrimps'], en: ['Shrimp', 'prawns'] },
+	{ category: 'meat', de: ['Fisch', 'lachs', 'thunfisch'], en: ['Fish', 'salmon', 'tuna'] },
+	{ category: 'meat', de: ['Garnelen', 'shrimps'], en: ['Shrimp', 'prawns'] },
 
 	// Vorrat
-	{ emoji: '🍝', de: ['Nudeln', 'spaghetti', 'pasta'], en: ['Pasta', 'spaghetti', 'noodles'] },
-	{ emoji: '🍚', de: ['Reis'], en: ['Rice'] },
-	{ emoji: '🌾', de: ['Mehl', 'haferflocken', 'müsli'], en: ['Flour', 'oats', 'cereal', 'muesli'] },
-	{ emoji: '🧂', de: ['Salz', 'pfeffer', 'gewürze'], en: ['Salt', 'spices'] },
-	{ emoji: '🍬', de: ['Zucker', 'süßigkeiten', 'bonbons'], en: ['Sugar', 'sweets', 'candy'] },
-	{ emoji: '🫒', de: ['Öl', 'olivenöl', 'oliven'], en: ['Oil', 'olive oil', 'olives'] },
-	{ emoji: '🍯', de: ['Honig', 'marmelade', 'nutella'], en: ['Honey', 'jam'] },
 	{
-		emoji: '🥫',
+		category: 'pantry',
+		de: ['Nudeln', 'spaghetti', 'pasta'],
+		en: ['Pasta', 'spaghetti', 'noodles']
+	},
+	{ category: 'pantry', de: ['Reis'], en: ['Rice'] },
+	{
+		category: 'pantry',
+		de: ['Mehl', 'haferflocken', 'müsli'],
+		en: ['Flour', 'oats', 'cereal', 'muesli']
+	},
+	{ category: 'pantry', de: ['Salz', 'pfeffer', 'gewürze'], en: ['Salt', 'spices'] },
+	{
+		category: 'pantry',
+		de: ['Zucker', 'süßigkeiten', 'bonbons'],
+		en: ['Sugar', 'sweets', 'candy']
+	},
+	{ category: 'pantry', de: ['Öl', 'olivenöl', 'oliven'], en: ['Oil', 'olive oil', 'olives'] },
+	{ category: 'pantry', de: ['Honig', 'marmelade', 'nutella'], en: ['Honey', 'jam'] },
+	{
+		category: 'pantry',
 		de: ['Dosen', 'konserven', 'tomatensoße', 'passata', 'suppe'],
 		en: ['Cans', 'canned tomatoes', 'soup']
 	},
 	{
-		emoji: '🥫',
+		category: 'pantry',
 		de: ['Ketchup', 'senf', 'mayo', 'mayonnaise', 'soße'],
 		en: ['Ketchup', 'mustard', 'mayo', 'sauce']
 	},
-	{ emoji: '🍕', de: ['Pizza'], en: ['Pizza'] },
-	{ emoji: '🍟', de: ['Pommes'], en: ['Fries'] },
-	{ emoji: '🧊', de: ['Eiswürfel', 'tiefkühl'], en: ['Ice', 'frozen'] },
-	{ emoji: '🍨', de: ['Eis', 'eiscreme'], en: ['Ice cream'] },
-	{ emoji: '🍫', de: ['Schokolade', 'schoko'], en: ['Chocolate'] },
-	{ emoji: '🍪', de: ['Kekse', 'keks', 'plätzchen'], en: ['Cookies', 'biscuits'] },
-	{ emoji: '🍿', de: ['Popcorn'], en: ['Popcorn'] },
-	{ emoji: '🥔', de: ['Chips'], en: ['Crisps', 'chips'] },
+	{ category: 'pantry', de: ['Pizza'], en: ['Pizza'] },
+	{ category: 'pantry', de: ['Pommes'], en: ['Fries'] },
+	{ category: 'pantry', de: ['Eiswürfel', 'tiefkühl'], en: ['Ice', 'frozen'] },
+	{ category: 'pantry', de: ['Eis', 'eiscreme'], en: ['Ice cream'] },
+	{ category: 'pantry', de: ['Schokolade', 'schoko'], en: ['Chocolate'] },
+	{ category: 'pantry', de: ['Kekse', 'keks', 'plätzchen'], en: ['Cookies', 'biscuits'] },
+	{ category: 'pantry', de: ['Popcorn'], en: ['Popcorn'] },
+	{ category: 'pantry', de: ['Chips'], en: ['Crisps', 'chips'] },
 
 	// Getränke
-	{ emoji: '💧', de: ['Wasser', 'mineralwasser', 'sprudel'], en: ['Water', 'sparkling water'] },
 	{
-		emoji: '🧃',
+		category: 'drinks',
+		de: ['Wasser', 'mineralwasser', 'sprudel'],
+		en: ['Water', 'sparkling water']
+	},
+	{
+		category: 'drinks',
 		de: ['Saft', 'orangensaft', 'apfelsaft', 'schorle'],
 		en: ['Juice', 'orange juice']
 	},
 	{
-		emoji: '🥤',
+		category: 'drinks',
 		de: ['Cola', 'limo', 'limonade', 'fanta', 'sprite', 'eistee'],
 		en: ['Soda', 'cola', 'lemonade', 'iced tea']
 	},
-	{ emoji: '☕', de: ['Kaffee', 'kaffeebohnen', 'espresso'], en: ['Coffee', 'espresso'] },
-	{ emoji: '🍵', de: ['Tee'], en: ['Tea'] },
-	{ emoji: '🍺', de: ['Bier'], en: ['Beer'] },
+	{ category: 'drinks', de: ['Kaffee', 'kaffeebohnen', 'espresso'], en: ['Coffee', 'espresso'] },
+	{ category: 'drinks', de: ['Tee'], en: ['Tea'] },
+	{ category: 'drinks', de: ['Bier'], en: ['Beer'] },
 	{
-		emoji: '🍷',
+		category: 'drinks',
 		de: ['Wein', 'rotwein', 'weißwein', 'sekt'],
 		en: ['Wine', 'red wine', 'white wine', 'champagne']
 	},
 	{
-		emoji: '⚡',
+		category: 'drinks',
 		de: ['Energy', 'energydrink', 'red bull'],
 		en: ['Energy drink', 'energy', 'red bull']
 	},
 
 	// Haushalt & Drogerie
 	{
-		emoji: '🧻',
+		category: 'household',
 		de: ['Klopapier', 'toilettenpapier', 'küchenrolle', 'taschentücher'],
 		en: ['Toilet paper', 'paper towels', 'tissues']
 	},
-	{ emoji: '🧼', de: ['Seife', 'spülmittel', 'handseife'], en: ['Soap', 'dish soap'] },
+	{ category: 'household', de: ['Seife', 'spülmittel', 'handseife'], en: ['Soap', 'dish soap'] },
 	{
-		emoji: '🧴',
+		category: 'household',
 		de: ['Shampoo', 'duschgel', 'creme', 'sonnencreme', 'deo', 'spülung'],
 		en: ['Shampoo', 'shower gel', 'lotion', 'sunscreen', 'deodorant']
 	},
-	{ emoji: '🪥', de: ['Zahnpasta', 'zahnbürste', 'zahncreme'], en: ['Toothpaste', 'toothbrush'] },
 	{
-		emoji: '🧺',
+		category: 'household',
+		de: ['Zahnpasta', 'zahnbürste', 'zahncreme'],
+		en: ['Toothpaste', 'toothbrush']
+	},
+	{
+		category: 'household',
 		de: ['Waschmittel', 'weichspüler'],
 		en: ['Laundry detergent', 'detergent', 'fabric softener']
 	},
 	{
-		emoji: '🧽',
+		category: 'household',
 		de: ['Schwämme', 'schwamm', 'putzmittel', 'reiniger'],
 		en: ['Sponges', 'sponge', 'cleaner']
 	},
-	{ emoji: '🗑️', de: ['Müllbeutel', 'mülltüten'], en: ['Bin bags', 'trash bags'] },
-	{ emoji: '🔋', de: ['Batterien', 'batterie'], en: ['Batteries', 'battery'] },
-	{ emoji: '💡', de: ['Glühbirne', 'lampe'], en: ['Light bulb', 'bulb'] },
+	{ category: 'household', de: ['Müllbeutel', 'mülltüten'], en: ['Bin bags', 'trash bags'] },
+	{ category: 'household', de: ['Batterien', 'batterie'], en: ['Batteries', 'battery'] },
+	{ category: 'household', de: ['Glühbirne', 'lampe'], en: ['Light bulb', 'bulb'] },
 	{
-		emoji: '💊',
+		category: 'household',
 		de: ['Medikamente', 'tabletten', 'ibuprofen', 'pflaster'],
 		en: ['Medicine', 'pills', 'plasters']
 	},
-	{ emoji: '🍼', de: ['Windeln', 'babynahrung'], en: ['Diapers', 'nappies', 'baby food'] },
 	{
-		emoji: '🐾',
+		category: 'household',
+		de: ['Windeln', 'babynahrung'],
+		en: ['Diapers', 'nappies', 'baby food']
+	},
+	{
+		category: 'household',
 		de: ['Katzenfutter', 'hundefutter', 'tierfutter', 'futter'],
 		en: ['Cat food', 'dog food', 'pet food']
 	},
-	{ emoji: '💐', de: ['Blumen', 'strauß'], en: ['Flowers', 'bouquet'] }
+	{ category: 'household', de: ['Blumen', 'strauß'], en: ['Flowers', 'bouquet'] }
 ];
 
-const FALLBACK = '🛒';
+const FALLBACK: ItemCategory = 'other';
 
 const KEYWORDS = CATALOG.flatMap((entry) =>
-	[...entry.de, ...entry.en].map((word) => ({ word: word.toLowerCase(), emoji: entry.emoji }))
+	[...entry.de, ...entry.en].map((word) => ({ word: word.toLowerCase(), category: entry.category }))
 ).sort((a, b) => b.word.length - a.word.length);
 
-/** Emoji for an item name, 🛒 when nothing in the catalog matches. */
-export function itemEmoji(name: string): string {
+/** Aisle of an item name, 'other' when nothing in the catalog matches. */
+export function itemCategory(name: string): ItemCategory {
 	const words = name.toLowerCase().trim().split(/\s+/);
 	const text = words.join(' ');
-	for (const { word, emoji } of KEYWORDS) {
-		if (text === word) return emoji;
-		// A word ending with the keyword ("Vollkornbrot"), never a prefix ("Brotdose" stays 🛒).
+	for (const { word, category } of KEYWORDS) {
+		if (text === word) return category;
+		// A word ending with the keyword ("Vollkornbrot"), never a prefix ("Brotdose" stays other).
 		// Keywords under 3 letters only count as the whole name: "Ei", not "Brei".
 		if (word.length >= 3 && (text.endsWith(word) || words.some((w) => w.endsWith(word))))
-			return emoji;
+			return category;
 	}
 	return FALLBACK;
 }
@@ -234,12 +294,12 @@ export function suggestItems(
 	query: string,
 	locale: string,
 	limit = 8
-): { name: string; emoji: string }[] {
+): { name: string; category: ItemCategory }[] {
 	const q = query.toLowerCase().trim();
 	if (!q) return [];
 	return CATALOG.map((entry) => ({
 		name: (locale === 'de' ? entry.de : entry.en)[0],
-		emoji: entry.emoji
+		category: entry.category
 	}))
 		.filter((item) => item.name.toLowerCase().startsWith(q))
 		.slice(0, limit);

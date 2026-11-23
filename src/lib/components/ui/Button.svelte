@@ -37,9 +37,10 @@
 
 	const variants: Record<Variant, string> = {
 		primary:
-			'bg-accent text-accent-fg font-semibold hover:brightness-95 active:brightness-90 shadow-[inset_0_-1px_0_rgba(0,0,0,0.12)]',
-		secondary: 'bg-surface-2 text-fg hover:bg-surface-3 active:brightness-95',
-		outline: 'border border-border bg-surface text-fg hover:border-border-strong',
+			'bg-accent text-accent-fg font-semibold hover:brightness-95 shadow-[0_2px_0_color-mix(in_srgb,var(--accent)_55%,#0b2b4a)]',
+		secondary: 'bg-surface-2 text-fg hover:bg-surface-3 shadow-[0_2px_0_var(--border)]',
+		outline:
+			'bg-surface text-fg shadow-[inset_0_0_0_1.5px_var(--border),0_2px_0_var(--border)] hover:bg-surface-2',
 		ghost: 'bg-transparent text-fg-2 hover:bg-surface-2 hover:text-fg',
 		danger: 'bg-transparent text-danger-text hover:bg-danger/10'
 	};
@@ -47,14 +48,14 @@
 	const sizes: Record<Size, string> = {
 		sm: 'h-8 px-3 text-[13px] gap-1.5 rounded-[10px]',
 		md: 'h-10 px-4 text-sm gap-2 rounded-[12px]',
-		lg: 'h-12 px-6 text-[15px] gap-2 rounded-[14px]'
+		lg: 'h-12 px-5 text-[15px] gap-2 rounded-[14px]'
 	};
 
 	const iconSize = $derived(size === 'sm' ? 14 : size === 'lg' ? 18 : 16);
 
 	const classes = $derived(
 		[
-			'inline-flex items-center justify-center font-medium whitespace-nowrap select-none transition-[background-color,color,filter,transform] duration-150 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50',
+			'pressable inline-flex items-center justify-center font-medium whitespace-nowrap select-none disabled:pointer-events-none disabled:opacity-50',
 			variants[variant],
 			sizes[size],
 			block ? 'w-full' : '',

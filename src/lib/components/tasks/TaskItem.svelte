@@ -11,6 +11,7 @@
 	import { formatShortDate, formatTime, isPast, relativeDueKey } from '#lib/utils/date.ts';
 
 	import { colorOf } from '../lists/listHelpers.ts';
+	import Avatar from '../ui/Avatar.svelte';
 	import Checkbox from '../ui/Checkbox.svelte';
 	import Icon from '../ui/Icon.svelte';
 	import IconButton from '../ui/IconButton.svelte';
@@ -36,13 +37,6 @@
 		task.assigneeId
 			? groups.byId(list?.groupId)?.members.find((m) => m.id === task.assigneeId)
 			: undefined
-	);
-	const initials = $derived(
-		assignee?.name
-			.split(/\s+/)
-			.slice(0, 2)
-			.map((part) => part[0]?.toUpperCase())
-			.join('') ?? ''
 	);
 	const overdue = $derived(!task.completed && isPast(task.dueDate));
 	const pending = $derived(tasks.isPending(task.id));
@@ -98,14 +92,15 @@
      Draggable onto lists in the sidebar and onto calendar days. -->
 <div
 	use:draggable={pending ? null : { kind: 'task', task }}
-	class={`group @container relative flex items-center gap-3 rounded-[12px] px-3 py-2.5 transition-[background-color,transform] duration-150 sm:gap-3.5 ${
-		highlight ? 'bg-surface-2' : 'hover:bg-surface-2'
+	class={`group @container relative flex items-center gap-3 rounded-[12px] px-3 py-2.5 transition-[background-color,transform] duration-150 sm:gap-4 ${
+		highlight ? 'bg-accent-soft' : 'hover:bg-surface-2'
 	} ${task.completed ? 'opacity-70' : ''} ${pending ? 'pointer-events-none opacity-60' : ''}`}
 >
 	<Checkbox
 		checked={task.completed}
 		label={task.completed ? t('tasks.markOpen') : t('tasks.markDone')}
 		color={task.priority === 'high' && !task.completed ? 'var(--danger)' : null}
+		fill={listColor}
 		onchange={toggle}
 	/>
 
@@ -138,7 +133,7 @@
 			{/if}
 			{#if list && !hideList}
 				<span class="flex items-center gap-1.5 text-[12px] text-muted">
-					<span class="h-[7px] w-[7px] rounded-full" style={`background:${listColor}`}></span>
+					<span class="h-2 w-2 rounded-[3px]" style={`background:${listColor}`}></span>
 					{list.name}
 				</span>
 			{/if}
@@ -146,7 +141,7 @@
 		<!-- Desktop meta line under the title -->
 		{#if list && !hideList}
 			<span class="hidden items-center gap-1.5 text-[13px] text-muted @xl:flex">
-				<span class="h-[7px] w-[7px] rounded-full" style={`background:${listColor}`}></span>
+				<span class="h-2 w-2 rounded-[3px]" style={`background:${listColor}`}></span>
 				{list.name}
 			</span>
 		{/if}
@@ -180,12 +175,12 @@
 	</div>
 
 	{#if assignee}
-		<span
-			class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-semibold text-accent-fg"
-			title={t('tasks.assignedTo', { name: assignee.name })}
-			role="img"
-			aria-label={t('tasks.assignedTo', { name: assignee.name })}>{initials}</span
-		>
+		<Avatar
+			id={assignee.id}
+			name={assignee.name}
+			size={26}
+			label={t('tasks.assignedTo', { name: assignee.name })}
+		/>
 	{/if}
 
 	{#if !task.completed}

@@ -31,7 +31,7 @@
 	use:dropTarget={{ accepts: () => true, ondrop: (item) => dropOnDay(item, day, t) }}
 >
 	<div class="flex items-center justify-between gap-3">
-		<h2 class="text-[15px] font-semibold text-fg">
+		<h2 class="font-display text-[18px] font-bold text-fg">
 			{#if relative}<span class="text-accent-text">{t(`common.${relative}`)} · </span>{/if}
 			{formatLongDate(day, locale())}
 		</h2>

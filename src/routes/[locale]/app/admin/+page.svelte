@@ -25,7 +25,7 @@
 	{#each tools as tool (tool.path)}
 		<a
 			href={localizedHref(locale(), tool.path)}
-			class="group flex items-start gap-4 rounded-[18px] border border-border bg-surface p-5 transition-colors hover:border-accent-line hover:bg-surface-2 sm:p-6"
+			class="group flex items-start gap-4 rounded-[22px] bg-surface p-5 shadow-[inset_0_0_0_1.5px_var(--border),0_3px_0_var(--border)] transition-colors hover:border-accent-line hover:bg-surface-2 sm:p-6"
 		>
 			<span
 				class="flex h-10 w-10 shrink-0 items-center justify-center rounded-[12px] bg-accent-soft text-accent-text"

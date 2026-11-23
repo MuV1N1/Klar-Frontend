@@ -92,7 +92,7 @@
 >
 	<div class="flex flex-col items-center gap-5 pb-2 text-center">
 		<div class="flex flex-col items-center gap-1">
-			<h2 class="text-[22px] font-semibold tracking-tight text-fg">
+			<h2 class="font-display text-[24px] font-bold tracking-tight text-fg">
 				{list?.name ?? task?.title ?? t('focus.noTask')}
 			</h2>
 			<p class="text-[14px] text-muted">

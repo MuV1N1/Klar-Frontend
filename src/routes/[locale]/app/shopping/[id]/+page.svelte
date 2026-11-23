@@ -3,17 +3,17 @@
 
 	import { deleteList } from '#lib/components/lists/listActions.ts';
 	import { listColorValue } from '#lib/components/lists/listHelpers.ts';
+	import Avatar from '#lib/components/ui/Avatar.svelte';
 	import Button from '#lib/components/ui/Button.svelte';
 	import EmptyState from '#lib/components/ui/EmptyState.svelte';
 	import ErrorState from '#lib/components/ui/ErrorState.svelte';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import IconButton from '#lib/components/ui/IconButton.svelte';
-	import Input from '#lib/components/ui/Input.svelte';
 	import Menu, { type MenuItem } from '#lib/components/ui/Menu.svelte';
 	import PageHeader from '#lib/components/ui/PageHeader.svelte';
 	import Skeleton from '#lib/components/ui/Skeleton.svelte';
 	import { localizedHref, useLocale, useTranslations } from '#lib/i18n/index.ts';
-	import { itemEmoji, suggestItems } from '#lib/shopping/catalog.ts';
+	import { CATEGORY_COLORS, itemCategory, suggestItems } from '#lib/shopping/catalog.ts';
+	import { groups } from '#lib/stores/groups.svelte.ts';
 	import { lists } from '#lib/stores/lists.svelte.ts';
 	import { tasks } from '#lib/stores/tasks.svelte.ts';
 	import { toasts } from '#lib/stores/toasts.svelte.ts';
@@ -24,9 +24,15 @@
 	const locale = useLocale();
 
 	const list = $derived(lists.byId(page.params.id));
+	const group = $derived(groups.byId(list?.groupId));
 	const items = $derived(
 		page.params.id ? tasks.forShoppingList(page.params.id) : { open: [], bought: [] }
 	);
+
+	const cartPercent = $derived.by(() => {
+		const total = items.open.length + items.bought.length;
+		return total ? Math.round((items.bought.length / total) * 100) : 0;
+	});
 
 	let query = $state('');
 	const suggestions = $derived(suggestItems(query, locale()));
@@ -90,38 +96,53 @@
 
 <svelte:head><title>{list?.name ?? t('shopping.title')} – {t('app.name')}</title></svelte:head>
 
-{#snippet tile(task: Task, bought: boolean)}
-	<div class="relative">
+<!-- Open item: a soft card in the colour of its aisle, tap = in the cart -->
+{#snippet card(task: Task)}
+	{@const category = itemCategory(task.title)}
+	<button
+		type="button"
+		onclick={() => void toggle(task)}
+		disabled={tasks.isPending(task.id)}
+		aria-label={t('shopping.markBought', { item: task.title })}
+		style={`--c:${CATEGORY_COLORS[category]}`}
+		class="fill-card pressable relative flex min-h-[120px] animate-card-in flex-col justify-between gap-4 rounded-[22px] p-4 text-left transition-transform duration-200 hover:-translate-y-0.5 disabled:opacity-60"
+	>
+		{#if task.quantity > 1}
+			<span
+				class="absolute -top-2 -right-1.5 flex h-7 min-w-9 items-center justify-center rounded-full bg-fg px-2 font-display text-[14px] font-bold text-surface tabular-nums"
+				>{task.quantity}×</span
+			>
+		{/if}
+		<span
+			class="font-display text-[19px] leading-[1.15] font-bold tracking-[-0.01em] break-words text-fg"
+			>{task.title}</span
+		>
+		<span class="text-[12px] text-fg-2">{t(`shopping.categories.${category}`)}</span>
+	</button>
+{/snippet}
+
+<!-- Bought item: a crossed-out chip, tap = back on the list -->
+{#snippet chip(task: Task)}
+	<span class="flex items-center rounded-full bg-surface-2">
 		<button
 			type="button"
 			onclick={() => void toggle(task)}
 			disabled={tasks.isPending(task.id)}
-			aria-label={t(bought ? 'shopping.addAgain' : 'shopping.markBought', { item: task.title })}
-			class={`flex aspect-square w-full flex-col items-center justify-center gap-1.5 rounded-[18px] border p-2 text-center transition-[transform,colors] active:scale-95 ${
-				bought
-					? 'border-border bg-surface text-muted opacity-70 hover:opacity-100'
-					: 'border-accent-line bg-accent-soft text-fg'
-			}`}
+			aria-label={t('shopping.addAgain', { item: task.title })}
+			class="flex h-9 items-center rounded-full pr-1 pl-3.5 text-[14px] text-muted transition-colors hover:text-fg"
 		>
-			<span class="text-[30px] leading-none" aria-hidden="true">{itemEmoji(task.title)}</span>
-			<span class="line-clamp-2 text-[12px] leading-tight font-medium break-words"
-				>{task.title}</span
+			<s
+				class="decoration-2"
+				style={`text-decoration-color:${CATEGORY_COLORS[itemCategory(task.title)]}`}>{task.title}</s
 			>
-			{#if task.quantity > 0}
-				<span class="line-clamp-1 text-[10px] font-medium">{task.quantity}x</span>
-			{/if}
 		</button>
-		{#if bought}
-			<div class="absolute top-1 right-1">
-				<IconButton
-					icon="x"
-					size="sm"
-					label={t('shopping.remove', { item: task.title })}
-					onclick={() => void remove(task)}
-				/>
-			</div>
-		{/if}
-	</div>
+		<IconButton
+			icon="x"
+			size="sm"
+			label={t('shopping.remove', { item: task.title })}
+			onclick={() => void remove(task)}
+		/>
+	</span>
 {/snippet}
 
 {#if lists.status === 'error' || tasks.status === 'error'}
@@ -138,8 +159,8 @@
 	<div class="flex flex-col gap-6" aria-busy="true">
 		<Skeleton class="h-8 w-56" />
 		<Skeleton class="h-12 rounded-[14px]" />
-		<div class="grid grid-cols-3 gap-3 sm:grid-cols-5">
-			{#each [1, 2, 3, 4, 5, 6] as i (i)}<Skeleton class="aspect-square rounded-[18px]" />{/each}
+		<div class="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-5">
+			{#each [1, 2, 3, 4, 5, 6] as i (i)}<Skeleton class="h-[120px] rounded-[22px]" />{/each}
 		</div>
 	</div>
 {:else if !list || list.kind !== 'shopping'}
@@ -153,12 +174,26 @@
 	</EmptyState>
 {:else}
 	<PageHeader
-		eyebrow={t('shopping.title')}
+		eyebrow={group
+			? `${t('shopping.title')} · ${t('groups.sharedWith', { name: group.name })}`
+			: t('shopping.title')}
 		title={list.name}
 		titleAccent={listColorValue(list.color)}
-		description={list.description ?? t('shopping.toBuy', { count: items.open.length })}
+		description={list.description ?? undefined}
 	>
 		{#snippet actions()}
+			{#if group}
+				<span class="mr-1 flex">
+					{#each group.members.slice(0, 4) as member (member.id)}
+						<Avatar
+							id={member.id}
+							name={member.name}
+							size={34}
+							class="-ml-1 outline-2 outline-surface first:ml-0"
+						/>
+					{/each}
+				</span>
+			{/if}
 			<Menu items={menuItems} label={t('navigation.more')}>
 				{#snippet trigger()}
 					<IconButton
@@ -173,6 +208,30 @@
 	</PageHeader>
 
 	<div class="flex flex-col gap-8">
+		<!-- How far the shop is: open vs. already in the cart -->
+		<div
+			class="fill-card flex items-center gap-4 rounded-[18px] px-4 py-3"
+			style={`--c:${listColorValue(list.color)}`}
+		>
+			<span class="font-display text-[24px] leading-none font-bold tabular-nums"
+				>{items.open.length}</span
+			>
+			<span class="text-[13px] text-fg-2">{t('shopping.cardOpen')}</span>
+			<span
+				class="h-2.5 flex-1 overflow-hidden rounded-full"
+				style={`background:color-mix(in srgb, ${listColorValue(list.color)} 20%, var(--track))`}
+				aria-hidden="true"
+			>
+				<span
+					class="block h-full rounded-full transition-[width] duration-500"
+					style={`width:${cartPercent}%;background:${listColorValue(list.color)}`}
+				></span>
+			</span>
+			<span class="text-[13px] whitespace-nowrap text-fg-2">
+				{t('shopping.inCartCount', { count: items.bought.length })}
+			</span>
+		</div>
+
 		<form
 			class="flex flex-col gap-3"
 			onsubmit={(event) => {
@@ -180,17 +239,18 @@
 				void add(query);
 			}}
 		>
-			<div class="flex gap-2">
-				<Input
+			<div
+				class="flex gap-2 rounded-[20px] bg-surface p-2 shadow-[inset_0_0_0_2px_var(--border),0_3px_0_var(--border)] focus-within:shadow-[inset_0_0_0_2px_var(--accent-line),0_3px_0_var(--border)]"
+			>
+				<input
 					bind:value={query}
-					size="lg"
 					placeholder={t('shopping.addPlaceholder')}
 					aria-label={t('shopping.addPlaceholder')}
 					autocomplete="off"
-					class="min-w-0 flex-1"
+					class="min-w-0 flex-1 border-0 bg-transparent px-3 text-[17px] font-medium text-fg placeholder:text-muted focus:ring-0"
 				/>
 				<div
-					class="flex h-14 flex-none items-center rounded-[12px] bg-surface-2 px-1"
+					class="flex h-12 flex-none items-center rounded-[12px] bg-surface-2 px-1"
 					role="group"
 					aria-label={t('shopping.quantity')}
 				>
@@ -216,14 +276,9 @@
 						onclick={() => (amount = String(amountValue + 1))}
 					/>
 				</div>
-				<IconButton
-					icon="plus"
-					type="submit"
-					variant="surface"
-					size="lg"
-					label={t('shopping.add')}
-					class="h-14! w-14!"
-				/>
+				<Button type="submit" variant="primary" icon="plus" class="h-12!">
+					<span class="max-sm:sr-only">{t('shopping.add')}</span>
+				</Button>
 			</div>
 			{#if suggestions.length}
 				<div class="flex flex-wrap gap-2">
@@ -231,9 +286,10 @@
 						<button
 							type="button"
 							onclick={() => void add(suggestion.name)}
-							class="flex items-center gap-1.5 rounded-full border border-border bg-surface-2 px-3 py-1.5 text-[13px] text-fg hover:border-border-strong"
+							style={`--c:${CATEGORY_COLORS[suggestion.category]}`}
+							class="fill-card pressable h-8 rounded-full px-3.5 text-[13px] font-medium text-fg [box-shadow:0_2px_0_color-mix(in_srgb,var(--c)_45%,var(--surface))]"
 						>
-							<span aria-hidden="true">{suggestion.emoji}</span>{suggestion.name}
+							{suggestion.name}
 						</button>
 					{/each}
 				</div>
@@ -250,19 +306,17 @@
 					compact
 				/>
 			{:else}
-				<div class="grid animate-rise-in grid-cols-3 gap-3 sm:grid-cols-5 lg:grid-cols-6">
-					{#each items.open as task (task.id)}{@render tile(task, false)}{/each}
+				<div class="grid grid-cols-2 gap-3 pt-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
+					{#each items.open as task (task.id)}{@render card(task)}{/each}
 				</div>
 			{/if}
 		</section>
 
 		{#if items.bought.length}
 			<section class="flex flex-col gap-3">
-				<h2 class="section-label flex items-center gap-2">
-					<Icon name="clock" size={13} />{t('shopping.recent')}
-				</h2>
-				<div class="grid grid-cols-3 gap-3 sm:grid-cols-5 lg:grid-cols-6">
-					{#each items.bought.slice(0, 24) as task (task.id)}{@render tile(task, true)}{/each}
+				<h2 class="section-label">{t('shopping.recent')} · {items.bought.length}</h2>
+				<div class="flex flex-wrap gap-2">
+					{#each items.bought.slice(0, 24) as task (task.id)}{@render chip(task)}{/each}
 				</div>
 			</section>
 		{/if}

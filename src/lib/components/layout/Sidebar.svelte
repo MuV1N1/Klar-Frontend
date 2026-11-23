@@ -12,6 +12,7 @@
 	import { moveTaskToList } from '../calendar/dropActions.ts';
 
 	import { listColorValue } from '../lists/listHelpers.ts';
+	import Avatar from '../ui/Avatar.svelte';
 	import Icon from '../ui/Icon.svelte';
 	import Logo from '../ui/Logo.svelte';
 	import Skeleton from '../ui/Skeleton.svelte';
@@ -179,11 +180,7 @@
 		{/if}
 		{#if auth.user}
 			<div class="flex items-center gap-3 px-3 pt-1 pb-1">
-				<span
-					class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-3 text-[12px] font-semibold text-fg"
-				>
-					{auth.user.name.slice(0, 1).toUpperCase()}
-				</span>
+				<Avatar id={auth.user.id} name={auth.user.name} />
 				<span class="flex min-w-0 flex-col">
 					<span class="truncate text-[13px] font-medium text-fg">{auth.user.name}</span>
 					<span class="truncate text-[11px] text-muted">{auth.user.email}</span>
