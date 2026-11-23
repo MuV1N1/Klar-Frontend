@@ -19,6 +19,8 @@ export interface Task {
 	listId: string | null;
 	/** User id of the creator (tasks in shared lists can come from any member). */
 	createdBy: string;
+	/** Group member responsible for the task; only in lists shared with a group. */
+	assigneeId: string | null;
 	completed: boolean;
 	/** ISO timestamp, set when the task was completed. */
 	completedAt: string | null;
@@ -38,6 +40,8 @@ export interface CreateTaskInput {
 	priority?: TaskPriority;
 	quantity?: number;
 	listId?: string | null;
+	/** Must be a member of the list's group; null = nobody. */
+	assigneeId?: string | null;
 	reminders?: Reminder[];
 }
 

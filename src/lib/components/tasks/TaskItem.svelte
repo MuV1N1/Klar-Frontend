@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { useLocale, useTranslations } from '#lib/i18n/index.ts';
 	import { draggable } from '#lib/stores/drag.svelte.ts';
+	import { groups } from '#lib/stores/groups.svelte.ts';
 	import { lists } from '#lib/stores/lists.svelte.ts';
 	import { settings } from '#lib/stores/settings.svelte.ts';
 	import { tasks } from '#lib/stores/tasks.svelte.ts';
@@ -31,6 +32,18 @@
 
 	const list = $derived(lists.byId(task.listId));
 	const listColor = $derived(colorOf(list));
+	const assignee = $derived(
+		task.assigneeId
+			? groups.byId(list?.groupId)?.members.find((m) => m.id === task.assigneeId)
+			: undefined
+	);
+	const initials = $derived(
+		assignee?.name
+			.split(/\s+/)
+			.slice(0, 2)
+			.map((part) => part[0]?.toUpperCase())
+			.join('') ?? ''
+	);
 	const overdue = $derived(!task.completed && isPast(task.dueDate));
 	const pending = $derived(tasks.isPending(task.id));
 
@@ -165,6 +178,15 @@
 			</span>
 		{/if}
 	</div>
+
+	{#if assignee}
+		<span
+			class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-semibold text-accent-fg"
+			title={t('tasks.assignedTo', { name: assignee.name })}
+			role="img"
+			aria-label={t('tasks.assignedTo', { name: assignee.name })}>{initials}</span
+		>
+	{/if}
 
 	{#if !task.completed}
 		<IconButton

@@ -13,6 +13,7 @@
 	import PageHeader from '#lib/components/ui/PageHeader.svelte';
 	import Skeleton from '#lib/components/ui/Skeleton.svelte';
 	import { localizedHref, useLocale, useTranslations } from '#lib/i18n/index.ts';
+	import { auth } from '#lib/stores/auth.svelte.ts';
 	import { lists } from '#lib/stores/lists.svelte.ts';
 	import { tasks } from '#lib/stores/tasks.svelte.ts';
 	import { ui } from '#lib/stores/ui.svelte.ts';
@@ -21,9 +22,16 @@
 	const locale = useLocale();
 
 	const list = $derived(lists.byId(page.params.id));
-	const listTasks = $derived(
+	const allListTasks = $derived(
 		page.params.id ? tasks.forList(page.params.id) : { open: [], completed: [] }
 	);
+	// "Only mine" filter, offered only in lists shared with a group
+	let onlyMine = $state(false);
+	const listTasks = $derived.by(() => {
+		if (!onlyMine || !list?.groupId) return allListTasks;
+		const mine = (task: { assigneeId: string | null }) => task.assigneeId === auth.user?.id;
+		return { open: allListTasks.open.filter(mine), completed: allListTasks.completed.filter(mine) };
+	});
 
 	const menuItems = $derived<MenuItem[]>([
 		{
@@ -78,6 +86,14 @@
 		description={list.description ?? t('lists.openTasks', { count: listTasks.open.length })}
 	>
 		{#snippet actions()}
+			{#if list.groupId}
+				<Button
+					variant={onlyMine ? 'primary' : 'outline'}
+					size="sm"
+					aria-pressed={onlyMine}
+					onclick={() => (onlyMine = !onlyMine)}>{t('tasks.onlyMine')}</Button
+				>
+			{/if}
 			{#if listTasks.open.length}
 				<IconButton
 					icon="clock"

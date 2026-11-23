@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { useLocale, useTranslations } from '#lib/i18n/index.ts';
+	import { auth } from '#lib/stores/auth.svelte.ts';
+	import { groups } from '#lib/stores/groups.svelte.ts';
 	import { lists } from '#lib/stores/lists.svelte.ts';
 	import { settings } from '#lib/stores/settings.svelte.ts';
 	import { tasks } from '#lib/stores/tasks.svelte.ts';
@@ -25,6 +27,7 @@
 	let title = $state('');
 	let description = $state('');
 	let listId = $state('');
+	let assigneeId = $state('');
 	let priority = $state<TaskPriority>('normal');
 	let dueDate = $state('');
 	let dueTime = $state('');
@@ -41,6 +44,7 @@
 		title = task?.title ?? defaults.title ?? '';
 		description = task?.description ?? defaults.description ?? '';
 		listId = task?.listId ?? defaults.listId ?? settings.value.defaultListId ?? '';
+		assigneeId = task?.assigneeId ?? defaults.assigneeId ?? '';
 		priority = task?.priority ?? defaults.priority ?? settings.value.defaultPriority;
 		dueDate = task?.dueDate ?? defaults.dueDate ?? '';
 		dueTime = task?.dueTime ?? defaults.dueTime ?? '';
@@ -52,6 +56,16 @@
 	const listOptions = $derived([
 		{ value: '', label: t('tasks.noList') },
 		...lists.todo.map((l) => ({ value: l.id, label: l.name }))
+	]);
+
+	// Only members of the list's group can be assigned; a private list or the inbox has none.
+	const members = $derived(groups.byId(lists.byId(listId)?.groupId)?.members ?? []);
+	const assigneeOptions = $derived([
+		{ value: '', label: t('tasks.assigneeNobody') },
+		...members.map((m) => ({
+			value: m.id,
+			label: m.id === auth.user?.id ? t('tasks.assigneeMe', { name: m.name }) : m.name
+		}))
 	]);
 
 	const priorityOptions = $derived(
@@ -69,6 +83,8 @@
 			title: title.trim(),
 			description: description.trim() || null,
 			listId: listId || null,
+			// Moving to another list drops an assignee who is not a member there.
+			assigneeId: members.some((m) => m.id === assigneeId) ? assigneeId : null,
 			priority,
 			dueDate: dueDate || null,
 			dueTime: dueDate && dueTime ? dueTime : null,
@@ -138,6 +154,11 @@
 			<Field label={t('tasks.list')} for="task-list">
 				<Select id="task-list" bind:value={listId} options={listOptions} />
 			</Field>
+			{#if members.length}
+				<Field label={t('tasks.assignee')} for="task-assignee">
+					<Select id="task-assignee" bind:value={assigneeId} options={assigneeOptions} />
+				</Field>
+			{/if}
 			<Field label={t('tasks.priority')} for="task-priority">
 				<Select id="task-priority" bind:value={priority} options={priorityOptions} />
 			</Field>
